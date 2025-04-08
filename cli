@@ -1,6 +1,6 @@
 #!/bin/bash
 
 # TODO Rename your .jar-File according to your project's name and version in pom.xml
-# TODO Rename this `cli` file to your project's domain, i. e. 'chess', 'skat', 'doppelkopf', or 'library'
+# Rename this `cli` file to your project's domain, i. e. 'chess', 'skat', 'doppelkopf', or 'library'
 # TODO Instead of Example#main, start your own application entry point
-java -cp target/TODO_ENTER_YOUR_PROJECT_NAME_HERE-0.1.0.jar hwr.oop.Example $@
+java -cp target/chess-0.1.0.jar hwr.oop.Chess $@
