@@ -1,6 +1,4 @@
-# HWR OOP Lecture Project Template
-
-[TODO]: # (Change README.md Headline to better fit to your project!)
+# HWR OOP Schach Project
 
 This repository contains a student project created for an ongoing lecture on object-oriented
 programming with Kotlin at HWR Berlin (summer term 2025).
@@ -49,9 +47,9 @@ just build
 
 [TODO]: # (For each feature implemented, add a row to the table!)
 
-| Number | Feature | Tests |
-|--------|---------|-------|
-| 1      | /       | /     |
+| Number | Feature                           | Tests |
+|--------|-----------------------------------|-------|
+| 1      | Create a chess board with figures | /     |
 
 ## Additional Dependencies
 

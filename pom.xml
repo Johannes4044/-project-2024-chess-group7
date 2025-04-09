@@ -117,9 +117,25 @@
         <version>${maven-surefire-plugin.version}</version>
         <configuration>
           <systemPropertyVariables>
+            <mainClass>hwr.oop.KotlinExample</mainClass>
             <kotest.framework.classpath.scanning.autoscan.disable>true
             </kotest.framework.classpath.scanning.autoscan.disable>
           </systemPropertyVariables>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>3.5.0</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>java</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <mainClass>hwr.oop.SchachBrettKt</mainClass>
         </configuration>
       </plugin>
     </plugins>
