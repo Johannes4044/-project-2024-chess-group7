@@ -73,5 +73,11 @@ class ChessBoard {
 fun main() {
    val chessBoard = ChessBoard()
    chessBoard.displayBoard()
+   chessBoard.move(Position('e', 2), Position('e', 4))
+   chessBoard.displayBoard()
+   chessBoard.move(Position('d', 7), Position('d', 5))
+   chessBoard.displayBoard()
+   chessBoard.move(Position('e', 4), Position('d', 5))
+   chessBoard.displayBoard()
 }
 
