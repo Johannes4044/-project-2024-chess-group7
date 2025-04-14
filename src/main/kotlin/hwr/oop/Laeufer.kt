@@ -1,9 +1,5 @@
-package hwr.oop
+import hwr.oop.Figuren
 
-class Laeufer(var positionX: Int, var positionY: Int, val Farbe: String, val istErsterZug: Boolean, val Name: String = "Laeufer") {
-    // Function to check if the pawn can move
-
-    fun newLaeufer(positionX: Int, positionY: Int,Farbe: String, istErsterZug: Boolean, Name: String): Laeufer {
-        return Laeufer(positionX,positionY ,Farbe, istErsterZug, Name)
-    }
+class Laeufer(istweiß: Boolean) : Figuren(istweiß) {
+    override fun symbol() = if (istweiß) "l" else "L"
 }

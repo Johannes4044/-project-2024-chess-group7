@@ -6,8 +6,11 @@ import org.assertj.core.api.Assertions.assertThat
 // TODO Delete this placeholder test.
 class SchachBrettTest : AnnotationSpec() {
   @Test
-  fun `example returns hello world`() {
-    val example = KotlinExample()
-    val result = example.sayHello()
-    assertThat(result).isEqualTo("Hello World!") }
+  fun `initialize Chessboard does not return false`() {
+    val chessboardexample = ChessBoard()
+    assertThat(chessboardexample.initializeBoard()).isNotNull
+    assertThat(chessboardexample.displayBoard()).isNotNull
+  }
+
+
 }
