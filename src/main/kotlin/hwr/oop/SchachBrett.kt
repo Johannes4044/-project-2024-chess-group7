@@ -54,7 +54,6 @@ class ChessBoard {
   }
 
   fun displayBoard() {
-    println(pieces.keys)
     for (j in 8 downTo 1) {
       for (i in 'a'..'h') {
         val pos = Position(i, j)

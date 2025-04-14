@@ -1,5 +1,6 @@
 package hwr.oop
 
+import Laeufer
 import io.kotest.core.spec.style.AnnotationSpec
 import org.assertj.core.api.Assertions.assertThat
 
@@ -7,62 +8,44 @@ class FigurenTest : AnnotationSpec() {
 
     @Test
     fun `Pawn gets correctly created`() {
-        val Bauerexample = Bauer(0, 1, "Weiß", true, "b")
-        assertThat(Bauerexample.positionX).isEqualTo(0)
-        assertThat(Bauerexample.positionY).isEqualTo(1)
-        assertThat(Bauerexample.Farbe).isEqualTo("Weiß")
-        assertThat(Bauerexample.istErsterZug).isEqualTo(true)
-        assertThat(Bauerexample.Name).isEqualTo("b")
+        val Bauerexample = Bauer(true)
+        assertThat(Bauerexample.symbol()).isEqualTo("b")
+        assertThat(Bauerexample.istweiß).isEqualTo(true)
     }
 
     @Test
     fun `Rook gets correctly created`() {
-        val Turmexample = Turm(0, 1, "Weiß", true, "T")
-        assertThat(Turmexample.positionX).isEqualTo(0)
-        assertThat(Turmexample.positionY).isEqualTo(1)
-        assertThat(Turmexample.Farbe).isEqualTo("Weiß")
-        assertThat(Turmexample.istErsterZug).isEqualTo(true)
-        assertThat(Turmexample.Name).isEqualTo("T")
+        val Turmexample = Turm(true)
+        assertThat(Turmexample.symbol()).isEqualTo("t")
+        assertThat(Turmexample.istweiß).isEqualTo(true)
     }
 
     @Test
     fun `Night gets correctly created`() {
-        val Nightexample = Springer(0, 1, "Weiß", true, "S")
-        assertThat(Nightexample.positionX).isEqualTo(0)
-        assertThat(Nightexample.positionY).isEqualTo(1)
-        assertThat(Nightexample.Farbe).isEqualTo("Weiß")
-        assertThat(Nightexample.istErsterZug).isEqualTo(true)
-        assertThat(Nightexample.Name).isEqualTo("S")
+        val Springerexample = Springer(true)
+        assertThat(Springerexample.symbol()).isEqualTo("s")
+        assertThat(Springerexample.istweiß).isEqualTo(true)
     }
 
     @Test
     fun `Bishop gets correctly created`() {
-        val Laeuferexample = Laeufer(0, 1, "Weiß", true, "l")
-        assertThat(Laeuferexample.positionX).isEqualTo(0)
-        assertThat(Laeuferexample.positionY).isEqualTo(1)
-        assertThat(Laeuferexample.Farbe).isEqualTo("Weiß")
-        assertThat(Laeuferexample.istErsterZug).isEqualTo(true)
-        assertThat(Laeuferexample.Name).isEqualTo("l")
+        val Laeuferexample = Laeufer(true)
+        assertThat(Laeuferexample.symbol()).isEqualTo("l")
+        assertThat(Laeuferexample.istweiß).isEqualTo(true)
     }
 
     @Test
     fun `Queen gets correctly created`() {
-        val Dameexample = Dame(0, 1, "Weiß", true, "D")
-        assertThat(Dameexample.positionX).isEqualTo(0)
-        assertThat(Dameexample.positionY).isEqualTo(1)
-        assertThat(Dameexample.Farbe).isEqualTo("Weiß")
-        assertThat(Dameexample.istErsterZug).isEqualTo(true)
-        assertThat(Dameexample.Name).isEqualTo("D")
+        val Dameexample = Dame(true)
+        assertThat(Dameexample.symbol()).isEqualTo("d")
+        assertThat(Dameexample.istweiß).isEqualTo(true)
     }
 
     @Test
     fun `King gets correctly created`() {
-        val Königexample = Bauer(0, 1, "Weiß", true, "k")
-        assertThat(Königexample.positionX).isEqualTo(0)
-        assertThat(Königexample.positionY).isEqualTo(1)
-        assertThat(Königexample.Farbe).isEqualTo("Weiß")
-        assertThat(Königexample.istErsterZug).isEqualTo(true)
-        assertThat(Königexample.Name).isEqualTo("k")
+        val Königexample = König(true)
+        assertThat(Königexample.symbol()).isEqualTo("k")
+        assertThat(Königexample.istweiß).isEqualTo(true)
     }
 
 }
