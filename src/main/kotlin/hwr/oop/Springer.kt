@@ -1,5 +1,5 @@
 package hwr.oop
 
-class Springer(istweiß: Boolean) : Figuren(istweiß) {
-    override fun symbol() = if (istweiß) "s" else "S"
+class Springer(isWhite: Boolean) : Figuren(isWhite) {
+    override fun symbol() = if (isWhite) "s" else "S"
 }

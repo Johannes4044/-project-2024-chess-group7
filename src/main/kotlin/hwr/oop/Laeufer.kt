@@ -1,5 +1,5 @@
 import hwr.oop.Figuren
 
-class Laeufer(istweiß: Boolean) : Figuren(istweiß) {
-    override fun symbol() = if (istweiß) "l" else "L"
+class Laeufer(isWhite: Boolean) : Figuren(isWhite) {
+    override fun symbol() = if (isWhite) "l" else "L"
 }

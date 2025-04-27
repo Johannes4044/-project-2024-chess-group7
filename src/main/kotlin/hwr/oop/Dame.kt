@@ -1,5 +1,5 @@
 package hwr.oop
 
-class Dame(istweiß: Boolean) : Figuren(istweiß) {
-    override fun symbol() = if (istweiß) "d" else "D"
+class Dame(isWhite: Boolean) : Figuren(isWhite) {
+    override fun symbol() = if (isWhite) "d" else "D"
 }
