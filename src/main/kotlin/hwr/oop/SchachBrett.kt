@@ -90,11 +90,13 @@ fun main() {
 
 
    chessBoard.displayBoard()
-   chessBoard.move(Position('e', 2), Position('e', 4))
+   chessBoard.move(Position('g', 1), Position('h', 3))
    chessBoard.displayBoard()
-   chessBoard.move(Position('d', 7), Position('d', 5))
+   chessBoard.move(Position('e', 2), Position('e', 3))
    chessBoard.displayBoard()
-   chessBoard.move(Position('e', 4), Position('d', 5))
+   chessBoard.move(Position('e', 1), Position('e', 2))
+   chessBoard.displayBoard()
+   chessBoard.move(Position('e', 2), Position('e', 1))
    chessBoard.displayBoard()
    chessBoard.move(Position('d', 1), Position('h', 5))
    chessBoard.displayBoard()
