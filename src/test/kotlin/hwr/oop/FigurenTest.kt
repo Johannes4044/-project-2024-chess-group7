@@ -48,4 +48,40 @@ class FigurenTest : AnnotationSpec() {
         assertThat(Königexample.istweiß).isEqualTo(true)
     }
 
+    @Test
+    fun `Bauer can move `() {
+        val TestBauer = Bauer(true)
+        val from = Position('a', 2)
+        val to = Position('a', 3)
+        val chessBoard = ChessBoard()
+
+        assertThat(TestBauer.canMove(from, to, chessBoard)).isTrue
+        assertThat(chessBoard.move(from, to)).isTrue
+    }
+
+    @Test
+    fun `Bauer can move two`() {
+        val TestBauer = Bauer(true)
+        val from = Position('a', 2)
+        val to = Position('a', 4)
+        val chessBoard = ChessBoard()
+
+        assertThat(TestBauer.canMove(from, to, chessBoard)).isTrue
+        assertThat(chessBoard.move(from, to)).isTrue
+    }
+
+    @Test
+    fun `Bauer can capture `() {
+        val from = Position('a', 2)
+        val to = Position('a', 4)
+        val from2 = Position('b', 7)
+        val to2 = Position('b', 5)
+        val from3 = Position('a', 4)
+        val to3 = Position('b', 5)
+        val chessBoard = ChessBoard()
+
+        assertThat(chessBoard.move(from, to)).isTrue
+        assertThat(chessBoard.move(from2, to2)).isTrue
+        assertThat(chessBoard.move(from3, to3)).isTrue
+    }
 }

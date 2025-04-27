@@ -1,5 +1,6 @@
 package hwr.oop
 import kotlin.math.abs
+
 class Springer(isWhite: Boolean) : Figuren(isWhite) {
     override fun symbol() = if (isWhite) "s" else "S"
 

@@ -4,6 +4,7 @@ class Dame(isWhite: Boolean) : Figuren(isWhite) {
     override fun symbol() = if (isWhite) "d" else "D"
 
 
+
     override fun canMove(from: Position, to: Position, board: ChessBoard): Boolean {
         val dy = to.Zeile - from.Zeile
         val dx = to.Spalte - from.Spalte
@@ -27,6 +28,8 @@ class Dame(isWhite: Boolean) : Figuren(isWhite) {
 
         // Перевірка цільової позиції
         val destination = board.getFigureAt(to)
-        return destination == null || destination.isWhite != this.istweiß
+        return destination == null || destination.isWhite != this.istWhite
 
-    }}
+    }
+}
+
