@@ -70,7 +70,25 @@ class ChessBoard {
 }
 
 fun main() {
-   val chessBoard = ChessBoard()
+  val chessBoard = ChessBoard()
+
+  println("Um das Spiel zu starten, schreiben Sie: game start und eine ID-Nummer:")
+  val satz = readLine()?.trim()
+  var id1 = ""
+
+  if (satz != null && satz.startsWith("chess new_game")) {
+    id1 = satz.removePrefix("chess new_game").trim()
+    if (id1.isNotEmpty()) {
+      println("Das Spiel startet mit der ID: $id1")
+      chessBoard.displayBoard()
+    } else {
+      println("Fehler: Keine ID-Nummer angegeben.")
+    }
+  } else {
+    println("Fehler: Ungültige Eingabe. Bitte schreiben Sie: game start und eine ID-Nummer.")
+  }
+
+
    chessBoard.displayBoard()
    chessBoard.move(Position('g', 1), Position('h', 3))
    chessBoard.displayBoard()
@@ -79,6 +97,8 @@ fun main() {
    chessBoard.move(Position('e', 1), Position('e', 2))
    chessBoard.displayBoard()
    chessBoard.move(Position('e', 2), Position('e', 1))
+   chessBoard.displayBoard()
+   chessBoard.move(Position('d', 1), Position('h', 5))
    chessBoard.displayBoard()
 }
 
