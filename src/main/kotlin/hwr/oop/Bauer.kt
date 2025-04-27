@@ -1,12 +1,12 @@
 package hwr.oop
 
 
-class Bauer(istweiß: Boolean) : Figuren(istweiß) {
-    override fun symbol() = if (istweiß) "b" else "B"
+class Bauer(isWhite: Boolean) : Figuren(isWhite) {
+    override fun symbol() = if (isWhite) "b" else "B"
 
     override fun canMove(from: Position, to: Position, board: ChessBoard): Boolean{
-        val direction = if (istweiß) 1 else -1
-        val startZeile = if (istweiß) 2 else 7
+        val direction = if (isWhite) 1 else -1
+        val startZeile = if (isWhite) 2 else 7
 
         val deltaY = to.Zeile - from.Zeile
         val deltaX = to.Spalte - from.Spalte
@@ -23,7 +23,7 @@ class Bauer(istweiß: Boolean) : Figuren(istweiß) {
         }
 
         // Schlagzug
-        if (kotlin.math.abs(deltaX) == 1 && deltaY == direction && destination != null && destination.istweiß != this.istweiß) {
+        if (kotlin.math.abs(deltaX) == 1 && deltaY == direction && destination != null && destination.isWhite != this.isWhite) {
             return true
         }
 

@@ -4,7 +4,7 @@ import Laeufer
 
 
 class ChessBoard {
-  private val pieces = mutableMapOf<Position, Figuren>()
+   val pieces = mutableMapOf<Position, Figuren>()
 
   init {
     initializeBoard()

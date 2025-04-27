@@ -1,7 +1,8 @@
 package hwr.oop
 
-class Dame(istweiß: Boolean) : Figuren(istweiß) {
-    override fun symbol() = if (istweiß) "d" else "D"
+class Dame(isWhite: Boolean) : Figuren(isWhite) {
+    override fun symbol() = if (isWhite) "d" else "D"
+
 
 
     override fun canMove(from: Position, to: Position, board: ChessBoard): Boolean {
@@ -27,7 +28,8 @@ class Dame(istweiß: Boolean) : Figuren(istweiß) {
 
         // Перевірка цільової позиції
         val destination = board.getFigureAt(to)
-        return destination == null || destination.istweiß != this.istweiß
+        return destination == null || destination.isWhite != this.istWhite
 
     }
 }
+

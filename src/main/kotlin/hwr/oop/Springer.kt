@@ -1,10 +1,11 @@
 package hwr.oop
 import kotlin.math.abs
-class Springer(istweiß: Boolean) : Figuren(istweiß) {
-    override fun symbol() = if (istweiß) "s" else "S"
+
+class Springer(isWhite: Boolean) : Figuren(isWhite) {
+    override fun symbol() = if (isWhite) "s" else "S"
 
     override fun canMove(from: Position, to: Position, board: ChessBoard): Boolean {
-        val startZeile = if (istweiß) 1 else 8
+        val startZeile = if (isWhite) 1 else 8
 
         val deltaX = to.Zeile - from.Zeile
         val deltaY = to.Spalte - from.Spalte
