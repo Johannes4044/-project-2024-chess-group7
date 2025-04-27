@@ -3,6 +3,7 @@ package hwr.oop
 class Dame(istweiß: Boolean) : Figuren(istweiß) {
     override fun symbol() = if (istweiß) "d" else "D"
 
+
     override fun canMove(from: Position, to: Position, board: ChessBoard): Boolean {
         val dy = to.Zeile - from.Zeile
         val dx = to.Spalte - from.Spalte
@@ -27,5 +28,6 @@ class Dame(istweiß: Boolean) : Figuren(istweiß) {
         // Перевірка цільової позиції
         val destination = board.getFigureAt(to)
         return destination == null || destination.istweiß != this.istweiß
+
     }
 }
