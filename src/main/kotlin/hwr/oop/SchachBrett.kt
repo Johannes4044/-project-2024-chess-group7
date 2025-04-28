@@ -6,9 +6,7 @@ import Bishop
 class ChessBoard {
    val Board = mutableMapOf<Position, Figures>()
 
-  init {
-    initializeBoard()
-  }
+
 
   fun initializeBoard() {
 
