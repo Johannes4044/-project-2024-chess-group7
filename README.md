@@ -39,25 +39,39 @@ just build
 
 ## Abstract
 
-[TODO]: # (Write a short description of your project.)
-[TODO]: # (State most important features.)
-[TODO]: # (State the most interesting problems you encountered during the project.)
+Dieses Projekt ist ein Schachspiel, das im Rahmen einer Vorlesung zur objektorientierten Programmierung mit Kotlin an der HWR Berlin (Sommersemester 2025) entwickelt wurde.
+Das Ziel dieses Projekts ist es, ein funktionierendes Schachspiel zu implementieren, das die grundlegenden Regeln des Schachs berücksichtigt. Es wurde ein Schachbrett mit Figuren erstellt, die sich gemäß den Schachregeln bewegen können. Das Projekt dient als Übung zur Anwendung von objektorientierten Prinzipien.
 
-## Feature List
+## Wichtige Funktionen
 
-[TODO]: # (For each feature implemented, add a row to the table!)
+1. Erstellung eines Schachbretts mit allen Figuren in der Startaufstellung.
+2. Implementierung der Bewegungslogik für verschiedene Figuren (z. B. Dame, Turm, Springer).
+3. Validierung der Züge basierend auf den Schachregeln (z. B. erlaubte Bewegungen, blockierte Wege).
+4. Darstellung des Schachbretts in der Konsole.
+5. Möglichkeit, Züge einzugeben und das Spiel zu starten.
 
-| Number | Feature                           | Tests |
-|--------|-----------------------------------|-------|
-| 1      | Create a chess board with figures | /     |
+## Interessante Probleme
 
-## Additional Dependencies
+1. Die Implementierung der Bewegungslogik für komplexe Figuren wie die Dame, die sich sowohl diagonal als auch horizontal/vertikal bewegen kann.
+2. Sicherstellen, dass Figuren nicht durch andere blockiert werden, außer beim Schlagen.
+3. Verwaltung der Spiellogik, um sicherzustellen, dass nur gültige Züge ausgeführt werden.
+4. Umgang mit der Darstellung des Schachbretts in der Konsole, um eine klare Übersicht zu gewährleisten.
 
-[TODO]: # (For each additional dependency your project requires- Add an additional row to the table!)
+## Feature-Liste
 
-| Number | Dependency Name | Dependency Description | Why is it necessary? |
-|--------|-----------------|------------------------|----------------------|
-| 1      | /               | /                      | /                    |
+| Number | Feature                                   | Tests |
+|--------|-------------------------------------------|-------|
+| 1      | Erstellung eines Schachbretts mit Figuren | /     |
+| 2      | Darstellung des Schachbretts              | /     |
+| 3      | Bewegungslogik für alle Figuren           | /     |
+| 4      | Validierung von Zügen                     | /     |
+
+
+## Additional dependency your project requires
+
+| Number | Dependency Name  | Dependency Description                     | Why is it necessary?                   |
+|--------|------------------|--------------------------------------------|----------------------------------------|
+| 1      | Wer kann ziehen  | Nur die Farbe kann ziehen, die am Zug ist  | Damit keiner Farbe zweimal ziehen kann |
 
 ## Instructions
 
