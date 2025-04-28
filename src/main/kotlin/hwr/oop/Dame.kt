@@ -28,7 +28,7 @@ class Dame(isWhite: Boolean) : Figuren(isWhite) {
 
         // Перевірка цільової позиції
         val destination = board.getFigureAt(to)
-        return destination == null || destination.isWhite != this.istWhite
+        return destination == null || destination.isWhite != this.isWhite
 
     }
 }
