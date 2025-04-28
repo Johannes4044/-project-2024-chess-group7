@@ -1,10 +1,10 @@
 package hwr.oop
 
-import Laeufer
+import Bishop
 
 
 class ChessBoard {
-   val pieces = mutableMapOf<Position, Figuren>()
+   val Board = mutableMapOf<Position, Figures>()
 
   init {
     initializeBoard()
@@ -13,41 +13,41 @@ class ChessBoard {
   fun initializeBoard() {
 
     for (i in 'a'..'h') {
-      pieces[Position(i, 2)] = Bauer(true)
+      Board[Position(i, 2)] = Pawn(true)
     }
     for (i in 'a'..'h') {
-      pieces[Position(i, 7)] = Bauer(false)
+      Board[Position(i, 7)] = Pawn(false)
     }
-    pieces[Position('a', 1)] = Turm(true)
-    pieces[Position('a', 8)] = Turm(false)
-    pieces[Position('h', 1)] = Turm(true)
-    pieces[Position('h', 8)] = Turm(false)
+    Board[Position('a', 1)] = Rook(true)
+    Board[Position('a', 8)] = Rook(false)
+    Board[Position('h', 1)] = Rook(true)
+    Board[Position('h', 8)] = Rook(false)
 
-    pieces[Position('b', 1)] = Springer(true)
-    pieces[Position('b', 8)] = Springer(false)
-    pieces[Position('g', 1)] = Springer(true)
-    pieces[Position('g', 8)] = Springer(false)
+    Board[Position('b', 1)] = Knight(true)
+    Board[Position('b', 8)] = Knight(false)
+    Board[Position('g', 1)] = Knight(true)
+    Board[Position('g', 8)] = Knight(false)
 
-    pieces[Position('c', 1)] = Laeufer(true)
-    pieces[Position('c', 8)] = Laeufer(false)
-    pieces[Position('f', 1)] = Laeufer(true)
-    pieces[Position('f', 8)] = Laeufer(false)
+    Board[Position('c', 1)] = Bishop(true)
+    Board[Position('c', 8)] = Bishop(false)
+    Board[Position('f', 1)] = Bishop(true)
+    Board[Position('f', 8)] = Bishop(false)
 
-    pieces[Position('d', 1)] = Dame(true)
-    pieces[Position('d', 8)] = Dame(false)
+    Board[Position('d', 1)] = Queen(true)
+    Board[Position('d', 8)] = Queen(false)
 
-    pieces[Position('e', 1)] = König(true)
-    pieces[Position('e', 8)] = König(false)
+    Board[Position('e', 1)] = King(true)
+    Board[Position('e', 8)] = King(false)
   }
 
 
-  fun getFigureAt(position: Position): Figuren? = pieces[position]
+  fun getFigureAt(position: Position): Figures? = Board[position]
 
   fun move(from: Position, to: Position): Boolean {
-    val figure = pieces[from] ?: return false
+    val figure = Board[from] ?: return false
     if (figure.canMove(from, to, this)) {
-      pieces.remove(from)
-      pieces[to] = figure
+      Board.remove(from)
+      Board[to] = figure
       return true
     }
     println("Ungültiger Zug für ${figure.symbol()} von $from nach $to")
@@ -58,7 +58,7 @@ class ChessBoard {
     for (j in 8 downTo 1) {
       for (i in 'a'..'h') {
         val pos = Position(i, j)
-        val fig = pieces[pos]
+        val fig = Board[pos]
         if (fig != null) {
           print(fig.symbol() + " ")
         } else {

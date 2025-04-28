@@ -1,6 +1,6 @@
 package hwr.oop
 
-import Laeufer
+import Bishop
 import io.kotest.core.spec.style.AnnotationSpec
 import org.assertj.core.api.Assertions.assertThat
 
@@ -8,49 +8,49 @@ class FigurenTest : AnnotationSpec() {
 
     @Test
     fun `Pawn gets correctly created`() {
-        val Bauerexample = Bauer(true)
+        val Bauerexample = Pawn(true)
         assertThat(Bauerexample.symbol()).isEqualTo("b")
         assertThat(Bauerexample.isWhite).isEqualTo(true)
     }
 
     @Test
     fun `Rook gets correctly created`() {
-        val Turmexample = Turm(true)
+        val Turmexample = Rook(true)
         assertThat(Turmexample.symbol()).isEqualTo("t")
         assertThat(Turmexample.isWhite).isEqualTo(true)
     }
 
     @Test
     fun `Night gets correctly created`() {
-        val Springerexample = Springer(true)
+        val Springerexample = Knight(true)
         assertThat(Springerexample.symbol()).isEqualTo("s")
         assertThat(Springerexample.isWhite).isEqualTo(true)
     }
 
     @Test
     fun `Bishop gets correctly created`() {
-        val Laeuferexample = Laeufer(true)
+        val Laeuferexample = Bishop(true)
         assertThat(Laeuferexample.symbol()).isEqualTo("l")
         assertThat(Laeuferexample.isWhite).isEqualTo(true)
     }
 
     @Test
     fun `Queen gets correctly created`() {
-        val Dameexample = Dame(true)
+        val Dameexample = Queen(true)
         assertThat(Dameexample.symbol()).isEqualTo("d")
         assertThat(Dameexample.isWhite).isEqualTo(true)
     }
 
     @Test
     fun `King gets correctly created`() {
-        val Königexample = König(true)
+        val Königexample = King(true)
         assertThat(Königexample.symbol()).isEqualTo("k")
         assertThat(Königexample.isWhite).isEqualTo(true)
     }
 
     @Test
     fun `Bauer can move `() {
-        val TestBauer = Bauer(true)
+        val TestBauer = Pawn(true)
         val from = Position('a', 2)
         val to = Position('a', 3)
         val chessBoard = ChessBoard()
@@ -61,7 +61,7 @@ class FigurenTest : AnnotationSpec() {
 
     @Test
     fun `Bauer can move two`() {
-        val TestBauer = Bauer(true)
+        val TestBauer = Pawn(true)
         val from = Position('a', 2)
         val to = Position('a', 4)
         val chessBoard = ChessBoard()

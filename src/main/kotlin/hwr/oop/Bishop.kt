@@ -1,9 +1,9 @@
 import hwr.oop.ChessBoard
-import hwr.oop.Figuren
+import hwr.oop.Figures
 import hwr.oop.Position
 import kotlin.math.abs
 
-class Laeufer(isWhite: Boolean) : Figuren(isWhite) {
+class Bishop(isWhite: Boolean) : Figures(isWhite) {
     override fun symbol() = if (isWhite) "l" else "L"
 
     override fun canMove(from: Position, to: Position, board: ChessBoard): Boolean {

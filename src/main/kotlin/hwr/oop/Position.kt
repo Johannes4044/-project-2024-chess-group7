@@ -1,5 +1,5 @@
 package hwr.oop
 
-data class Position(val Spalte: Char, val Zeile: Int) {
-    override fun toString() = "$Spalte$Zeile"
+data class Position(val Column: Char, val Row: Int) {
+    override fun toString() = "$Column$Row"
 }
