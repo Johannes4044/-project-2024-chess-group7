@@ -1,14 +1,14 @@
 package hwr.oop
 
-import Laeufer
+import Bishop
 import io.kotest.core.spec.style.AnnotationSpec
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertTrue
 
 
-class KönigTest : AnnotationSpec() {
+class KingTest : AnnotationSpec() {
     fun `King can move if destination is empty`() {
-        val bauer = König(true) // true = White
+        val King = King(true) // true = White
         val from = Position('e',1)
         val possibleMoves = listOf(
             Position('e', 2),  // nach oben
@@ -23,7 +23,7 @@ class KönigTest : AnnotationSpec() {
 
         // Check, if King can move to every given destination
         possibleMoves.forEach { to ->
-            assertThat(König.canMove(from, to, board)).isTrue
+            assertThat(King.canMove(from, to, board)).isTrue
         }
     }
 }
