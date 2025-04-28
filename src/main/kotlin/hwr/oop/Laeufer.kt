@@ -18,5 +18,5 @@ class Laeufer(isWhite: Boolean) : Figuren(isWhite) {
         }
         return false
     }
-    }
+}
 
