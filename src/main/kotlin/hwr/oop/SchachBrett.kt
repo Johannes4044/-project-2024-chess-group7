@@ -74,7 +74,7 @@ class ChessBoard {
 fun main() {
   val chessBoard = ChessBoard()
 
-  println("Um das Spiel zu starten, schreiben Sie: game start und eine ID-Nummer:")
+  println("Um das Spiel zu starten, schreiben Sie: chess new_game und eine ID-Nummer:")
   val satz = readLine()?.trim()
   var id1 = ""
 
