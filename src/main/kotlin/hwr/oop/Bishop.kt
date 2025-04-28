@@ -7,8 +7,8 @@ class Bishop(isWhite: Boolean) : Figures(isWhite) {
     override fun symbol() = if (isWhite) "l" else "L"
 
     override fun canMove(from: Position, to: Position, board: ChessBoard): Boolean {
-        val deltaY = to.Zeile - from.Zeile
-        val deltaX = to.Spalte - from.Spalte
+        val deltaY = to.Row - from.Row
+        val deltaX = to.Column - from.Column
 
         val destination = board.getFigureAt(to)
 
