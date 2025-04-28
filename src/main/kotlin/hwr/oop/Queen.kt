@@ -3,18 +3,16 @@ package hwr.oop
 class Queen(isWhite: Boolean) : Figures(isWhite) {
     override fun symbol() = if (isWhite) "d" else "D"
 
-
-
     override fun canMove(from: Position, to: Position, board: ChessBoard): Boolean {
         val dy = to.Row - from.Row
         val dx = to.Column - from.Column
 
-        // Перевірка, чи рух горизонтальний, вертикальний або діагональний
+        // Überprüfung, ob die Bewegung horizontal, vertikal oder diagonal ist
         if (dx != 0 && dy != 0 && kotlin.math.abs(dx) != kotlin.math.abs(dy)) {
             return false
         }
 
-        // Перевірка, чи шлях вільний
+        // Überprüfung, ob der Weg frei ist
         val stepX = if (dx == 0) 0 else dx / kotlin.math.abs(dx)
         val stepY = if (dy == 0) 0 else dy / kotlin.math.abs(dy)
 
@@ -26,10 +24,10 @@ class Queen(isWhite: Boolean) : Figures(isWhite) {
             current = Position((current.Column + stepX).toChar(), current.Row + stepY)
         }
 
-        // Перевірка цільової позиції
+        // Überprüfung der Zielposition
         val destination = board.getFigureAt(to)
         return destination == null || destination.isWhite != this.isWhite
 
+      
     }
 }
-
