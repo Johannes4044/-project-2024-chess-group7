@@ -50,6 +50,7 @@ class ChessBoard {
       pieces[to] = figure
       return true
     }
+    println("Ungültiger Zug für ${figure.symbol()} von $from nach $to")
     return false
   }
 
@@ -68,6 +69,7 @@ class ChessBoard {
     }
   }
 }
+//TODO Wenn schwarz zieht, dann muss die Figur auch schwarz sein
 
 fun main() {
   val chessBoard = ChessBoard()
@@ -90,15 +92,15 @@ fun main() {
 
 
    chessBoard.displayBoard()
-   chessBoard.move(Position('g', 1), Position('h', 3))
+   chessBoard.move(Position('a', 2), Position('a', 4))
    chessBoard.displayBoard()
-   chessBoard.move(Position('e', 2), Position('e', 3))
+   chessBoard.move(Position('a', 1), Position('b', 4))
    chessBoard.displayBoard()
-   chessBoard.move(Position('e', 1), Position('e', 2))
-   chessBoard.displayBoard()
-   chessBoard.move(Position('e', 2), Position('e', 1))
-   chessBoard.displayBoard()
-   chessBoard.move(Position('d', 1), Position('h', 5))
-   chessBoard.displayBoard()
+//   chessBoard.move(Position('e', 1), Position('e', 2))
+//   chessBoard.displayBoard()
+//   chessBoard.move(Position('e', 2), Position('e', 1))
+//   chessBoard.displayBoard()
+//   chessBoard.move(Position('d', 1), Position('h', 5))
+//   chessBoard.displayBoard()
 }
 
