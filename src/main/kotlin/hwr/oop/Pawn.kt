@@ -1,15 +1,15 @@
 package hwr.oop
 
 
-class Bauer(isWhite: Boolean) : Figuren(isWhite) {
+class Pawn(isWhite: Boolean) : Figures(isWhite) {
     override fun symbol() = if (isWhite) "b" else "B"
 
     override fun canMove(from: Position, to: Position, board: ChessBoard): Boolean{
         val direction = if (isWhite) 1 else -1
         val startZeile = if (isWhite) 2 else 7
 
-        val deltaY = to.Zeile - from.Zeile
-        val deltaX = to.Spalte - from.Spalte
+        val deltaY = to.Row - from.Row
+        val deltaX = to.Column - from.Column
 
         val destination = board.getFigureAt(to)
         // Normaler Zug
@@ -18,7 +18,7 @@ class Bauer(isWhite: Boolean) : Figuren(isWhite) {
         }
 
         // Erster Zug (2 Felder)
-        if (deltaX == 0 && deltaY == 2*direction && destination == null && from.Zeile == startZeile) {
+        if (deltaX == 0 && deltaY == 2*direction && destination == null && from.Row == startZeile) {
             return true
         }
 
