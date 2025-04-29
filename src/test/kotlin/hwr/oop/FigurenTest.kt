@@ -19,6 +19,7 @@ class FiguresTest : AnnotationSpec() {
         assertThat(Rookexample.symbol()).isEqualTo("t")
         assertThat(Rookexample.isWhite).isEqualTo(true)
     }
+
     @Test
     fun `Rook can move vertically`() {
         val chessBoard = ChessBoard()
@@ -133,14 +134,14 @@ class FiguresTest : AnnotationSpec() {
         assertThat(pawn.canMove(from, to, chessBoard)).isFalse
     }
 
-@Test
-fun `Pawn cannot move sideways`() {
-    val chessBoard = ChessBoard()
-    val pawn = Pawn(true)
-    chessBoard.Board[Position('a', 2)] = pawn
-    val from = Position('a', 2)
-    val to = Position('b', 2)
+    @Test
+    fun `Pawn cannot move sideways`() {
+        val chessBoard = ChessBoard()
+        val pawn = Pawn(true)
+        chessBoard.Board[Position('a', 2)] = pawn
+        val from = Position('a', 2)
+        val to = Position('b', 2)
 
-    assertThat(pawn.canMove(from, to, chessBoard)).isFalse
-}
+        assertThat(pawn.canMove(from, to, chessBoard)).isFalse
+    }
 }
