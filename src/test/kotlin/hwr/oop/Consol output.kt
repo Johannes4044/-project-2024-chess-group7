@@ -1,6 +1,7 @@
 package hwr.oop
 
 
+
 import io.kotest.core.spec.style.AnnotationSpec
 import org.assertj.core.api.Assertions.assertThat
 import java.io.ByteArrayOutputStream
@@ -14,7 +15,7 @@ class ConsoleOutputTest : AnnotationSpec() {
         val outputStream = ByteArrayOutputStream()
         System.setOut(PrintStream(outputStream))
         val chessboardexample = ChessBoard()
-        chessboardexample.initializeBoard()
+        chessboardexample. ()
 
 
         chessboardexample.displayBoard()

@@ -11,9 +11,23 @@ class Bishop(isWhite: Boolean) : Figures(isWhite) {
         val deltaX = to.Column - from.Column
 
         val destination = board.getFigureAt(to)
+        if (abs(deltaX) != abs(deltaY)) {
+            return false
+        }
+        val stepX = if (deltaX == 0) 0 else deltaX / abs(deltaX)
+        val stepY = if (deltaY == 0) 0 else deltaY / abs(deltaY)
+
+        var current = Position(from.Column + stepX, from.Row + stepY)
+
+        while (current != to) {
+            if (board.getFigureAt(current) != null) {
+                return false
+            }
+            current = Position(current.Column + stepX, current.Row + stepY)
+        }
 
         //Move
-        if (abs(deltaX) == abs(deltaY) && (destination == null || destination.isWhite != this.isWhite)) {
+        if (((destination == null || destination.isWhite != this.isWhite))) {
             return true
         }
         return false

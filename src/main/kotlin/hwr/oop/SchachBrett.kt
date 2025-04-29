@@ -3,6 +3,7 @@ package hwr.oop
 import Bishop
 
 
+
 class ChessBoard {
 
 
@@ -55,6 +56,13 @@ class ChessBoard {
     println("Ungültiger Zug für ${figure.symbol()} von $from nach $to")
     return false
   }
+
+
+
+
+
+
+
 
   fun displayBoard() {
     for (j in 8 downTo 1) {

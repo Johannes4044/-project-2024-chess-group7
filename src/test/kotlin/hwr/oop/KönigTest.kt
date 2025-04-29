@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Assertions.assertTrue
 
 
 class KingTest : AnnotationSpec() {
+    @Test
     fun `King can move if destination is empty`() {
         val King = King(true) // true = White
         val from = Position('e',1)
