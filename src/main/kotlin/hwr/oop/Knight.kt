@@ -18,4 +18,25 @@ class Knight(isWhite: Boolean) : Figures(isWhite) {
         }
         return false
     }
+    override fun availableMoves(from: Position, board: ChessBoard): List<Position> {
+        val moves = mutableListOf<Position>()
+
+        // Alle möglichen Bewegungen des Springers
+        val directions = listOf(
+            Pair(2, 1), Pair(2, -1), Pair(-2, 1), Pair(-2, -1),
+            Pair(1, 2), Pair(1, -2), Pair(-1, 2), Pair(-1, -2)
+        )
+
+        for ((dx, dy) in directions) {
+            val target = Position(from.Column + dx, from.Row + dy)
+            if (target.Column in 'a'..'h' && target.Row in 1..8) {
+                val destination = board.getFigureAt(target)
+                if (destination == null || destination.isWhite != this.isWhite) {
+                    moves.add(target)
+                }
+            }
+        }
+
+        return moves
+    }
 }

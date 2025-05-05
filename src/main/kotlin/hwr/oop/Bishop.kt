@@ -18,5 +18,31 @@ class Bishop(isWhite: Boolean) : Figures(isWhite) {
         }
         return false
     }
+    override fun availableMoves(from: Position, board: ChessBoard): List<Position> {
+        val moves = mutableListOf<Position>()
+
+        // Prüfen aller möglichen diagonalen Richtungen
+        val directions = listOf(
+            Pair(1, 1),   // Rechts oben
+            Pair(1, -1),  // Rechts unten
+            Pair(-1, 1),  // Links oben
+            Pair(-1, -1)  // Links unten
+        )
+
+        for ((dx, dy) in directions) {
+            var current = Position(from.Column + dx, from.Row + dy)
+            while (current.Column in 'a'..'h' && current.Row in 1..8) {
+                if (canMove(from, current, board)) {
+                    moves.add(current)
+                }
+                if (board.getFigureAt(current) != null) {
+                    break // Stoppen, wenn eine Figur im Weg ist
+                }
+                current = Position(current.Column + dx, current.Row + dy)
+            }
+        }
+
+        return moves
+    }
     }
 
