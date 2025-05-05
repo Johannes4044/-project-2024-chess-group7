@@ -22,9 +22,9 @@ class FiguresTest : AnnotationSpec() {
 
     @Test
     fun `Rook can move vertically`() {
-        val chessBoard = ChessBoard()
+        val chessBoard = ChessBoard.emptyBoard()
         val TestRook = Rook(true)
-        chessBoard.Board[Position('a', 1)] = TestRook
+        chessBoard.board[Position('a',1)] = TestRook
         val from = Position('a', 1)
         val to = Position('a', 8)
 
@@ -35,9 +35,9 @@ class FiguresTest : AnnotationSpec() {
 
     @Test
     fun `Rook can move horizontally`() {
-        val chessBoard = ChessBoard()
+        val chessBoard = ChessBoard.emptyBoard()
         val TestRook = Rook(true)
-        chessBoard.Board[Position('a', 1)] = TestRook
+        chessBoard.board[Position('a', 1)] = TestRook
         val from = Position('a', 1)
         val to = Position('h', 1)
 
@@ -47,9 +47,9 @@ class FiguresTest : AnnotationSpec() {
 
     @Test
     fun `Rook cannot move diagonally`() {
-        val chessBoard = ChessBoard()
+        val chessBoard = ChessBoard.emptyBoard()
         val TestRook = Rook(true)
-        chessBoard.Board[Position('a', 1)] = TestRook
+        chessBoard.board[Position('a', 1)] = TestRook
         val from = Position('a', 1)
         val to = Position('h', 8)
 
@@ -87,9 +87,9 @@ class FiguresTest : AnnotationSpec() {
 
     @Test
     fun `Pawn can move one step forward`() {
-        val chessBoard = ChessBoard()
+        val chessBoard = ChessBoard.emptyBoard()
         val pawn = Pawn(true)
-        chessBoard.Board[Position('a', 2)] = pawn
+        chessBoard.board[Position('a', 2)] = pawn
         val from = Position('a', 2)
         val to = Position('a', 3)
 
@@ -99,9 +99,9 @@ class FiguresTest : AnnotationSpec() {
 
     @Test
     fun `Pawn can move two steps forward from start position`() {
-        val chessBoard = ChessBoard()
+        val chessBoard = ChessBoard.emptyBoard()
         val pawn = Pawn(true)
-        chessBoard.Board[Position('a', 2)] = pawn
+        chessBoard.board[Position('a', 2)] = pawn
         val from = Position('a', 2)
         val to = Position('a', 4)
 
@@ -111,11 +111,11 @@ class FiguresTest : AnnotationSpec() {
 
     @Test
     fun `Pawn can capture diagonally`() {
-        val chessBoard = ChessBoard()
+        val chessBoard = ChessBoard.emptyBoard()
         val whitePawn = Pawn(true)
         val blackPawn = Pawn(false)
-        chessBoard.Board[Position('a', 4)] = whitePawn
-        chessBoard.Board[Position('b', 5)] = blackPawn
+        chessBoard.board[Position('a', 4)] = whitePawn
+        chessBoard.board[Position('b', 5)] = blackPawn
         val from = Position('a', 4)
         val to = Position('b', 5)
 
@@ -125,9 +125,9 @@ class FiguresTest : AnnotationSpec() {
 
     @Test
     fun `Pawn cannot move backward`() {
-        val chessBoard = ChessBoard()
+        val chessBoard = ChessBoard.emptyBoard()
         val pawn = Pawn(true)
-        chessBoard.Board[Position('a', 3)] = pawn
+        chessBoard.board[Position('a', 3)] = pawn
         val from = Position('a', 3)
         val to = Position('a', 2)
 
@@ -136,9 +136,9 @@ class FiguresTest : AnnotationSpec() {
 
     @Test
     fun `Pawn cannot move sideways`() {
-        val chessBoard = ChessBoard()
+        val chessBoard = ChessBoard.emptyBoard()
         val pawn = Pawn(true)
-        chessBoard.Board[Position('a', 2)] = pawn
+        chessBoard.board[Position('a', 2)] = pawn
         val from = Position('a', 2)
         val to = Position('b', 2)
 

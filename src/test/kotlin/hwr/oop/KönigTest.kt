@@ -17,7 +17,8 @@ class KingTest : AnnotationSpec() {
             Position('d', 2),  // oben links (diagonal)
             Position('f', 2),  // oben rechts (diagonal)
         )
-        val board = ChessBoard()
+        val board = ChessBoard.emptyBoard()
+        board.board[from] = King
 
         possibleMoves.forEach { board.getFigureAt(it) }
 
