@@ -87,13 +87,16 @@ fun main() {
   } else {
     println("Fehler: Ungültige Eingabe. Bitte schreiben Sie: game start und eine ID-Nummer.")
   }
+  chessBoard.initializeBoard()
 
-
-   chessBoard.displayBoard()
-   chessBoard.move(Position('a', 2), Position('a', 4))
-   chessBoard.displayBoard()
-   chessBoard.move(Position('a', 1), Position('b', 4))
-   chessBoard.displayBoard()
+  chessBoard.displayBoard()
+  println("Verfügbare Züge für die Position a2:")
+  val rookMoves = chessBoard.getFigureAt(Position('a', 2))?.availableMoves(Position('a', 2), chessBoard)
+  println(rookMoves?.map { "${it.Column}${it.Row}" }?.joinToString(", ") ?: "Keine Züge verfügbar")
+//   chessBoard.move(Position('a', 2), Position('a', 4))
+//   chessBoard.displayBoard()
+//   chessBoard.move(Position('a', 1), Position('b', 4))
+//   chessBoard.displayBoard()
 //   chessBoard.move(Position('e', 1), Position('e', 2))
 //   chessBoard.displayBoard()
 //   chessBoard.move(Position('e', 2), Position('e', 1))
