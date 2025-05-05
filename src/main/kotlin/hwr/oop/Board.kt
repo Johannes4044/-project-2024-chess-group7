@@ -3,50 +3,52 @@ package hwr.oop
 import Bishop
 import hwr.oop.CLI.ChessGameCLI
 
-
-class ChessBoard {
-   val Board = mutableMapOf<Position, Figures>()
+class ChessBoard(val board: MutableMap<Position, Figures>) {
 
 
+  companion object {
+    fun emptyBoard(): ChessBoard = ChessBoard(mutableMapOf())
 
-  fun initializeBoard() {
+    fun fullBoard(): ChessBoard {
+      val board = mutableMapOf<Position, Figures>()
+      for (i in 'a'..'h') {
+        board[Position(i, 2)] = Pawn(true)
+      }
+      for (i in 'a'..'h') {
+        board[Position(i, 7)] = Pawn(false)
+      }
+      board[Position('a', 1)] = Rook(true)
+      board[Position('a', 8)] = Rook(false)
+      board[Position('h', 1)] = Rook(true)
+      board[Position('h', 8)] = Rook(false)
 
-    for (i in 'a'..'h') {
-      Board[Position(i, 2)] = Pawn(true)
+      board[Position('b', 1)] = Knight(true)
+      board[Position('b', 8)] = Knight(false)
+      board[Position('g', 1)] = Knight(true)
+      board[Position('g', 8)] = Knight(false)
+
+      board[Position('c', 1)] = Bishop(true)
+      board[Position('c', 8)] = Bishop(false)
+      board[Position('f', 1)] = Bishop(true)
+      board[Position('f', 8)] = Bishop(false)
+
+      board[Position('d', 1)] = Queen(true)
+      board[Position('d', 8)] = Queen(false)
+
+      board[Position('e', 1)] = King(true)
+      board[Position('e', 8)] = King(false)
+
+      return ChessBoard(board)
     }
-    for (i in 'a'..'h') {
-      Board[Position(i, 7)] = Pawn(false)
-    }
-    Board[Position('a', 1)] = Rook(true)
-    Board[Position('a', 8)] = Rook(false)
-    Board[Position('h', 1)] = Rook(true)
-    Board[Position('h', 8)] = Rook(false)
-
-    Board[Position('b', 1)] = Knight(true)
-    Board[Position('b', 8)] = Knight(false)
-    Board[Position('g', 1)] = Knight(true)
-    Board[Position('g', 8)] = Knight(false)
-
-    Board[Position('c', 1)] = Bishop(true)
-    Board[Position('c', 8)] = Bishop(false)
-    Board[Position('f', 1)] = Bishop(true)
-    Board[Position('f', 8)] = Bishop(false)
-
-    Board[Position('d', 1)] = Queen(true)
-    Board[Position('d', 8)] = Queen(false)
-
-    Board[Position('e', 1)] = King(true)
-    Board[Position('e', 8)] = King(false)
   }
 
-
-  fun getFigureAt(position: Position): Figures? = Board[position]
+  fun getFigureAt(position: Position): Figures? = board[position]
 
   fun move(from: Position, to: Position): Boolean {
-    val figure = Board[from] ?: return false
+    val figure = board[from] ?: return false
     if (figure.canMove(from, to, this)) {
-      Board.remove(from)
-      Board[to] = figure
+      board.remove(from)
+      board[to] = figure
       return true
     }
     println("Ungültiger Zug für ${figure.symbol()} von $from nach $to")
@@ -57,7 +59,7 @@ class ChessBoard {
     for (j in 8 downTo 1) {
       for (i in 'a'..'h') {
         val pos = Position(i, j)
-        val fig = Board[pos]
+        val fig = board[pos]
         if (fig != null) {
           print(fig.symbol() + " ")
         } else {
@@ -67,8 +69,7 @@ class ChessBoard {
       println()
     }
   }
-}
-//TODO Wenn schwarz zieht, dann muss die Figur auch schwarz sein
+
 
 fun main() {
   val chessBoard = ChessBoard()
