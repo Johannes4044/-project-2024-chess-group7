@@ -1,6 +1,5 @@
 package hwr.oop
 
-import Bishop
 import io.kotest.core.spec.style.AnnotationSpec
 import org.assertj.core.api.Assertions.assertThat
 
@@ -8,81 +7,81 @@ class FiguresTest : AnnotationSpec() {
 
     @Test
     fun `Pawn gets correctly created`() {
-        val Bauerexample = Pawn(true)
-        assertThat(Bauerexample.symbol()).isEqualTo("b")
-        assertThat(Bauerexample.isWhite).isEqualTo(true)
+        val pawnExample = Pawn(true)
+        assertThat(pawnExample.symbol()).isEqualTo("b")
+        assertThat(pawnExample.isWhite).isEqualTo(true)
     }
 
     @Test
     fun `Rook gets correctly created`() {
-        val Rookexample = Rook(true)
-        assertThat(Rookexample.symbol()).isEqualTo("t")
-        assertThat(Rookexample.isWhite).isEqualTo(true)
+        val rookExample = Rook(true)
+        assertThat(rookExample.symbol()).isEqualTo("t")
+        assertThat(rookExample.isWhite).isEqualTo(true)
     }
 
     @Test
     fun `Rook can move vertically`() {
         val chessBoard = ChessBoard.emptyBoard()
-        val TestRook = Rook(true)
-        chessBoard.board[Position('a',1)] = TestRook
+        val testRook = Rook(true)
+        chessBoard.board[Position('a',1)] = testRook
         val from = Position('a', 1)
         val to = Position('a', 8)
 
 
-        assertThat(TestRook.canMove(from, to, chessBoard)).isTrue
+        assertThat(testRook.canMove(from, to, chessBoard)).isTrue
         assertThat(chessBoard.move(from, to)).isTrue
     }
 
     @Test
     fun `Rook can move horizontally`() {
         val chessBoard = ChessBoard.emptyBoard()
-        val TestRook = Rook(true)
-        chessBoard.board[Position('a', 1)] = TestRook
+        val testRook = Rook(true)
+        chessBoard.board[Position('a', 1)] = testRook
         val from = Position('a', 1)
         val to = Position('h', 1)
 
-        assertThat(TestRook.canMove(from, to, chessBoard)).isTrue
+        assertThat(testRook.canMove(from, to, chessBoard)).isTrue
         assertThat(chessBoard.move(from, to)).isTrue
     }
 
     @Test
     fun `Rook cannot move diagonally`() {
         val chessBoard = ChessBoard.emptyBoard()
-        val TestRook = Rook(true)
-        chessBoard.board[Position('a', 1)] = TestRook
+        val testRook = Rook(true)
+        chessBoard.board[Position('a', 1)] = testRook
         val from = Position('a', 1)
         val to = Position('h', 8)
 
 
-        assertThat(TestRook.canMove(from, to, chessBoard)).isFalse
+        assertThat(testRook.canMove(from, to, chessBoard)).isFalse
     }
 
     @Test
-    fun `Night gets correctly created`() {
-        val Springerexample = Knight(true)
-        assertThat(Springerexample.symbol()).isEqualTo("s")
-        assertThat(Springerexample.isWhite).isEqualTo(true)
+    fun `Knight gets correctly created`() {
+        val knightExample = Knight(true)
+        assertThat(knightExample.symbol()).isEqualTo("s")
+        assertThat(knightExample.isWhite).isEqualTo(true)
     }
 
     @Test
     fun `Bishop gets correctly created`() {
-        val Laeuferexample = Bishop(true)
-        assertThat(Laeuferexample.symbol()).isEqualTo("l")
-        assertThat(Laeuferexample.isWhite).isEqualTo(true)
+        val bishopExample = Bishop(true)
+        assertThat(bishopExample.symbol()).isEqualTo("l")
+        assertThat(bishopExample.isWhite).isEqualTo(true)
     }
 
     @Test
     fun `Queen gets correctly created`() {
-        val Dameexample = Queen(true)
-        assertThat(Dameexample.symbol()).isEqualTo("d")
-        assertThat(Dameexample.isWhite).isEqualTo(true)
+        val queenExample = Queen(true)
+        assertThat(queenExample.symbol()).isEqualTo("d")
+        assertThat(queenExample.isWhite).isEqualTo(true)
     }
 
     @Test
     fun `King gets correctly created`() {
-        val Königexample = King(true)
-        assertThat(Königexample.symbol()).isEqualTo("k")
-        assertThat(Königexample.isWhite).isEqualTo(true)
+        val kingExample = King(true)
+        assertThat(kingExample.symbol()).isEqualTo("k")
+        assertThat(kingExample.isWhite).isEqualTo(true)
     }
 
     @Test

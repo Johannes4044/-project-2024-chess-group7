@@ -13,10 +13,10 @@ class ConsoleOutputTest : AnnotationSpec() {
         val originalOut = System.out
         val outputStream = ByteArrayOutputStream()
         System.setOut(PrintStream(outputStream))
-        val chessboardexample = ChessBoard.fullBoard()
+        val chessBoardExample = ChessBoard.fullBoard()
 
 
-        chessboardexample.displayBoard()
+        chessBoardExample.displayBoard()
 
         System.setOut(originalOut)
 

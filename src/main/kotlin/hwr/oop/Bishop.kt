@@ -1,22 +1,17 @@
-import hwr.oop.ChessBoard
-import hwr.oop.Figures
-import hwr.oop.Position
+package hwr.oop
 import kotlin.math.abs
 
-class Bishop(isWhite: Boolean) : Figures(isWhite) {
+class Bishop(override val isWhite: Boolean) : Figures {
     override fun symbol() = if (isWhite) "l" else "L"
 
     override fun canMove(from: Position, to: Position, board: ChessBoard): Boolean {
-        val deltaY = to.Row - from.Row
-        val deltaX = to.Column - from.Column
+        val deltaY = to.row - from.row
+        val deltaX = to.column - from.column
 
         val destination = board.getFigureAt(to)
 
         //Move
-        if (abs(deltaX) == abs(deltaY) && (destination == null || destination.isWhite != this.isWhite)) {
-            return true
-        }
-        return false
+        return abs(deltaX) == abs(deltaY) && (destination == null || destination.isWhite != this.isWhite)
     }
     override fun availableMoves(from: Position, board: ChessBoard): List<Position> {
         val moves = mutableListOf<Position>()
@@ -30,15 +25,16 @@ class Bishop(isWhite: Boolean) : Figures(isWhite) {
         )
 
         for ((dx, dy) in directions) {
-            var current = Position(from.Column + dx, from.Row + dy)
-            while (current.Column in 'a'..'h' && current.Row in 1..8) {
+            var current = Position(from.column + dx, from.row + dy)
+            while (current.column in 'a'..'h' && current.row
+                in 1..8) {
                 if (canMove(from, current, board)) {
                     moves.add(current)
                 }
                 if (board.getFigureAt(current) != null) {
                     break // Stoppen, wenn eine Figur im Weg ist
                 }
-                current = Position(current.Column + dx, current.Row + dy)
+                current = Position(current.column + dx, current.row + dy)
             }
         }
 

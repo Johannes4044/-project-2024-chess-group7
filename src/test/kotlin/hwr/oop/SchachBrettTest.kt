@@ -6,8 +6,8 @@ import org.assertj.core.api.Assertions.assertThat
 class SchachBrettTest : AnnotationSpec() {
   @Test
   fun `initialize Chessboard does not return false`() {
-    val chessboardexample = ChessBoard.fullBoard()
-    assertThat(chessboardexample.displayBoard()).isNotNull
+    val chessBoardExample = ChessBoard.fullBoard()
+    assertThat(chessBoardExample.displayBoard()).isNotNull
   }
   @Test
   fun `CLI command chess new_game initializes the game`() {

@@ -1,15 +1,15 @@
 package hwr.oop
 
 
-class Pawn(isWhite: Boolean) : Figures(isWhite) {
+class Pawn(override val isWhite: Boolean) : Figures {
     override fun symbol() = if (isWhite) "b" else "B"
 
     override fun canMove(from: Position, to: Position, board: ChessBoard): Boolean{
         val direction = if (isWhite) 1 else -1
         val startZeile = if (isWhite) 2 else 7
 
-        val deltaY = to.Row - from.Row
-        val deltaX = to.Column - from.Column
+        val deltaY = to.row - from.row
+        val deltaX = to.column - from.column
 
         val destination = board.getFigureAt(to)
         // Normaler Zug
@@ -18,7 +18,7 @@ class Pawn(isWhite: Boolean) : Figures(isWhite) {
         }
 
         // Erster Zug (2 Felder)
-        if (deltaX == 0 && deltaY == 2*direction && destination == null && from.Row == startZeile) {
+        if (deltaX == 0 && deltaY == 2*direction && destination == null && from.row == startZeile) {
             return true
         }
 
@@ -35,29 +35,31 @@ class Pawn(isWhite: Boolean) : Figures(isWhite) {
         val startZeile = if (isWhite) 2 else 7
 
         // Normaler Zug
-        val forwardOne = Position(from.Column, from.Row + direction)
-        if (board.getFigureAt(forwardOne) == null && forwardOne.Row in 1..8) {
+        val forwardOne = Position(from.column, from.row + direction)
+        if (board.getFigureAt(forwardOne) == null && forwardOne.row
+            in 1..8) {
             moves.add(forwardOne)
         }
 
         // Erster Zug (2 Felder)
-        val forwardTwo = Position(from.Column, from.Row + 2 * direction)
-        if (from.Row == startZeile && board.getFigureAt(forwardOne) == null && board.getFigureAt(forwardTwo) == null) {
+        val forwardTwo = Position(from.column, from.row + 2 * direction)
+        if (from.row == startZeile && board.getFigureAt(forwardOne) == null && board.getFigureAt(forwardTwo) == null) {
             moves.add(forwardTwo)
         }
 
         // Schlagzüge
-        val attackLeft = Position(from.Column - 1, from.Row + direction)
-        val attackRight = Position(from.Column + 1, from.Row + direction)
+        val attackLeft = Position(from.column - 1, from.row + direction)
+        val attackRight = Position(from.column + 1, from.row + direction)
 
-        if (attackLeft.Column in 'a'..'h' && attackLeft.Row in 1..8) {
+        if (attackLeft.column
+            in 'a'..'h' && attackLeft.row in 1..8) {
             val leftTarget = board.getFigureAt(attackLeft)
             if (leftTarget != null && leftTarget.isWhite != this.isWhite) {
                 moves.add(attackLeft)
             }
         }
 
-        if (attackRight.Column in 'a'..'h' && attackRight.Row in 1..8) {
+        if (attackRight.column in 'a'..'h' && attackRight.row in 1..8) {
             val rightTarget = board.getFigureAt(attackRight)
             if (rightTarget != null && rightTarget.isWhite != this.isWhite) {
                 moves.add(attackRight)
