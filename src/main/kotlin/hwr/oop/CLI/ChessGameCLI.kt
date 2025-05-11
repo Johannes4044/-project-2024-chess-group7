@@ -36,7 +36,7 @@ class ChessGameCLI(private val board: ChessBoard) {
             println("Fehler: Keine ID-Nummer angegeben.")
             return
         }
-        board.initializeBoard()
+        ChessBoard.fullBoard()
         gameRunning = true
         isWhiteTurn = true
         println("Neues Spiel gestartet mit ID: $gameId")

@@ -144,4 +144,17 @@ class FiguresTest : AnnotationSpec() {
 
         assertThat(pawn.canMove(from, to, chessBoard)).isFalse
     }
+
+    @Test
+    fun `Pawn gets promoted to Queen`(){
+        val chessBoard = ChessBoard.emptyBoard()
+        val pawn = Pawn(true)
+        chessBoard.board[Position('a', 7)] = pawn
+        val from = Position('a', 7)
+        val to = Position('a', 8)
+
+        assertThat(pawn.canMove(from, to, chessBoard)).isTrue
+        assertThat(chessBoard.move(from, to, { isWhite -> Queen(isWhite) })).isTrue
+        assertThat(chessBoard.getFigureAt(to)?.symbol()).isEqualTo("d")
+    }
 }
