@@ -1,22 +1,19 @@
 package hwr.oop
 import kotlin.math.abs
 
-class Knight(isWhite: Boolean) : Figures(isWhite) {
+class Knight(override val isWhite: Boolean) : Figures {
     override fun symbol() = if (isWhite) "s" else "S"
 
     override fun canMove(from: Position, to: Position, board: ChessBoard): Boolean {
         val startZeile = if (isWhite) 1 else 8
 
-        val deltaX = to.Row - from.Row
-        val deltaY = to.Column - from.Column
+        val deltaX = to.row - from.row
+        val deltaY = to.column - from.column
 
         val destination = board.getFigureAt(to)
 
-        if (((abs(deltaX) == 2 && abs(deltaY) == 1) || (Math.abs(deltaX) == 1 && Math.abs(deltaY) == 2))
-            && (destination == null)) {
-            return true
-        }
-        return false
+        return (((abs(deltaX) == 2 && abs(deltaY) == 1) || (abs(deltaX) == 1 && abs(deltaY) == 2))
+                && (destination == null))
     }
     override fun availableMoves(from: Position, board: ChessBoard): List<Position> {
         val moves = mutableListOf<Position>()
@@ -28,8 +25,9 @@ class Knight(isWhite: Boolean) : Figures(isWhite) {
         )
 
         for ((dx, dy) in directions) {
-            val target = Position(from.Column + dx, from.Row + dy)
-            if (target.Column in 'a'..'h' && target.Row in 1..8) {
+            val target = Position(from.column+ dx, from.row + dy)
+            if (target.column in 'a'..'h' && target.row
+                in 1..8) {
                 val destination = board.getFigureAt(target)
                 if (destination == null || destination.isWhite != this.isWhite) {
                     moves.add(target)

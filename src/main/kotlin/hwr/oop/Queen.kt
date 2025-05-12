@@ -1,11 +1,11 @@
 package hwr.oop
 
-class Queen(isWhite: Boolean) : Figures(isWhite) {
+class Queen(override val isWhite: Boolean) : Figures{
     override fun symbol() = if (isWhite) "d" else "D"
 
     override fun canMove(from: Position, to: Position, board: ChessBoard): Boolean {
-        val dy = to.Row - from.Row
-        val dx = to.Column - from.Column
+        val dy = to.row - from.row
+        val dx = to.column - from.column
 
         // Überprüfung, ob die Bewegung horizontal, vertikal oder diagonal ist
         if (dx != 0 && dy != 0 && kotlin.math.abs(dx) != kotlin.math.abs(dy)) {
@@ -16,12 +16,12 @@ class Queen(isWhite: Boolean) : Figures(isWhite) {
         val stepX = if (dx == 0) 0 else dx / kotlin.math.abs(dx)
         val stepY = if (dy == 0) 0 else dy / kotlin.math.abs(dy)
 
-        var current = Position((from.Column + stepX).toChar(), from.Row + stepY)
+        var current = Position((from.column + stepX), from.row + stepY)
         while (current != to) {
             if (board.getFigureAt(current) != null) {
                 return false
             }
-            current = Position((current.Column + stepX).toChar(), current.Row + stepY)
+            current = Position((current.column + stepX), current.row + stepY)
         }
 
         // Überprüfung der Zielposition
@@ -42,8 +42,8 @@ class Queen(isWhite: Boolean) : Figures(isWhite) {
         )
 
         for ((dx, dy) in directions) {
-            var current = Position((from.Column + dx).toChar(), from.Row + dy)
-            while (current.Column in 'a'..'h' && current.Row in 1..8) {
+            var current = Position((from.column + dx).toChar(), from.row + dy)
+            while (current.column in 'a'..'h' && current.row in 1..8) {
                 val destination = board.getFigureAt(current)
                 if (destination == null) {
                     moves.add(current)
@@ -53,7 +53,7 @@ class Queen(isWhite: Boolean) : Figures(isWhite) {
                     }
                     break
                 }
-                current = Position((current.Column + dx).toChar(), current.Row + dy)
+                current = Position((current.column + dx).toChar(), current.row + dy)
             }
         }
 

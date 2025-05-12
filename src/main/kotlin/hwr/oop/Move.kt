@@ -2,7 +2,7 @@ package hwr.oop
 
 data class Move(val from: Position, val to: Position, val board: ChessBoard) {
     override fun toString(): String {
-        return "Zug von ${from.Column}${from.Row} nach ${to.Column}${to.Row}"
+        return "Zug von ${from.column}${from.row} nach ${to.column}${to.row}"
     }
 
     fun isValid(): Boolean {
