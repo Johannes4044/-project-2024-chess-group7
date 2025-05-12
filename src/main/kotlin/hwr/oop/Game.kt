@@ -1,8 +1,8 @@
 package hwr.oop
 
 class Game {
-    private val board: ChessBoard = ChessBoard.fullBoard()
-    private var currentPlayerIsWhite: Boolean = true
+    val board: ChessBoard = ChessBoard.fullBoard()
+    var currentPlayerIsWhite: Boolean = true
 
     fun startGame() {
         board.displayBoard()
@@ -29,9 +29,21 @@ class Game {
     }
 
 
-    fun isGameOver(): Boolean {
-        //TODO Logik zur Überprüfung, ob das Spiel vorbei ist (z. B. Schachmatt, Patt)
+    fun isGameOver() {
+        fun isKingInCheck(whiteTurn: Boolean): Boolean {
+            val kingPosition = board.findKing(whiteTurn) ?: return false
 
-        return false
+            for (position in board.getAllPositions() as List<Position>) {
+                val figure = board.getFigureAt(position)
+                if (figure != null && figure.isWhite != whiteTurn) {
+                    if (figure.availableMoves(position, board).contains(kingPosition)) {
+                        return true
+                    }
+                }
+            }
+            return false
+        }
+
     }
 }
+
