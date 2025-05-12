@@ -25,10 +25,13 @@ class Game {
             println("Ungültiger Zug!")
             return false
         }
+        currentPlayerIsWhite = !currentPlayerIsWhite
     }
+
 
     fun isGameOver(): Boolean {
         //TODO Logik zur Überprüfung, ob das Spiel vorbei ist (z. B. Schachmatt, Patt)
+
         return false
     }
 }
