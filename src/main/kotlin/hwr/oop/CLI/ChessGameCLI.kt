@@ -3,7 +3,6 @@ package hwr.oop.CLI
 import hwr.oop.ChessBoard
 import hwr.oop.Move
 import hwr.oop.Position
-import hwr.oop.Figures
 
 class ChessGameCLI(private val board: ChessBoard) {
     private var isWhiteTurn = true
@@ -36,7 +35,9 @@ class ChessGameCLI(private val board: ChessBoard) {
             println("Fehler: Keine ID-Nummer angegeben.")
             return
         }
-        ChessBoard.fullBoard()
+
+        val board = ChessBoard.emptyBoard()
+
         gameRunning = true
         isWhiteTurn = true
         println("Neues Spiel gestartet mit ID: $gameId")
@@ -94,7 +95,7 @@ class ChessGameCLI(private val board: ChessBoard) {
 
         val position = Position(pos[0], pos[1].toString().toInt())
         val moves = board.getFigureAt(position)?.availableMoves(position, board)
-        println("Verfügbare Züge für $pos: ${moves?.map { "${it.Column}${it.Row}" }?.joinToString(", ") ?: "Keine"}")
+        println("Verfügbare Züge für $pos: ${moves?.map { "${it.column}${it.row}" }?.joinToString(", ") ?: "Keine"}")
     }
 
     private fun showHelp() {

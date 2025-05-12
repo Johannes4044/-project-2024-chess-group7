@@ -77,6 +77,10 @@ Das Ziel dieses Projekts ist es, ein funktionierendes Schachspiel zu implementie
 
 [TODO]: # (Remove these instructions once you finished your fork's setup.)
 
+## TODO
+
+
+
 Use a fork of this repository to do implement your project.
 
 Remember to add this repository as a second remote repository (upstream) and pull from the correct
@@ -99,27 +103,27 @@ git clone <fork-url>
 cd <created-folder>
 ```
 
-2. Now your fork is configured as primary remote repository (origin).
+1. Now your fork is configured as primary remote repository (origin).
    Next to origin, you should add the original repository as a second remote repository (upstream).
 
 ```
 git remote add upstream <repository-url>
 ```
 
-3. Verify that both remotes are configured correctly.
+1. Verify that both remotes are configured correctly.
    The following command should list both remotes: origin and upstream.
 
 ```
 git remote -v
 ```
 
-4. To fetch changes from all remote repositories, use:
+1. To fetch changes from all remote repositories, use:
 
 ```
 git fetch --all
 ```
 
-5. If there are interesting changes (in e.g. the `main` branch) to merge into your branch, use:
+1. If there are interesting changes (in e.g. the `main` branch) to merge into your branch, use:
 
 ```
 git pull upstream main

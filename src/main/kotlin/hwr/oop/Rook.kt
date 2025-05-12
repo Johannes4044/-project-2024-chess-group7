@@ -1,11 +1,11 @@
 package hwr.oop
 
-class Rook(isWhite: Boolean) : Figures(isWhite) {
+class Rook(override val isWhite: Boolean) : Figures{
     override fun symbol() = if (isWhite) "t" else "T"
 
     override fun canMove(from: Position, to: Position, board: ChessBoard): Boolean {
-        val deltaY = to.Row - from.Row
-        val deltaX = to.Column - from.Column
+        val deltaY = to.row - from.row
+        val deltaX = to.column - from.column
 
         // Der Turm kann sich nur horizontal oder vertikal bewegen
         if (deltaX != 0 && deltaY != 0) {
@@ -16,12 +16,12 @@ class Rook(isWhite: Boolean) : Figures(isWhite) {
         val stepX = if (deltaX == 0) 0 else deltaX / kotlin.math.abs(deltaX)
         val stepY = if (deltaY == 0) 0 else deltaY / kotlin.math.abs(deltaY)
 
-        var current = Position(from.Column + stepX, from.Row + stepY)
+        var current = Position(from.column + stepX, from.row + stepY)
         while (current != to) {
             if (board.getFigureAt(current) != null) {
                 return false
             }
-            current = Position(current.Column + stepX, current.Row + stepY)
+            current = Position(current.column + stepX, current.row + stepY)
         }
 
         // Zielposition prüfen
@@ -40,15 +40,15 @@ class Rook(isWhite: Boolean) : Figures(isWhite) {
         )
 
         for ((dx, dy) in directions) {
-            var current = Position(from.Column + dx, from.Row + dy)
-            while (current.Column in 'a'..'h' && current.Row in 1..8) {
+            var current = Position(from.column + dx, from.row + dy)
+            while (current.column in 'a'..'h' && current.row in 1..8) {
                 if (canMove(from, current, board)) {
                     moves.add(current)
                 }
                 if (board.getFigureAt(current) != null) {
                     break // Stoppen, wenn eine Figur im Weg ist
                 }
-                current = Position(current.Column + dx, current.Row + dy)
+                current = Position(current.column + dx, current.row + dy)
             }
         }
 

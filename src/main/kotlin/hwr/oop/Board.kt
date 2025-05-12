@@ -1,6 +1,5 @@
 package hwr.oop
 
-import Bishop
 import hwr.oop.CLI.ChessGameCLI
 
 class ChessBoard(val board: MutableMap<Position, Figures>) {
@@ -110,6 +109,7 @@ class ChessBoard(val board: MutableMap<Position, Figures>) {
     }
   }
 
+
   fun toFEN(): String{
     val fen = StringBuilder()
     for (j in 8 downTo 1) {
@@ -140,9 +140,16 @@ class ChessBoard(val board: MutableMap<Position, Figures>) {
 
 fun main() {
   val chessBoard = ChessBoard.fullBoard()
+
     val cli = ChessGameCLI(chessBoard)
     cli.start()
-  }
+}
+    // val chessBoard = ChessBoard.fullBoard()
+    // chessBoard.displayBoard()
+    // println("Verfügbare Züge für die Position a2:")
+    // val rookMoves = chessBoard.getFigureAt(Position('a', 2))?.availableMoves(Position('a', 2), chessBoard)
+    // println(rookMoves?.map { "${it.Column}${it.Row}" }?.joinToString(", ") ?: "Keine Züge verfügbar")
+
 //
 //  println("Um das Spiel zu starten, schreiben Sie: chess new_game und eine ID-Nummer:")
 //  val satz = readLine()?.trim()
