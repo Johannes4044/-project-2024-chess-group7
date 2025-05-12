@@ -20,6 +20,9 @@
     <maven-jar-plugin.version>3.4.2</maven-jar-plugin.version>
     <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
     <maven-failsafe-plugin.version>2.22.2</maven-failsafe-plugin.version>
+    <maven-assembly-plugin.version>3.7.1</maven-assembly-plugin.version>
+    <pitest.version>1.19.1</pitest.version>
+    <kotest-extensions-pitest.version>1.2.0</kotest-extensions-pitest.version>
   </properties>
 
   <repositories>
@@ -60,6 +63,12 @@
       <groupId>io.kotest</groupId>
       <artifactId>kotest-assertions-core-jvm</artifactId>
       <version>${kotest.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.kotest.extensions</groupId>
+      <artifactId>kotest-extensions-pitest</artifactId>
+      <version>${kotest-extensions-pitest.version}</version>
       <scope>test</scope>
     </dependency>
 
@@ -103,7 +112,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
-        <version>3.7.1</version>
+        <version>${maven-assembly-plugin.version}</version>
         <configuration>
           <descriptorRefs>
             <descriptorRef>jar-with-dependencies</descriptorRef>
@@ -136,6 +145,28 @@
             <kotest.framework.classpath.scanning.autoscan.disable>true</kotest.framework.classpath.scanning.autoscan.disable>
           </systemPropertyVariables>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.pitest</groupId>
+        <artifactId>pitest-maven</artifactId>
+        <version>${pitest.version}</version>
+        <configuration>
+          <targetClasses>
+            <param>hwr.oop.*</param>
+          </targetClasses>
+          <targetTests>
+            <param>hwr.oop.*</param>
+          </targetTests>
+        </configuration>
+        <executions>
+          <execution>
+            <id>mutation-testing</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>mutationCoverage</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
 
       <!-- Exec Maven Plugin -->
