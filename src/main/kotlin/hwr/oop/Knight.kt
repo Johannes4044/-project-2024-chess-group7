@@ -25,9 +25,8 @@ class Knight(override val isWhite: Boolean) : Figures {
         )
 
         for ((dx, dy) in directions) {
-            val target = Position(from.column+ dx, from.row + dy)
-            if (target.column in 'a'..'h' && target.row
-                in 1..8) {
+            val target = Position(from.column + dx, from.row + dy)
+            if (target.column in 'a'..'h' && target.row in 1..8) {
                 val destination = board.getFigureAt(target)
                 if (destination == null || destination.isWhite != this.isWhite) {
                     moves.add(target)

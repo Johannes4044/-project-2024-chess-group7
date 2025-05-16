@@ -81,7 +81,7 @@ class ChessBoard(val board: MutableMap<Position, Figures>) {
     val figure = board[from] ?: return false
     if (figure.canMove(from, to, this)) {
       board.remove(from)
-      if (figure is Pawn && (to.Row == 8 && figure.isWhite || to.Row == 1 && !figure.isWhite)) {
+      if (figure is Pawn && (to.row == 8 && figure.isWhite || to.row == 1 && !figure.isWhite)) {
         board[to] = promoteTo?.invoke(figure.isWhite) ?: Queen(figure.isWhite)
         println("Bauer wird zur Dame befördert!")
       }
@@ -136,6 +136,33 @@ class ChessBoard(val board: MutableMap<Position, Figures>) {
     }
     return(fen.toString())
   }
+  fun getAllFigures(whiteTurn: Boolean): Any {
+
+    val allFigures = mutableListOf<Figures>()
+    for (entry in board.entries) {
+      if (entry.value.isWhite == whiteTurn) {
+        allFigures.add(entry.value)
+      }
+    }
+    return allFigures
+  }
+
+  fun findKing(whiteTurn: Boolean): Position? {
+    for (entry in board.entries) {
+      if (entry.value is King && entry.value.isWhite == whiteTurn) {
+        return entry.key
+      }
+    }
+    return null
+  }
+
+  fun getAllPositions(): Any {
+    val allPositions = mutableListOf<Position>()
+    for (entry in board.entries) {
+      allPositions.add(entry.key)
+    }
+    return allPositions
+  }
 }
 
 fun main() {
@@ -144,43 +171,3 @@ fun main() {
     val cli = ChessGameCLI(chessBoard)
     cli.start()
 }
-    // val chessBoard = ChessBoard.fullBoard()
-    // chessBoard.displayBoard()
-    // println("Verfügbare Züge für die Position a2:")
-    // val rookMoves = chessBoard.getFigureAt(Position('a', 2))?.availableMoves(Position('a', 2), chessBoard)
-    // println(rookMoves?.map { "${it.Column}${it.Row}" }?.joinToString(", ") ?: "Keine Züge verfügbar")
-
-//
-//  println("Um das Spiel zu starten, schreiben Sie: chess new_game und eine ID-Nummer:")
-//  val satz = readLine()?.trim()
-//  var id1 = ""
-//
-//  if (satz != null && satz.startsWith("chess new_game")) {
-//    id1 = satz.removePrefix("chess new_game").trim()
-//    if (id1.isNotEmpty()) {
-//      println("Das Spiel startet mit der ID: $id1")
-//      chessBoard.displayBoard()
-//    } else {
-//      println("Fehler: Keine ID-Nummer angegeben.")
-//    }
-//  } else {
-//    println("Fehler: Ungültige Eingabe. Bitte schreiben Sie: game start und eine ID-Nummer.")
-//  }
-//  chessBoard.initializeBoard()
-//
-//  chessBoard.displayBoard()
-//  println("Verfügbare Züge für die Position a2:")
-//  val rookMoves = chessBoard.getFigureAt(Position('a', 2))?.availableMoves(Position('a', 2), chessBoard)
-//  println(rookMoves?.map { "${it.Column}${it.Row}" }?.joinToString(", ") ?: "Keine Züge verfügbar")
-////   chessBoard.move(Position('a', 2), Position('a', 4))
-////   chessBoard.displayBoard()
-////   chessBoard.move(Position('a', 1), Position('b', 4))
-////   chessBoard.displayBoard()
-////   chessBoard.move(Position('e', 1), Position('e', 2))
-////   chessBoard.displayBoard()
-////   chessBoard.move(Position('e', 2), Position('e', 1))
-////   chessBoard.displayBoard()
-////   chessBoard.move(Position('d', 1), Position('h', 5))
-////   chessBoard.displayBoard()
-
-

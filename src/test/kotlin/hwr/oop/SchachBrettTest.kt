@@ -45,4 +45,5 @@ class SchachBrettTest : AnnotationSpec() {
         assertThat(chessBoard.getFigureAt(Position('d', 1))?.symbol()).isEqualTo("d")
         assertThat(chessBoard.getFigureAt(Position('e', 2))?.symbol()).isEqualTo("b")
     }
+
 }

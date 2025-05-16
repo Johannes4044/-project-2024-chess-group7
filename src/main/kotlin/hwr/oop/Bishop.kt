@@ -26,8 +26,7 @@ class Bishop(override val isWhite: Boolean) : Figures {
 
         for ((dx, dy) in directions) {
             var current = Position(from.column + dx, from.row + dy)
-            while (current.column in 'a'..'h' && current.row
-                in 1..8) {
+            while (current.column in 'a'..'h' && current.row in 1..8) {
                 if (canMove(from, current, board)) {
                     moves.add(current)
                 }
