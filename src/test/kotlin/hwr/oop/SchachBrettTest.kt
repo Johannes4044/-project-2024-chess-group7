@@ -2,6 +2,7 @@ package hwr.oop
 
 import io.kotest.core.spec.style.AnnotationSpec
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.assertThrows
 
 class SchachBrettTest : AnnotationSpec() {
   @Test
@@ -36,14 +37,45 @@ class SchachBrettTest : AnnotationSpec() {
         val chessBoard = ChessBoard.emptyBoard()
         val fenString = chessBoard.toFEN()
         assertThat(fenString).isEqualTo("8/8/8/8/8/8/8/8")
+        assertThat(chessBoard.getFigureAt(Position('d',1))).isNull()
+        assertThat(chessBoard.getFigureAt(Position('e',2))).isNull()
     }
 
+    @Test
+    fun `FEN string is generated correctly for custom board`() {
+        val chessBoard = ChessBoard(mutableMapOf(
+            Position('a', 1) to Rook(true),
+            Position('b', 2) to Knight(false),
+            Position('c', 3) to Bishop(true)
+        ))
+        val fenString = chessBoard.toFEN()
+        assertThat(fenString).isEqualTo("8/8/8/8/8/2l5/1S6/t7")
+    }
     @Test
     fun `FEN to board conversion works correctly`() {
         val fenString = "TSLDKLST/BBBBBBBB/8/8/8/8/bbbbbbbb/tsldklst"
         val chessBoard = ChessBoard.fromFEN(fenString)
         assertThat(chessBoard.getFigureAt(Position('d', 1))?.symbol()).isEqualTo("d")
         assertThat(chessBoard.getFigureAt(Position('e', 2))?.symbol()).isEqualTo("b")
+    }
+
+    @Test
+    fun `FEN to board conversion works correctly for empty board`() {
+        val fenString = "8/8/8/8/8/8/8/8"
+        val chessBoard = ChessBoard.fromFEN(fenString)
+        assertThat(chessBoard.getFigureAt(Position('d', 1))).isNull()
+        assertThat(chessBoard.getFigureAt(Position('e', 2))).isNull()
+    }
+
+    @Test
+    fun `fromFEN throws IllegalArgumentException for invalid FEN`() {
+        val invalidFEN = "invalidFENString"
+
+        val exception = assertThrows<IllegalArgumentException> {
+            ChessBoard.fromFEN(invalidFEN)
+        }
+
+        assertThat(exception.message?.contains("Ungültige Figur in FEN") == true)
     }
 
 }
