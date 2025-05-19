@@ -4,7 +4,7 @@ import io.kotest.core.spec.style.AnnotationSpec
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.assertThrows
 
-class SchachBrettTest : AnnotationSpec() {
+class ChessBoardTests : AnnotationSpec() {
     @Test
     fun `initialize Chessboard does not return false`() {
         val chessBoardExample = ChessBoard.fullBoard()
