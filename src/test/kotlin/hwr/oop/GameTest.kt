@@ -1,11 +1,14 @@
 package hwr.oop
 
+import hwr.oop.figures.King
+import hwr.oop.figures.Pawn
+import hwr.oop.figures.Queen
+import hwr.oop.figures.Rook
 import io.kotest.core.spec.style.AnnotationSpec
 import org.assertj.core.api.Assertions.assertThat
 
 
 class GameTest : AnnotationSpec() {
-    // Teste die Startbedingungen des Spiels
     @Test
     fun `start game initializes the game correctly`() {
         val game = Game()
@@ -13,7 +16,6 @@ class GameTest : AnnotationSpec() {
         assertThat(game.isGameOver()).isFalse()
     }
 
-    // Teste einen gültigen Zug
     @Test
     fun `valid move changes player turn`() {
         val game = Game()
@@ -23,28 +25,25 @@ class GameTest : AnnotationSpec() {
         assertThat(game.isGameOver()).isFalse()
     }
 
-    // Teste einen ungültigen Zug
     @Test
     fun `invalid move does not change player turn`() {
         val game = Game()
         val from = Position('e', 2)
-        val to = Position('e', 5) // Ungültiger Zug für einen Bauern
+        val to = Position('e', 5)
         game.makeMove(from, to)
         assertThat(game.isGameOver()).isFalse()
     }
 
-    // Teste einen Zug mit einer Figur des falschen Spielers
     @Test
     fun `move with wrong player's figure does not change player turn`() {
         val game = Game()
         val from = Position('e', 2)
         val to = Position('e', 4)
-        game.makeMove(from, to) // Weißer Spieler zieht
-        game.makeMove(from, to) // Schwarzer Spieler versucht zu ziehen
+        game.makeMove(from, to)
+        game.makeMove(from, to)
         assertThat(game.isGameOver()).isFalse()
     }
 
-//    //Teste das Schwarz und weiße sich abwechseln
     @Test
     fun `players alternate turns`() {
         val game = Game()
@@ -53,67 +52,143 @@ class GameTest : AnnotationSpec() {
         val fromBlack = Position('d', 7)
         val toBlack = Position('d', 5)
 
-        game.makeMove(fromWhite, toWhite) // Weißer Spieler zieht
+        game.makeMove(fromWhite, toWhite)
         assertThat(game.isGameOver()).isFalse()
 
-        game.makeMove(fromBlack, toBlack) // Schwarzer Spieler zieht
+        game.makeMove(fromBlack, toBlack)
         assertThat(game.isGameOver()).isFalse()
     }
 
-//    // Teste einen Zug, der eine andere Figur schlägt
     @Test
     fun `valid move captures opponent's figure`() {
         val game = Game()
         val from = Position('e', 2)
         val to = Position('e', 4)
-        game.makeMove(from, to) // Weißer Spieler zieht
+        game.makeMove(from, to)
         val fromBlack = Position('d', 7)
         val toBlack = Position('d', 5)
-        game.makeMove(fromBlack, toBlack) // Schwarzer Spieler zieht
+        game.makeMove(fromBlack, toBlack)
         val fromWhiteCapture = Position('e', 4)
-        val toWhiteCapture = Position('d', 5) // Weißer Spieler schlägt die schwarze Figur
+        val toWhiteCapture = Position('d', 5)
         game.makeMove(fromWhiteCapture, toWhiteCapture)
         assertThat(game.isGameOver()).isFalse()
     }
 
-    // Teste das Ende des Spiels
     @Test
     fun `game ends in stalemate`() {
         val game = Game()
         val board = ChessBoard.fullBoard()
-        board.move(Position('h', 1), Position('h', 1)) // Weißer König bleibt an Ort und Stelle
-        board.move(Position('f', 2), Position('f', 2)) // Schwarzer König bleibt an Ort und Stelle
-        board.move(Position('g', 3), Position('g', 3)) // Schwarze Dame bleibt an Ort und Stelle
+        board.move(Position('h', 1), Position('h', 1))
+        board.move(Position('f', 2), Position('f', 2))
+        board.move(Position('g', 3), Position('g', 3))
         game.currentPlayerIsWhite = true
 
-        val isStalemate = game.isGameOver() // Überprüft, ob das Spiel vorbei ist
+        val isStalemate = game.isGameOver()
         assertThat(isStalemate).isFalse()
     }
+    @Test
+    fun `kingPositions returns correct positions`() {
+        val game = Game()
+        val (whiteKing, blackKing) = game.kingPositions()
+        assertThat(whiteKing).isEqualTo(Position('e', 1))
+        assertThat(blackKing).isEqualTo(Position('e', 8))
+    }
 
     @Test
-    fun `white is checked`(){
+    fun `getAllMoves return all available moves back`() {
+        val game = Game()
+        val (whiteMoves, blackMoves) = game.getAllMoves(game.board)
+        assertThat(whiteMoves).isNotEmpty
+        assertThat(blackMoves).isNotEmpty
+    }
+
+    @Test
+    fun `white is checked`() {
         val game = Game()
         val chessBoard = ChessBoard.emptyBoard()
-        game.getAllMoves(chessBoard)
-        game.kingPositions()
-
         chessBoard.placePieces(Position('e', 2), King(true))
         chessBoard.placePieces(Position('e', 5), Rook(false))
+        game.board = chessBoard
         val isChecked = game.whiteCheck()
         assertThat(isChecked).isTrue()
     }
 
     @Test
-    fun `black is checked`(){
+    fun `black is checked`() {
         val game = Game()
         val chessBoard = ChessBoard.emptyBoard()
-        game.getAllMoves(chessBoard)
-        game.kingPositions()
-
-
-        chessBoard.placePieces(Position('e', 2), King(false))
-        chessBoard.placePieces(Position('e', 5), Rook(true))
-        val isChecked = game.whiteCheck()
+        chessBoard.placePieces(Position('e', 6), King(false))
+        chessBoard.placePieces(Position('e', 3), Rook(true))
+        game.board = chessBoard
+        val isChecked = game.blackCheck()
         assertThat(isChecked).isTrue()
+    }
+    @Test
+    fun `getAllFigures return all white figures back`() {
+        val chessBoard = ChessBoard.fullBoard()
+        val whiteFigures = chessBoard.getAllFigures(true) as List<*>
+        assertThat(whiteFigures).hasSize(16)
+        assertThat(whiteFigures.all { (it as Figure).isWhite }).isTrue()
+    }
+
+    @Test
+    fun `getAllFigures return all black figures back`() {
+        val chessBoard = ChessBoard.fullBoard()
+        val blackFigures = chessBoard.getAllFigures(false) as List<*>
+        assertThat(blackFigures).hasSize(16)
+        assertThat(blackFigures.all { !(it as Figure).isWhite }).isTrue()
+    }
+
+    @Test
+    fun `getAllPositions return all occupied positions back`() {
+        val chessBoard = ChessBoard.fullBoard()
+        val positions = chessBoard.getAllPositions() as List<*>
+        assertThat(positions).hasSize(32)
+        assertThat(positions.all { it is Position }).isTrue()
+    }
+
+    @Test
+    fun `move from invalid position returns false`() {
+        val game = Game()
+        val from = Position('z', 9)
+        val to = Position('a', 1)
+        val result = game.makeMove(from, to)
+        assertThat(result).isFalse()
+    }
+
+    @Test
+    fun `move from empty position returns false`() {
+        val game = Game()
+        val from = Position('a', 3)
+        val to = Position('a', 4)
+        val result = game.makeMove(from, to)
+        assertThat(result).isFalse()
+    }
+
+    @Test
+    fun `move to own figure returns false`() {
+        val game = Game()
+        val from = Position('e', 2)
+        val to = Position('d', 1)
+        val result = game.makeMove(from, to)
+        assertThat(result).isFalse()
+    }
+
+    @Test
+    fun `pawn promotion works`() {
+        val game = Game()
+        game.board = ChessBoard.emptyBoard()
+        game.board.placePieces(Position('a', 7), Pawn(true))
+        game.currentPlayerIsWhite = true
+        val result = game.makeMove(Position('a', 7), Position('a', 8))
+        assertThat(result).isTrue()
+        assertThat(game.board.getFigureAt(Position('a', 8))).isInstanceOf(Queen::class.java)
+    }
+
+    @Test
+    fun `game is over when no king on board`() {
+        val game = Game()
+        game.board = ChessBoard.emptyBoard()
+        assertThat(game.isGameOver()).isFalse()
     }
 }

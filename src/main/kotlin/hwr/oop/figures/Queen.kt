@@ -1,4 +1,8 @@
-package hwr.oop
+package hwr.oop.figures
+
+import hwr.oop.ChessBoard
+import hwr.oop.Figure
+import hwr.oop.Position
 
 class Queen(override val isWhite: Boolean) : Figure {
     override fun symbol() = if (isWhite) "d" else "D"

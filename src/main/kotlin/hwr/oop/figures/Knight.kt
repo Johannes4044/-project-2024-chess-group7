@@ -1,25 +1,21 @@
-package hwr.oop
+package hwr.oop.figures
 
-import kotlin.math.abs
+import hwr.oop.ChessBoard
+import hwr.oop.Figure
+import hwr.oop.Position
 
-class King(override val isWhite: Boolean) : Figure {
-    override fun symbol() = if (isWhite) "k" else "K"
+class Knight(override val isWhite: Boolean) : Figure {
+    override fun symbol() = if (isWhite) "s" else "S"
 
     override fun availableMoves(from: Position, board: ChessBoard): List<Position> {
         val moves = mutableListOf<Position>()
 
-        // Alle möglichen Bewegungsrichtungen des Königs
+        // Alle möglichen Bewegungen des Springers
         val directions = listOf(
-            Pair(1, 0),   // Rechts
-            Pair(-1, 0),  // Links
-            Pair(0, 1),   // Oben
-            Pair(0, -1),  // Unten
-            Pair(1, 1),   // Rechts oben
-            Pair(1, -1),  // Rechts unten
-            Pair(-1, 1),  // Links oben
-            Pair(-1, -1)  // Links unten
+            Pair(2, 1), Pair(2, -1), Pair(-2, 1), Pair(-2, -1),
+            Pair(1, 2), Pair(1, -2), Pair(-1, 2), Pair(-1, -2)
         )
-
+        // Ein component davon machen
         for ((dx, dy) in directions) {
             val target = Position(from.column + dx, from.row + dy)
             if (target.column in 'a'..'h' && target.row in 1..8) {
@@ -29,7 +25,6 @@ class King(override val isWhite: Boolean) : Figure {
                 }
             }
         }
-
         return moves
     }
 }

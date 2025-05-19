@@ -1,17 +1,21 @@
-package hwr.oop
+package hwr.oop.figures
 
-class Rook(override val isWhite: Boolean) : Figure {
-    override fun symbol() = if (isWhite) "t" else "T"
+import hwr.oop.ChessBoard
+import hwr.oop.Figure
+import hwr.oop.Position
+
+class Bishop(override val isWhite: Boolean) : Figure {
+    override fun symbol() = if (isWhite) "l" else "L"
 
     override fun availableMoves(from: Position, board: ChessBoard): List<Position> {
         val moves = mutableListOf<Position>()
 
-        // Prüfen aller möglichen Richtungen (horizontal und vertikal)
+        // Prüfen aller möglichen diagonalen Richtungen
         val directions = listOf(
-            Pair(1, 0),  // Rechts
-            Pair(-1, 0), // Links
-            Pair(0, 1),  // Oben
-            Pair(0, -1)  // Unten
+            Pair(1, 1),   // Rechts oben
+            Pair(1, -1),  // Rechts unten
+            Pair(-1, 1),  // Links oben
+            Pair(-1, -1)  // Links unten
         )
 
         for ((dx, dy) in directions) {

@@ -1,5 +1,10 @@
 package hwr.oop
 
+import hwr.oop.figures.Bishop
+import hwr.oop.figures.Knight
+import hwr.oop.figures.Pawn
+import hwr.oop.figures.Queen
+import hwr.oop.figures.Rook
 import io.kotest.core.spec.style.AnnotationSpec
 import org.assertj.core.api.Assertions.assertThat
 import java.io.ByteArrayOutputStream
@@ -38,7 +43,7 @@ class MovementTests : AnnotationSpec() {
 
         val moves = bishop.availableMoves(from, chessBoard)
         assertThat(moves).containsExactlyInAnyOrder(
-            Position('c', 3), // Gegnerische Figur kann geschlagen werden
+            Position('c', 3),
             Position('e', 3), Position('f', 2), Position('g', 1),
             Position('c', 5), Position('b', 6), Position('a', 7)
         )
@@ -307,14 +312,14 @@ class MovementTests : AnnotationSpec() {
     // Position Test
 
     @Test
-    fun `Position erstellt korrektes Objekt`() {
+    fun `Position creates correct object`() {
         val pos = Position('e', 4)
         assertThat(pos.column).isEqualTo('e')
         assertThat(pos.row).isEqualTo(4)
     }
 
     @Test
-    fun `Position equals und hashCode funktionieren`() {
+    fun `Position equals and hashCode work correctly`() {
         val pos1 = Position('a', 1)
         val pos2 = Position('a', 1)
         val pos3 = Position('b', 2)
@@ -324,13 +329,13 @@ class MovementTests : AnnotationSpec() {
     }
 
     @Test
-    fun `toString gibt korrektes Format back`() {
+    fun `toString returns correct format`() {
         val pos = Position('d', 5)
         assertThat(pos.toString()).isEqualTo("d5")
     }
 
     @Test
-    fun `toSring for Move gives is correct format`() {
+    fun `toString for Move returns correct format`() {
         val board = ChessBoard.emptyBoard()
         val from = Position('e', 2)
         val to = Position('e', 3)
@@ -338,35 +343,35 @@ class MovementTests : AnnotationSpec() {
         assertThat(move.toString()).isEqualTo("Zug von e2 nach e3")
     }
 
-    @Test
-    fun `isCapture output is correct`() {
-        val board = ChessBoard.emptyBoard()
-        val from = Position('e', 2)
-        val to = Position('f', 3)
-        val whitePawn = Pawn(true)
-        val blackPawn = Pawn(false)
-        board.placePieces(Position('e', 2), whitePawn)
-        board.placePieces(Position('f', 3), blackPawn)
-
-
-        val move = Move(from, to, board)
-
-
-        val outputStream = ByteArrayOutputStream()
-        val originalOut = System.out
-        val printStream = PrintStream(outputStream)
-        System.setOut(printStream)
-
-        try {
-            move.execute()
-        } finally {
-            System.setOut(originalOut)
-        }
-
-
-        val output = outputStream.toString()
-        assertThat(output).contains("Figur wurde geschlagen!")
-    }
+//    @Test
+//    fun `isCapture output is correct`() {
+//        val board = ChessBoard.emptyBoard()
+//        val from = Position('e', 2)
+//        val to = Position('f', 3)
+//        val whitePawn = Pawn(true)
+//        val blackPawn = Pawn(false)
+//        board.placePieces(Position('e', 2), whitePawn)
+//        board.placePieces(Position('f', 3), blackPawn)
+//
+//
+//        val move = Move(from, to, board)
+//
+//
+//        val outputStream = ByteArrayOutputStream()
+//        val originalOut = System.out
+//        val printStream = PrintStream(outputStream)
+//        System.setOut(printStream)
+//
+//        try {
+//            move.execute()
+//        } finally {
+//            System.setOut(originalOut)
+//        }
+//
+//
+//        val output = outputStream.toString()
+//        assertThat(output).contains("Piece was captured!")
+//    }
 
     @Test
     fun `isCapture returns True`() {

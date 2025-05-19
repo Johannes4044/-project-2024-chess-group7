@@ -1,5 +1,8 @@
 package hwr.oop
 
+import hwr.oop.figures.Bishop
+import hwr.oop.figures.Knight
+import hwr.oop.figures.Rook
 import io.kotest.core.spec.style.AnnotationSpec
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.assertThrows
