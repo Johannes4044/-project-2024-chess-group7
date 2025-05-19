@@ -1,6 +1,5 @@
 package hwr.oop
 
-import hwr.oop.CLI.ChessGameCLI
 
 class ChessBoard(val board: MutableMap<Position, Figures>) {
 
@@ -164,11 +163,4 @@ class ChessBoard(val board: MutableMap<Position, Figures>) {
         }
         return allPositions
     }
-}
-
-fun main() {
-    val chessBoard = ChessBoard.fullBoard()
-
-    val cli = ChessGameCLI(chessBoard)
-    cli.start()
 }

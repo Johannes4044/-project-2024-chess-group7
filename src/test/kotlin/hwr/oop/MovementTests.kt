@@ -5,7 +5,7 @@ import org.assertj.core.api.Assertions.assertThat
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream
 
-class BewegungTest : AnnotationSpec() {
+class MovementTests : AnnotationSpec() {
 
     @Test
     fun `Bishop can move diagonally when path is clear`() {
