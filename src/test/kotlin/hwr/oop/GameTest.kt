@@ -84,4 +84,31 @@ class GameTest : AnnotationSpec()  {
         val isStalemate = game.isGameOver() // Überprüft, ob das Spiel vorbei ist
         assertThat(isStalemate).isFalse()
     }
+
+    @Test
+    fun `white is checked`(){
+        val game = Game()
+        val chessBoard = ChessBoard.emptyBoard()
+        game.getAllMoves(chessBoard)
+        game.kingPositions()
+
+
+        chessBoard.board[Position('e',2 )] = King(true) //weißer König wird erstellt
+        chessBoard.board[Position('e',5)] = Rook(false) //schwarzer Turm wird erstellt
+        val isChecked = game.whiteCheck()
+        assertThat(isChecked).isTrue()
+    }
+
+    @Test
+    fun `black is checked`(){
+        val game = Game()
+        val chessBoard = ChessBoard.emptyBoard()
+        game.getAllMoves(chessBoard)
+        game.kingPositions()
+
+        chessBoard.board[Position('e',2 )] = King(false) //schwarzer König wird erstellt
+        chessBoard.board[Position('e',5)] = Rook(true) // Eine weiße Figur, die den König bedroht (Turm auf e5)
+        val isChecked = game.whiteCheck()
+        assertThat(isChecked).isTrue()
+    }
 }

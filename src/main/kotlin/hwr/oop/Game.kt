@@ -1,5 +1,7 @@
 package hwr.oop
 
+
+
 class Game {
     val board: ChessBoard = ChessBoard.fullBoard()
     var currentPlayerIsWhite: Boolean = true
@@ -26,6 +28,71 @@ class Game {
             return false
         }
         currentPlayerIsWhite = !currentPlayerIsWhite
+    }
+
+    fun kingPositions(): Pair <Position?, Position?>  {    //paar gibt die Positionen der Könige zurück
+        var whiteKingPosition : Position? = null
+        var blackKingPosition : Position? = null
+        var col = 'a'..'h'
+        var row = 1..8
+        outer@for (Column in col) {                        //durchläuft alle Spalten und Zeilen
+            for (Row in row) {
+                val position = Position(Column, Row)
+                val figur = board.getFigureAt(position)
+
+                if (figur is King && figur.symbol() == "k") {      // wenn die Figur ein Weißer König ist dann true
+                    whiteKingPosition = position
+                }
+                if (figur is King && figur.symbol() == "K") {       // wenn die Figur ein schwarzer König ist dann true
+                    blackKingPosition = position
+                }
+                if(whiteKingPosition != null && blackKingPosition != null) {    // wenn beide gefunden wurden bricht es ab
+                    break@outer
+                }
+            }
+        }
+        return Pair(whiteKingPosition, blackKingPosition)
+    }
+    fun getAllMoves(board: ChessBoard): Pair<List<Position>, List<Position>> {  //gibt ein paar aus Listen wieder
+        val whiteMoves = mutableListOf<Position>() //enthält alle weißen möglichen Züge
+        val blackMoves = mutableListOf<Position>() //enthält alle schwarzen möglichen Züge
+        val col = 'a'..'h'
+        val row = 1..8
+
+        for (column in col) {
+            for (Row in row) {
+                val from = Position(column, Row)
+                val figure = board.getFigureAt(from)
+
+                if (figure != King(true) && figure != null && figure.symbol()[0].isLowerCase()) {
+                    val moves = figure.availableMoves(from, board)
+                    whiteMoves.addAll(moves)    //fügt alle Züge einer weißen Figur zur Liste zu
+                }
+                if (figure != King(false) && figure != null && figure.symbol()[0].isUpperCase()) {
+                    val moves = figure.availableMoves(from, board)
+                    blackMoves.addAll(moves)    //fügt alle Züge einer schwarzen Figur zur Liste zu
+                }
+            }
+        }
+        return Pair(whiteMoves, blackMoves)
+    }
+    fun whiteCheck(): Boolean {
+        val (whiteMoves, blackMoves) = getAllMoves(board)
+        val (whiteKing, blackKing) = kingPositions()
+        for (white in whiteMoves) {
+            if(whiteKing == white)  //für alle Elemente(Positionen) die möglich sind wird geprüft == King sind
+                return true
+        }
+        return false
+    }
+    fun blackCheck(): Boolean {
+        val (whiteMoves, blackMoves) =getAllMoves(board)
+        val (whiteKing, blackKing) = kingPositions()
+        for (black in blackMoves) {
+            if(whiteKing == black)  //für alle Elemente(Positionen) die möglich sind wird geprüft == King sind
+                return true
+        }
+        return false
     }
 
 
