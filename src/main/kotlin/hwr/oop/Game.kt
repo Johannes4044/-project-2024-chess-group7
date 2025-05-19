@@ -30,7 +30,7 @@ class Game {
         currentPlayerIsWhite = !currentPlayerIsWhite
     }
 
-    fun kingPositions(): Pair <Position?, Position?>  {    //paar gibt die Positionen der Könige zurück
+    private fun kingPositions(): Pair <Position?, Position?>  {    //paar gibt die Positionen der Könige zurück
         var whiteKingPosition : Position? = null
         var blackKingPosition : Position? = null
         var col = 'a'..'h'
@@ -53,7 +53,7 @@ class Game {
         }
         return Pair(whiteKingPosition, blackKingPosition)
     }
-    fun getAllMoves(board: ChessBoard): Pair<List<Position>, List<Position>> {  //gibt ein paar aus Listen wieder
+    private fun getAllMoves(board: ChessBoard): Pair<List<Position>, List<Position>> {  //gibt ein paar aus Listen wieder
         val whiteMoves = mutableListOf<Position>() //enthält alle weißen möglichen Züge
         val blackMoves = mutableListOf<Position>() //enthält alle schwarzen möglichen Züge
         val col = 'a'..'h'
