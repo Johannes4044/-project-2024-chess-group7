@@ -11,7 +11,7 @@ class MovementTests : AnnotationSpec() {
     fun `Bishop can move diagonally when path is clear`() {
         val chessBoard = ChessBoard.emptyBoard()
         val bishop = Bishop(true)
-        chessBoard.board[Position('c', 1)] = bishop
+        chessBoard.placePieces(Position('c', 1), bishop)
         val from = Position('c', 1)
         val to = Position('f', 4)
 
@@ -23,8 +23,8 @@ class MovementTests : AnnotationSpec() {
         val chessBoard = ChessBoard.emptyBoard()
         val bishop = Bishop(true)
         val opponentPawn = Pawn(false)
-        chessBoard.board[Position('c', 1)] = bishop
-        chessBoard.board[Position('f', 4)] = opponentPawn
+        chessBoard.placePieces(Position('c', 1), bishop)
+        chessBoard.placePieces(Position('f', 4), opponentPawn)
         val from = Position('c', 1)
         val to = Position('f', 4)
 
@@ -35,7 +35,7 @@ class MovementTests : AnnotationSpec() {
     fun `Bishop available moves on empty board`() {
         val chessBoard = ChessBoard.emptyBoard()
         val bishop = Bishop(true)
-        chessBoard.board[Position('d', 4)] = bishop
+        chessBoard.placePieces(Position('d', 4), bishop)
         val from = Position('d', 4)
 
         val moves = bishop.availableMoves(from, chessBoard)
@@ -53,9 +53,9 @@ class MovementTests : AnnotationSpec() {
         val bishop = Bishop(true)
         val blockingPawn = Pawn(true)
         val opponentPawn = Pawn(false)
-        chessBoard.board[Position('d', 4)] = bishop
-        chessBoard.board[Position('e', 5)] = blockingPawn
-        chessBoard.board[Position('c', 3)] = opponentPawn
+        chessBoard.placePieces(Position('d', 4), bishop)
+        chessBoard.placePieces(Position('e', 5), blockingPawn)
+        chessBoard.placePieces(Position('c', 3), opponentPawn)
         val from = Position('d', 4)
 
         val moves = bishop.availableMoves(from, chessBoard)
@@ -70,7 +70,7 @@ class MovementTests : AnnotationSpec() {
     fun `Pawn can move one step forward`() {
         val chessBoard = ChessBoard.emptyBoard()
         val pawn = Pawn(true)
-        chessBoard.board[Position('a', 2)] = pawn
+        chessBoard.placePieces(Position('a', 2), pawn)
         val from = Position('a', 2)
         val to = Position('a', 3)
 
@@ -82,7 +82,7 @@ class MovementTests : AnnotationSpec() {
     fun `Pawn can move two steps forward from start position`() {
         val chessBoard = ChessBoard.emptyBoard()
         val pawn = Pawn(true)
-        chessBoard.board[Position('a', 2)] = pawn
+        chessBoard.placePieces(Position('a', 2), pawn)
         val from = Position('a', 2)
         val to = Position('a', 4)
 
@@ -95,8 +95,8 @@ class MovementTests : AnnotationSpec() {
         val chessBoard = ChessBoard.emptyBoard()
         val whitePawn = Pawn(true)
         val blackPawn = Pawn(false)
-        chessBoard.board[Position('a', 4)] = whitePawn
-        chessBoard.board[Position('b', 5)] = blackPawn
+        chessBoard.placePieces(Position('a', 4), whitePawn)
+        chessBoard.placePieces(Position('b', 5), blackPawn)
         val from = Position('a', 4)
         val to = Position('b', 5)
 
@@ -109,8 +109,8 @@ class MovementTests : AnnotationSpec() {
         val chessBoard = ChessBoard.emptyBoard()
         val whitePawn = Pawn(true)
         val blackPawn = Pawn(false)
-        chessBoard.board[Position('b', 3)] = whitePawn
-        chessBoard.board[Position('a', 4)] = blackPawn
+        chessBoard.placePieces(Position('b', 3), whitePawn)
+        chessBoard.placePieces(Position('a', 4), blackPawn)
         val from = Position('b', 3)
         val to = Position('a', 4)
 
@@ -122,7 +122,7 @@ class MovementTests : AnnotationSpec() {
     fun `Pawn cannot move backward`() {
         val chessBoard = ChessBoard.emptyBoard()
         val pawn = Pawn(true)
-        chessBoard.board[Position('a', 3)] = pawn
+        chessBoard.placePieces(Position('a', 3), pawn)
         val from = Position('a', 3)
         val to = Position('a', 2)
 
@@ -133,7 +133,7 @@ class MovementTests : AnnotationSpec() {
     fun `Pawn cannot move sideways`() {
         val chessBoard = ChessBoard.emptyBoard()
         val pawn = Pawn(true)
-        chessBoard.board[Position('a', 2)] = pawn
+        chessBoard.placePieces(Position('a', 2), pawn)
         val from = Position('a', 2)
         val to = Position('b', 2)
 
@@ -144,7 +144,7 @@ class MovementTests : AnnotationSpec() {
     fun `Pawn gets promoted to Queen`() {
         val chessBoard = ChessBoard.emptyBoard()
         val pawn = Pawn(true)
-        chessBoard.board[Position('a', 7)] = pawn
+        chessBoard.placePieces(Position('a', 7), pawn)
         val from = Position('a', 7)
         val to = Position('a', 8)
 
@@ -157,7 +157,7 @@ class MovementTests : AnnotationSpec() {
     fun `Pawn gets promoted to other figure`() {
         val chessBoard = ChessBoard.emptyBoard()
         val pawn = Pawn(true)
-        chessBoard.board[Position('a', 7)] = pawn
+        chessBoard.placePieces(Position('a', 7), pawn)
         val from = Position('a', 7)
         val to = Position('a', 8)
 
@@ -170,7 +170,7 @@ class MovementTests : AnnotationSpec() {
     fun `knight can move in L shape`() {
         val chessBoard = ChessBoard.emptyBoard()
         val knight = Knight(true)
-        chessBoard.board[Position('d', 4)] = knight
+        chessBoard.placePieces(Position('d', 4), knight)
         val from = Position('d', 4)
         val to = Position('f', 5)
 
@@ -181,7 +181,7 @@ class MovementTests : AnnotationSpec() {
     fun `knight cannot move in non L shape`() {
         val chessBoard = ChessBoard.emptyBoard()
         val knight = Knight(true)
-        chessBoard.board[Position('d', 4)] = knight
+        chessBoard.placePieces(Position('d', 4), knight)
         val from = Position('d', 4)
         val to = Position('d', 6)
 
@@ -193,8 +193,8 @@ class MovementTests : AnnotationSpec() {
         val chessBoard = ChessBoard.emptyBoard()
         val knight = Knight(true)
         val blockingPawn = Pawn(true)
-        chessBoard.board[Position('d', 4)] = knight
-        chessBoard.board[Position('f', 5)] = blockingPawn
+        chessBoard.placePieces(Position('d', 4), knight)
+        chessBoard.placePieces(Position('f', 5), blockingPawn)
         val from = Position('d', 4)
         val to = Position('f', 5)
 
@@ -205,7 +205,7 @@ class MovementTests : AnnotationSpec() {
     fun `knight available moves on empty board`() {
         val chessBoard = ChessBoard.emptyBoard()
         val knight = Knight(true)
-        chessBoard.board[Position('d', 4)] = knight
+        chessBoard.placePieces(Position('d', 4), knight)
         val from = Position('d', 4)
 
         val moves = knight.availableMoves(from, chessBoard)
@@ -221,9 +221,9 @@ class MovementTests : AnnotationSpec() {
         val knight = Knight(true)
         val blockingPawn = Pawn(true)
         val opponentPawn = Pawn(false)
-        chessBoard.board[Position('d', 4)] = knight
-        chessBoard.board[Position('b', 3)] = blockingPawn
-        chessBoard.board[Position('f', 5)] = opponentPawn
+        chessBoard.placePieces(Position('d', 4), knight)
+        chessBoard.placePieces(Position('b', 3), blockingPawn)
+        chessBoard.placePieces(Position('f', 5), opponentPawn)
         val from = Position('d', 4)
 
         val moves = knight.availableMoves(from, chessBoard)
@@ -237,7 +237,7 @@ class MovementTests : AnnotationSpec() {
     fun `Pawn available moves on empty board`() {
         val chessBoard = ChessBoard.emptyBoard()
         val pawn = Pawn(true)
-        chessBoard.board[Position('a', 2)] = pawn
+        chessBoard.placePieces(Position('a', 2), pawn)
         val from = Position('a', 2)
 
         val moves = pawn.availableMoves(from, chessBoard)
@@ -253,10 +253,10 @@ class MovementTests : AnnotationSpec() {
         val blockingPawn = Pawn(true)
         val opponentPawn = Pawn(false)
         val opponentPawn2 = Pawn(false)
-        chessBoard.board[Position('b', 2)] = pawn
-        chessBoard.board[Position('b', 3)] = blockingPawn
-        chessBoard.board[Position('c', 3)] = opponentPawn
-        chessBoard.board[Position('a', 3)] = opponentPawn2
+        chessBoard.placePieces(Position('b', 2), pawn)
+        chessBoard.placePieces(Position('b', 3), blockingPawn)
+        chessBoard.placePieces(Position('c', 3), opponentPawn)
+        chessBoard.placePieces(Position('a', 3), opponentPawn2)
         val from = Position('b', 2)
 
         val moves = pawn.availableMoves(from, chessBoard)
@@ -269,7 +269,7 @@ class MovementTests : AnnotationSpec() {
     fun `Queen can move vertically`() {
         val chessBoard = ChessBoard.emptyBoard()
         val queen = Queen(true)
-        chessBoard.board[Position('d', 4)] = queen
+        chessBoard.placePieces(Position('d', 4), queen)
         val from = Position('d', 4)
         val to = Position('d', 8)
 
@@ -280,7 +280,7 @@ class MovementTests : AnnotationSpec() {
     fun `Queen cannot move in invalid direction`() {
         val chessBoard = ChessBoard.emptyBoard()
         val queen = Queen(true)
-        chessBoard.board[Position('d', 4)] = queen
+        chessBoard.placePieces(Position('d', 4), queen)
         val from = Position('d', 4)
         val to = Position('e', 6)
 
@@ -292,8 +292,8 @@ class MovementTests : AnnotationSpec() {
         val chessBoard = ChessBoard.emptyBoard()
         val queen = Queen(true)
         val blockingPawn = Pawn(true)
-        chessBoard.board[Position('d', 4)] = queen
-        chessBoard.board[Position('d', 6)] = blockingPawn
+        chessBoard.placePieces(Position('d', 4), queen)
+        chessBoard.placePieces(Position('d', 6), blockingPawn)
         val from = Position('d', 4)
         val to = Position('d', 8)
 
@@ -305,8 +305,8 @@ class MovementTests : AnnotationSpec() {
         val chessBoard = ChessBoard.emptyBoard()
         val queen = Queen(true)
         val opponentPawn = Pawn(false)
-        chessBoard.board[Position('d', 4)] = queen
-        chessBoard.board[Position('d', 6)] = opponentPawn
+        chessBoard.placePieces(Position('d', 4), queen)
+        chessBoard.placePieces(Position('d', 6), opponentPawn)
         val from = Position('d', 4)
         val to = Position('d', 6)
 
@@ -317,7 +317,7 @@ class MovementTests : AnnotationSpec() {
     fun `Queen available moves on empty board`() {
         val chessBoard = ChessBoard.emptyBoard()
         val queen = Queen(true)
-        chessBoard.board[Position('d', 4)] = queen
+        chessBoard.placePieces(Position('d', 4), queen)
         val from = Position('d', 4)
 
         val moves = queen.availableMoves(from, chessBoard)
@@ -363,7 +363,7 @@ class MovementTests : AnnotationSpec() {
     fun `Rook can move vertically`() {
         val chessBoard = ChessBoard.emptyBoard()
         val rook = Rook(true)
-        chessBoard.board[Position('d', 4)] = rook
+        chessBoard.placePieces(Position('d', 4), rook)
         val from = Position('d', 4)
         val to = Position('d', 8)
 
@@ -374,7 +374,7 @@ class MovementTests : AnnotationSpec() {
     fun `Rook can move horizontally`() {
         val chessBoard = ChessBoard.emptyBoard()
         val rook = Rook(true)
-        chessBoard.board[Position('d', 4)] = rook
+        chessBoard.placePieces(Position('d', 4), rook)
         val from = Position('d', 4)
         val to = Position('a', 4)
 
@@ -385,7 +385,7 @@ class MovementTests : AnnotationSpec() {
     fun `Rook cannot move diagonally`() {
         val chessBoard = ChessBoard.emptyBoard()
         val rook = Rook(true)
-        chessBoard.board[Position('d', 4)] = rook
+        chessBoard.placePieces(Position('d', 4), rook)
         val from = Position('d', 4)
         val to = Position('e', 5)
 
@@ -397,8 +397,8 @@ class MovementTests : AnnotationSpec() {
         val chessBoard = ChessBoard.emptyBoard()
         val rook = Rook(true)
         val blockingPawn = Pawn(true)
-        chessBoard.board[Position('d', 4)] = rook
-        chessBoard.board[Position('d', 6)] = blockingPawn
+        chessBoard.placePieces(Position('d', 4), rook)
+        chessBoard.placePieces(Position('d', 8), blockingPawn)
         val from = Position('d', 4)
         val to = Position('d', 8)
 
@@ -410,8 +410,8 @@ class MovementTests : AnnotationSpec() {
         val chessBoard = ChessBoard.emptyBoard()
         val rook = Rook(true)
         val opponentPawn = Pawn(false)
-        chessBoard.board[Position('d', 4)] = rook
-        chessBoard.board[Position('d', 6)] = opponentPawn
+        chessBoard.placePieces(Position('d', 4), rook)
+        chessBoard.placePieces(Position('d', 6), opponentPawn)
         val from = Position('d', 4)
         val to = Position('d', 6)
 
@@ -422,7 +422,7 @@ class MovementTests : AnnotationSpec() {
     fun `Rook available moves on empty board`() {
         val chessBoard = ChessBoard.emptyBoard()
         val rook = Rook(true)
-        chessBoard.board[Position('d', 4)] = rook
+        chessBoard.placePieces(Position('d', 4), rook)
         val from = Position('d', 4)
 
         val moves = rook.availableMoves(from, chessBoard)
@@ -453,7 +453,7 @@ class MovementTests : AnnotationSpec() {
         val from = Position('e', 2)
         val to = Position('e', 3)
         val pawn = Pawn(true)
-        board.board[from] = pawn
+        chessBoard.placePieces(Position('e', 2), pawn)
         val move = Move(from, to, board)
         assertThat(move.isValid()).isTrue()
     }
@@ -464,7 +464,7 @@ class MovementTests : AnnotationSpec() {
         val from = Position('e', 2)
         val to = Position('e', 5)
         val pawn = Pawn(true)
-        board.board[from] = pawn
+        chessBoard.placePieces(Position('e', 2), pawn)
         val move = Move(from, to, board)
         assertThat(move.isValid()).isFalse()
     }
@@ -485,8 +485,8 @@ class MovementTests : AnnotationSpec() {
         val to = Position('e', 3)
         val whitePawn = Pawn(true)
         val blackPawn = Pawn(false)
-        board.board[from] = whitePawn
-        board.board[to] = blackPawn
+        chessBoard.placePieces(Position('e', 2), whitePawn)
+        chessBoard.placePieces(Position('e', 3), blackPawn)
         val move = Move(from, to, board)
         assertThat(move.isCapture()).isTrue()
     }
@@ -498,8 +498,8 @@ class MovementTests : AnnotationSpec() {
         val to = Position('e', 3)
         val whitePawn1 = Pawn(true)
         val whitePawn2 = Pawn(true)
-        board.board[from] = whitePawn1
-        board.board[to] = whitePawn2
+        chessBoard.placePieces(Position('e', 2), whitePawn1)
+        chessBoard.placePieces(Position('e', 3), whitePawn2)
         val move = Move(from, to, board)
         assertThat(move.isCapture()).isFalse()
     }
@@ -510,7 +510,7 @@ class MovementTests : AnnotationSpec() {
         val from = Position('e', 2)
         val to = Position('e', 3)
         val whitePawn = Pawn(true)
-        board.board[from] = whitePawn
+        chessBoard.placePieces(Position('e', 2), whitePawn)
         val move = Move(from, to, board)
         assertThat(move.isCapture()).isFalse()
     }
@@ -521,7 +521,7 @@ class MovementTests : AnnotationSpec() {
         val from = Position('e', 2)
         val to = Position('e', 3)
         val pawn = Pawn(true)
-        board.board[from] = pawn
+        chessBoard.placePieces(Position('e', 2), pawn)
         val move = Move(from, to, board)
         assertThat(move.execute()).isTrue()
         assertThat(board.getFigureAt(to)).isEqualTo(pawn)
@@ -534,7 +534,7 @@ class MovementTests : AnnotationSpec() {
         val from = Position('e', 2)
         val to = Position('e', 5)
         val pawn = Pawn(true)
-        board.board[from] = pawn
+        chessBoard.placePieces(Position('e', 2), pawn)
         val move = Move(from, to, board)
         assertThat(move.execute()).isFalse()
         assertThat(board.getFigureAt(from)).isEqualTo(pawn)
@@ -582,8 +582,9 @@ class MovementTests : AnnotationSpec() {
         val to = Position('f', 3)
         val whitePawn = Pawn(true)
         val blackPawn = Pawn(false)
-        board.board[from] = whitePawn
-        board.board[to] = blackPawn
+        chessBoard.placePieces(Position('e', 2), whitePawn)
+        chessBoard.placePieces(Position('f', 3), blackPawn)
+
 
         val move = Move(from, to, board)
 
@@ -614,9 +615,9 @@ class MovementTests : AnnotationSpec() {
         val whitePawn = Pawn(true)
         val whitePawn2 = Pawn(true)
         val blackPawn = Pawn(false)
-        board.board[from] = whitePawn
-        board.board[to] = blackPawn
-        board.board[from2] = whitePawn2
+        chessBoard.placePieces(Position('e', 2), whitePawn)
+        chessBoard.placePieces(Position('f', 3), blackPawn)
+        chessBoard.placePieces(Position('a', 3), whitePawn2)
 
         val move = Move(from, to, board)
         val move2 = Move(from2, to2, board)
