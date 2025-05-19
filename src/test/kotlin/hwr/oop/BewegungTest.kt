@@ -30,6 +30,7 @@ class BewegungTest : AnnotationSpec() {
 
         assertThat(bishop.canMove(from, to, chessBoard)).isTrue()
     }
+
     @Test
     fun `Bishop available moves on empty board`() {
         val chessBoard = ChessBoard.emptyBoard()
@@ -90,7 +91,7 @@ class BewegungTest : AnnotationSpec() {
     }
 
     @Test
-    fun `Pawn can capture diagonally`() {
+    fun `Pawn can capture diagonally to the right`() {
         val chessBoard = ChessBoard.emptyBoard()
         val whitePawn = Pawn(true)
         val blackPawn = Pawn(false)
@@ -98,6 +99,20 @@ class BewegungTest : AnnotationSpec() {
         chessBoard.board[Position('b', 5)] = blackPawn
         val from = Position('a', 4)
         val to = Position('b', 5)
+
+        assertThat(whitePawn.canMove(from, to, chessBoard)).isTrue()
+        assertThat(chessBoard.move(from, to)).isTrue()
+    }
+
+    @Test
+    fun `Pawn can capture diagonally to the left`() {
+        val chessBoard = ChessBoard.emptyBoard()
+        val whitePawn = Pawn(true)
+        val blackPawn = Pawn(false)
+        chessBoard.board[Position('b', 3)] = whitePawn
+        chessBoard.board[Position('a', 4)] = blackPawn
+        val from = Position('b', 3)
+        val to = Position('a', 4)
 
         assertThat(whitePawn.canMove(from, to, chessBoard)).isTrue()
         assertThat(chessBoard.move(from, to)).isTrue()
@@ -126,7 +141,7 @@ class BewegungTest : AnnotationSpec() {
     }
 
     @Test
-    fun `Pawn gets promoted to Queen`(){
+    fun `Pawn gets promoted to Queen`() {
         val chessBoard = ChessBoard.emptyBoard()
         val pawn = Pawn(true)
         chessBoard.board[Position('a', 7)] = pawn
@@ -150,6 +165,7 @@ class BewegungTest : AnnotationSpec() {
         assertThat(chessBoard.move(from, to) { isWhite -> Rook(isWhite) }).isTrue()
         assertThat(chessBoard.getFigureAt(to)?.symbol()).isEqualTo("t")
     }
+
     @Test
     fun `knight can move in L shape`() {
         val chessBoard = ChessBoard.emptyBoard()
@@ -184,6 +200,7 @@ class BewegungTest : AnnotationSpec() {
 
         assertThat(knight.canMove(from, to, chessBoard)).isFalse()
     }
+
     @Test
     fun `knight available moves on empty board`() {
         val chessBoard = ChessBoard.emptyBoard()
@@ -235,16 +252,19 @@ class BewegungTest : AnnotationSpec() {
         val pawn = Pawn(true)
         val blockingPawn = Pawn(true)
         val opponentPawn = Pawn(false)
-        chessBoard.board[Position('a', 2)] = pawn
-        chessBoard.board[Position('a', 3)] = blockingPawn
-        chessBoard.board[Position('b', 3)] = opponentPawn
-        val from = Position('a', 2)
+        val opponentPawn2 = Pawn(false)
+        chessBoard.board[Position('b', 2)] = pawn
+        chessBoard.board[Position('b', 3)] = blockingPawn
+        chessBoard.board[Position('c', 3)] = opponentPawn
+        chessBoard.board[Position('a', 3)] = opponentPawn2
+        val from = Position('b', 2)
 
         val moves = pawn.availableMoves(from, chessBoard)
         assertThat(moves).containsExactlyInAnyOrder(
-            Position('b', 3)
+            Position('c', 3), Position('a', 3),
         )
     }
+
     @Test
     fun `Queen can move vertically`() {
         val chessBoard = ChessBoard.emptyBoard()
@@ -292,6 +312,7 @@ class BewegungTest : AnnotationSpec() {
 
         assertThat(queen.canMove(from, to, chessBoard)).isTrue()
     }
+
     @Test
     fun `Queen available moves on empty board`() {
         val chessBoard = ChessBoard.emptyBoard()
@@ -302,14 +323,42 @@ class BewegungTest : AnnotationSpec() {
         val moves = queen.availableMoves(from, chessBoard)
         assertThat(moves).containsExactlyInAnyOrder(
             // Vertikal
-            Position('d', 1), Position('d', 2), Position('d', 3), Position('d', 5), Position('d', 6), Position('d', 7), Position('d', 8),
+            Position('d', 1),
+            Position('d', 2),
+            Position('d', 3),
+            Position('d', 5),
+            Position('d', 6),
+            Position('d', 7),
+            Position('d', 8),
             // Horizontal
-            Position('a', 4), Position('b', 4), Position('c', 4), Position('e', 4), Position('f', 4), Position('g', 4), Position('h', 4),
+            Position('a', 4),
+            Position('b', 4),
+            Position('c', 4),
+            Position('e', 4),
+            Position('f', 4),
+            Position('g', 4),
+            Position('h', 4),
             // Diagonal
-            Position('a', 1), Position('b', 2), Position('c', 3), Position('e', 5), Position('f', 6), Position('g', 7), Position('h', 8),
-            Position('a', 7), Position('b', 6), Position('c', 5), Position('e', 3), Position('f', 2), Position('g', 1)
+            Position('a', 1),
+            Position('b', 2),
+            Position('c', 3),
+            Position('e', 5),
+            Position('f', 6),
+            Position('g', 7),
+            Position('h', 8),
+            Position('a', 7),
+            Position('b', 6),
+            Position('c', 5),
+            Position('e', 3),
+            Position('f', 2),
+            Position('g', 1)
         )
     }
+
+    fun `Queen available moves on filled board`() {
+        val chessBoard = ChessBoard.emptyBoard()
+    }
+
     @Test
     fun `Rook can move vertically`() {
         val chessBoard = ChessBoard.emptyBoard()
@@ -342,6 +391,7 @@ class BewegungTest : AnnotationSpec() {
 
         assertThat(rook.canMove(from, to, chessBoard)).isFalse()
     }
+
     @Test
     fun `Rook cannot move if path is blocked`() {
         val chessBoard = ChessBoard.emptyBoard()
@@ -354,6 +404,7 @@ class BewegungTest : AnnotationSpec() {
 
         assertThat(rook.canMove(from, to, chessBoard)).isFalse()
     }
+
     @Test
     fun `Rook can capture opponent piece`() {
         val chessBoard = ChessBoard.emptyBoard()
@@ -366,6 +417,7 @@ class BewegungTest : AnnotationSpec() {
 
         assertThat(rook.canMove(from, to, chessBoard)).isTrue()
     }
+
     @Test
     fun `Rook available moves on empty board`() {
         val chessBoard = ChessBoard.emptyBoard()
@@ -376,11 +428,24 @@ class BewegungTest : AnnotationSpec() {
         val moves = rook.availableMoves(from, chessBoard)
         assertThat(moves).containsExactlyInAnyOrder(
             // Vertikal
-            Position('d', 1), Position('d', 2), Position('d', 3), Position('d', 5), Position('d', 6), Position('d', 7), Position('d', 8),
+            Position('d', 1),
+            Position('d', 2),
+            Position('d', 3),
+            Position('d', 5),
+            Position('d', 6),
+            Position('d', 7),
+            Position('d', 8),
             // Horizontal
-            Position('a', 4), Position('b', 4), Position('c', 4), Position('e', 4), Position('f', 4), Position('g', 4), Position('h', 4)
+            Position('a', 4),
+            Position('b', 4),
+            Position('c', 4),
+            Position('e', 4),
+            Position('f', 4),
+            Position('g', 4),
+            Position('h', 4)
         )
     }
+
     // Move Test
     @Test
     fun `isValid returns true for valid move`() {
@@ -511,7 +576,7 @@ class BewegungTest : AnnotationSpec() {
     }
 
     @Test
-    fun `isCapture output is correct`(){
+    fun `isCapture output is correct`() {
         val board = ChessBoard.emptyBoard()
         val from = Position('e', 2)
         val to = Position('f', 3)
@@ -530,8 +595,7 @@ class BewegungTest : AnnotationSpec() {
 
         try {
             move.execute()
-        }
-        finally {
+        } finally {
             System.setOut(originalOut)
         }
 
@@ -541,12 +605,12 @@ class BewegungTest : AnnotationSpec() {
     }
 
     @Test
-    fun`isCapture returns True`(){
+    fun `isCapture returns True`() {
         val board = ChessBoard.emptyBoard()
         val from = Position('e', 2)
         val from2 = Position('a', 3)
         val to = Position('f', 3)
-        val to2 = Position('a',4)
+        val to2 = Position('a', 4)
         val whitePawn = Pawn(true)
         val whitePawn2 = Pawn(true)
         val blackPawn = Pawn(false)

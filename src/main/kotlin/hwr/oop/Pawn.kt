@@ -4,7 +4,7 @@ package hwr.oop
 class Pawn(override val isWhite: Boolean) : Figures {
     override fun symbol() = if (isWhite) "b" else "B"
 
-    override fun canMove(from: Position, to: Position, board: ChessBoard): Boolean{
+    override fun canMove(from: Position, to: Position, board: ChessBoard): Boolean {
         val direction = if (isWhite) 1 else -1
         val startZeile = if (isWhite) 2 else 7
 
@@ -18,7 +18,7 @@ class Pawn(override val isWhite: Boolean) : Figures {
         }
 
         // Erster Zug (2 Felder)
-        if (deltaX == 0 && deltaY == 2*direction && destination == null && from.row == startZeile) {
+        if (deltaX == 0 && deltaY == 2 * direction && destination == null && from.row == startZeile) {
             return true
         }
 
@@ -29,6 +29,7 @@ class Pawn(override val isWhite: Boolean) : Figures {
 
         return false
     }
+
     override fun availableMoves(from: Position, board: ChessBoard): List<Position> {
         val moves = mutableListOf<Position>()
         val direction = if (isWhite) 1 else -1
@@ -37,7 +38,8 @@ class Pawn(override val isWhite: Boolean) : Figures {
         // Normaler Zug
         val forwardOne = Position(from.column, from.row + direction)
         if (board.getFigureAt(forwardOne) == null && forwardOne.row
-            in 1..8) {
+            in 1..8
+        ) {
             moves.add(forwardOne)
         }
 
@@ -52,7 +54,8 @@ class Pawn(override val isWhite: Boolean) : Figures {
         val attackRight = Position(from.column + 1, from.row + direction)
 
         if (attackLeft.column
-            in 'a'..'h' && attackLeft.row in 1..8) {
+            in 'a'..'h' && attackLeft.row in 1..8
+        ) {
             val leftTarget = board.getFigureAt(attackLeft)
             if (leftTarget != null && leftTarget.isWhite != this.isWhite) {
                 moves.add(attackLeft)

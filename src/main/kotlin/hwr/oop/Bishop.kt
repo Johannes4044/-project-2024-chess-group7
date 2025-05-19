@@ -1,4 +1,5 @@
 package hwr.oop
+
 import kotlin.math.abs
 
 class Bishop(override val isWhite: Boolean) : Figures {
@@ -13,6 +14,7 @@ class Bishop(override val isWhite: Boolean) : Figures {
         //Move
         return abs(deltaX) == abs(deltaY) && (destination == null || destination.isWhite != this.isWhite)
     }
+
     override fun availableMoves(from: Position, board: ChessBoard): List<Position> {
         val moves = mutableListOf<Position>()
 
@@ -39,5 +41,5 @@ class Bishop(override val isWhite: Boolean) : Figures {
 
         return moves
     }
-    }
+}
 

@@ -5,25 +5,11 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.assertThrows
 
 class SchachBrettTest : AnnotationSpec() {
-  @Test
-  fun `initialize Chessboard does not return false`() {
-    val chessBoardExample = ChessBoard.fullBoard()
-    assertThat(chessBoardExample.displayBoard()).isNotNull
-  }
-  @Test
-  fun `CLI command chess new_game initializes the game`() {
-    val input = "chess new_game 12345"
-    val chessBoard = ChessBoard.fullBoard()
-
-    // Simulierte Eingabe
-    val id = input.removePrefix("chess new_game").trim()
-    assertThat(id).isEqualTo("12345")
-
-    // Überprüfung der Initialisierung
-    chessBoard.displayBoard()
-    assertThat(chessBoard.getFigureAt(Position('d', 1))?.symbol()).isEqualTo("d")
-    assertThat(chessBoard.getFigureAt(Position('e', 2))?.symbol()).isEqualTo("b")
-  }
+    @Test
+    fun `initialize Chessboard does not return false`() {
+        val chessBoardExample = ChessBoard.fullBoard()
+        assertThat(chessBoardExample.displayBoard()).isNotNull
+    }
 
     @Test
     fun `FEN string is generated correctly`() {
@@ -37,20 +23,23 @@ class SchachBrettTest : AnnotationSpec() {
         val chessBoard = ChessBoard.emptyBoard()
         val fenString = chessBoard.toFEN()
         assertThat(fenString).isEqualTo("8/8/8/8/8/8/8/8")
-        assertThat(chessBoard.getFigureAt(Position('d',1))).isNull()
-        assertThat(chessBoard.getFigureAt(Position('e',2))).isNull()
+        assertThat(chessBoard.getFigureAt(Position('d', 1))).isNull()
+        assertThat(chessBoard.getFigureAt(Position('e', 2))).isNull()
     }
 
     @Test
     fun `FEN string is generated correctly for custom board`() {
-        val chessBoard = ChessBoard(mutableMapOf(
-            Position('a', 1) to Rook(true),
-            Position('b', 2) to Knight(false),
-            Position('c', 3) to Bishop(true)
-        ))
+        val chessBoard = ChessBoard(
+            mutableMapOf(
+                Position('a', 1) to Rook(true),
+                Position('b', 2) to Knight(false),
+                Position('c', 3) to Bishop(true)
+            )
+        )
         val fenString = chessBoard.toFEN()
         assertThat(fenString).isEqualTo("8/8/8/8/8/2l5/1S6/t7")
     }
+
     @Test
     fun `FEN to board conversion works correctly`() {
         val fenString = "TSLDKLST/BBBBBBBB/8/8/8/8/bbbbbbbb/tsldklst"

@@ -20,6 +20,7 @@ class ChessGameCLI(private val board: ChessBoard) {
                     println("Spiel beendet.")
                     break
                 }
+
                 input == "display" -> handleDisplay()
                 input.matches(Regex("move [a-h][1-8] [a-h][1-8]")) -> handleMove(input)
                 input.startsWith("moves") -> handleShowMoves(input)
@@ -99,7 +100,8 @@ class ChessGameCLI(private val board: ChessBoard) {
     }
 
     private fun showHelp() {
-        println("""
+        println(
+            """
             Verfügbare Befehle:
             chess new_game <id> - Startet ein neues Spiel
             move <von> <nach>  - Bewegt eine Figur (z.B. 'move a2 a4')
@@ -107,6 +109,7 @@ class ChessGameCLI(private val board: ChessBoard) {
             display            - Zeigt das aktuelle Brett
             help              - Zeigt diese Hilfe
             exit              - Beendet das Spiel
-        """.trimIndent())
+        """.trimIndent()
+        )
     }
 }

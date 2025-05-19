@@ -1,4 +1,5 @@
 package hwr.oop
+
 import kotlin.math.abs
 
 class Knight(override val isWhite: Boolean) : Figures {
@@ -15,6 +16,7 @@ class Knight(override val isWhite: Boolean) : Figures {
         return (((abs(deltaX) == 2 && abs(deltaY) == 1) || (abs(deltaX) == 1 && abs(deltaY) == 2))
                 && (destination == null))
     }
+
     override fun availableMoves(from: Position, board: ChessBoard): List<Position> {
         val moves = mutableListOf<Position>()
 

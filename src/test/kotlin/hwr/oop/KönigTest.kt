@@ -2,7 +2,7 @@ package hwr.oop
 
 import io.kotest.core.spec.style.AnnotationSpec
 import org.assertj.core.api.Assertions.assertThat
-import kotlin.text.set
+import kotlin.collections.set
 
 
 class KingTest : AnnotationSpec() {

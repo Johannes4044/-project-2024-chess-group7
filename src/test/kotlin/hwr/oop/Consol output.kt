@@ -29,5 +29,5 @@ class ConsoleOutputTest : AnnotationSpec() {
         assertThat(output).contains(". . . . . . . . ")
         assertThat(output).contains("b b b b b b b b")
         assertThat(output).contains("t s l d k l s t")
-        }
+    }
 }

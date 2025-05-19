@@ -1,4 +1,5 @@
 package hwr.oop
+
 import kotlin.math.abs
 
 class King(override val isWhite: Boolean) : Figures {
@@ -13,8 +14,9 @@ class King(override val isWhite: Boolean) : Figures {
 
         val destination = board.getFigureAt(to)
 
-        return abs(deltaX) <=1 && abs(deltaY) <= 1 && destination == null
+        return abs(deltaX) <= 1 && abs(deltaY) <= 1 && destination == null
     }
+
     override fun availableMoves(from: Position, board: ChessBoard): List<Position> {
         val moves = mutableListOf<Position>()
 
