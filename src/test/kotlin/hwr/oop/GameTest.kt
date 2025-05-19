@@ -44,7 +44,7 @@ class GameTest : AnnotationSpec() {
         assertThat(game.isGameOver()).isFalse()
     }
 
-    //Teste Das Schwarz und weiße sich abwechseln
+//    //Teste das Schwarz und weiße sich abwechseln
     @Test
     fun `players alternate turns`() {
         val game = Game()
@@ -60,7 +60,7 @@ class GameTest : AnnotationSpec() {
         assertThat(game.isGameOver()).isFalse()
     }
 
-    // Teste einen Zug, der eine andere Figur schlägt
+//    // Teste einen Zug, der eine andere Figur schlägt
     @Test
     fun `valid move captures opponent's figure`() {
         val game = Game()

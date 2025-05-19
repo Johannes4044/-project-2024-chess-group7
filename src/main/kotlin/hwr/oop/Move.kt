@@ -7,7 +7,7 @@ data class Move(val from: Position, val to: Position, val board: ChessBoard) {
 
     fun isValid(): Boolean {
         val figure = board.getFigureAt(from) ?: return false
-        return figure.canMove(from, to, board)
+        return figure.availableMoves(from, board).contains(to)
     }
 
     fun isCapture(): Boolean {

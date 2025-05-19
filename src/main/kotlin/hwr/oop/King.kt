@@ -5,18 +5,6 @@ import kotlin.math.abs
 class King(override val isWhite: Boolean) : Figures {
     override fun symbol() = if (isWhite) "k" else "K"
 
-    override fun canMove(from: Position, to: Position, board: ChessBoard): Boolean {
-        val direction = 1
-        val startZeile = if (isWhite) 1 else 8
-
-        val deltaX = to.row - from.row
-        val deltaY = to.column - from.column
-
-        val destination = board.getFigureAt(to)
-
-        return abs(deltaX) <= 1 && abs(deltaY) <= 1 && destination == null
-    }
-
     override fun availableMoves(from: Position, board: ChessBoard): List<Position> {
         val moves = mutableListOf<Position>()
 
