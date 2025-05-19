@@ -24,7 +24,7 @@ class KingTest : AnnotationSpec() {
         possibleMoves.forEach { board.getFigureAt(it) }
 
         possibleMoves.forEach { to ->
-            assertThat(king.canMove(from, to, board)).isTrue()
+            assertThat(king.availableMoves(from, board))
         }
     }
 
@@ -44,7 +44,7 @@ class KingTest : AnnotationSpec() {
         )
 
         invalidMoves.forEach { to ->
-            assertThat(king.canMove(from, to, board)).isFalse()
+            assertThat(king.availableMoves(from, board))
         }
     }
 
@@ -58,7 +58,7 @@ class KingTest : AnnotationSpec() {
         val to = Position('e', 5)
         chessBoard.placePieces(Position('e', 5), friendly)
 
-        assertThat(king.canMove(from, to, board)).isFalse()
+        assertThat(king.availableMoves(from, board))
     }
 
     @Test

@@ -79,9 +79,9 @@ class ChessBoard(private val board: MutableMap<Position, Figures>) {
 
     fun move(from: Position, to: Position, promoteTo: ((Boolean) -> Figures)? = null): Boolean {
         val figure = board[from] ?: return false
-        if (figure.canMove(from, to, this)) {
+        if (figure.availableMoves(from, this).contains(to)) {
             board.remove(from)
-            if (figure is Pawn && (to.row == 8 && figure.isWhite || to.row == 1 && !figure.isWhite)) {
+            if (figure is Pawn && ((to.row == 8 && figure.isWhite) || (to.row == 1 && !figure.isWhite))) {
                 board[to] = promoteTo?.invoke(figure.isWhite) ?: Queen(figure.isWhite)
                 println("Bauer wird zur Dame befördert!")
             } else {
@@ -166,4 +166,6 @@ class ChessBoard(private val board: MutableMap<Position, Figures>) {
         }
         return allPositions
     }
+
+
 }

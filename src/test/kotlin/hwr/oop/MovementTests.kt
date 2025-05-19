@@ -7,7 +7,7 @@ import java.io.PrintStream
 
 class MovementTests : AnnotationSpec() {
 
-    @Test
+
     fun `Bishop can move diagonally when path is clear`() {
         val chessBoard = ChessBoard.emptyBoard()
         val bishop = Bishop(true)
@@ -32,6 +32,7 @@ class MovementTests : AnnotationSpec() {
     }
 
     @Test
+
     fun `Bishop available moves on empty board`() {
         val chessBoard = ChessBoard.emptyBoard()
         val bishop = Bishop(true)
@@ -202,6 +203,7 @@ class MovementTests : AnnotationSpec() {
     }
 
     @Test
+
     fun `knight available moves on empty board`() {
         val chessBoard = ChessBoard.emptyBoard()
         val knight = Knight(true)
@@ -266,6 +268,7 @@ class MovementTests : AnnotationSpec() {
     }
 
     @Test
+
     fun `Queen can move vertically`() {
         val chessBoard = ChessBoard.emptyBoard()
         val queen = Queen(true)
@@ -314,6 +317,7 @@ class MovementTests : AnnotationSpec() {
     }
 
     @Test
+
     fun `Queen available moves on empty board`() {
         val chessBoard = ChessBoard.emptyBoard()
         val queen = Queen(true)
