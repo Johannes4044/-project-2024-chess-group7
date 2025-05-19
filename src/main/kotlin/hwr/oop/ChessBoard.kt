@@ -1,7 +1,7 @@
 package hwr.oop
 
 
-class ChessBoard(val board: MutableMap<Position, Figures>) {
+class ChessBoard(private val board: MutableMap<Position, Figures>) {
 
 
     companion object {
@@ -108,6 +108,9 @@ class ChessBoard(val board: MutableMap<Position, Figures>) {
         }
     }
 
+    fun placePieces(position: Position, figure: Figures) {
+        board[position] = figure
+    }
 
     fun toFEN(): String {
         val fen = StringBuilder()

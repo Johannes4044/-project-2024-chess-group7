@@ -97,9 +97,8 @@ class GameTest : AnnotationSpec() {
         game.getAllMoves(chessBoard)
         game.kingPositions()
 
-
-        chessBoard.board[Position('e',2 )] = King(true) //weißer König wird erstellt
-        chessBoard.board[Position('e',5)] = Rook(false) //schwarzer Turm wird erstellt
+        chessBoard.placePieces(Position('e', 2), King(true))
+        chessBoard.placePieces(Position('e', 5), Rook(false))
         val isChecked = game.whiteCheck()
         assertThat(isChecked).isTrue()
     }
@@ -111,8 +110,9 @@ class GameTest : AnnotationSpec() {
         game.getAllMoves(chessBoard)
         game.kingPositions()
 
-        chessBoard.board[Position('e',2 )] = King(false) //schwarzer König wird erstellt
-        chessBoard.board[Position('e',5)] = Rook(true) // Eine weiße Figur, die den König bedroht (Turm auf e5)
+
+        chessBoard.placePieces(Position('e', 2), King(false))
+        chessBoard.placePieces(Position('e', 5), Rook(true))
         val isChecked = game.whiteCheck()
         assertThat(isChecked).isTrue()
     }
