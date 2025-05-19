@@ -1,7 +1,7 @@
 package hwr.oop
 
 
-class Pawn(override val isWhite: Boolean) : Figures {
+class Pawn(override val isWhite: Boolean) : Figure {
     override fun symbol() = if (isWhite) "b" else "B"
 
     override fun availableMoves(from: Position, board: ChessBoard): List<Position> {

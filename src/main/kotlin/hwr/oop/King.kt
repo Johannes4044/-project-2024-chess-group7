@@ -2,7 +2,7 @@ package hwr.oop
 
 import kotlin.math.abs
 
-class King(override val isWhite: Boolean) : Figures {
+class King(override val isWhite: Boolean) : Figure {
     override fun symbol() = if (isWhite) "k" else "K"
 
     override fun availableMoves(from: Position, board: ChessBoard): List<Position> {

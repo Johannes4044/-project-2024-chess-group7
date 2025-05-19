@@ -80,7 +80,7 @@ class GameTest : AnnotationSpec() {
     @Test
     fun `game ends in stalemate`() {
         val game = Game()
-        val board = game.board
+        val board = ChessBoard.fullBoard()
         board.move(Position('h', 1), Position('h', 1)) // Weißer König bleibt an Ort und Stelle
         board.move(Position('f', 2), Position('f', 2)) // Schwarzer König bleibt an Ort und Stelle
         board.move(Position('g', 3), Position('g', 3)) // Schwarze Dame bleibt an Ort und Stelle
