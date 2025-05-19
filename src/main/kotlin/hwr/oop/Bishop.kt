@@ -2,7 +2,7 @@ package hwr.oop
 
 import kotlin.math.abs
 
-class Bishop(override val isWhite: Boolean) : Figures {
+class Bishop(override val isWhite: Boolean) : Figure {
     override fun symbol() = if (isWhite) "l" else "L"
 
     override fun availableMoves(from: Position, board: ChessBoard): List<Position> {

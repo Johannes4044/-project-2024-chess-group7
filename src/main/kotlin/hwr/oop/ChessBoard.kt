@@ -1,14 +1,14 @@
 package hwr.oop
 
 
-class ChessBoard(private val board: MutableMap<Position, Figures>) {
+class ChessBoard(private val board: MutableMap<Position, Figure>) {
 
 
     companion object {
         fun emptyBoard(): ChessBoard = ChessBoard(mutableMapOf())
 
         fun fullBoard(): ChessBoard {
-            val board = mutableMapOf<Position, Figures>()
+            val board = mutableMapOf<Position, Figure>()
             for (i in 'a'..'h') {
                 board[Position(i, 2)] = Pawn(true)
             }
@@ -40,7 +40,7 @@ class ChessBoard(private val board: MutableMap<Position, Figures>) {
         }
 
         fun fromFEN(fen: String): ChessBoard {
-            val board = mutableMapOf<Position, Figures>()
+            val board = mutableMapOf<Position, Figure>()
             val rows = fen.split(" ")[0].split("/")  // nur Feldbelegung
             var rowIndex = 8
 
@@ -75,9 +75,9 @@ class ChessBoard(private val board: MutableMap<Position, Figures>) {
         }
     }
 
-    fun getFigureAt(position: Position): Figures? = board[position]
+    fun getFigureAt(position: Position): Figure? = board[position]
 
-    fun move(from: Position, to: Position, promoteTo: ((Boolean) -> Figures)? = null): Boolean {
+    fun move(from: Position, to: Position, promoteTo: ((Boolean) -> Figure)? = null): Boolean {
         val figure = board[from] ?: return false
         if (figure.availableMoves(from, this).contains(to)) {
             board.remove(from)
@@ -108,7 +108,7 @@ class ChessBoard(private val board: MutableMap<Position, Figures>) {
         }
     }
 
-    fun placePieces(position: Position, figure: Figures) {
+    fun placePieces(position: Position, figure: Figure) {
         board[position] = figure
     }
 
@@ -141,7 +141,7 @@ class ChessBoard(private val board: MutableMap<Position, Figures>) {
 
     fun getAllFigures(whiteTurn: Boolean): Any {
 
-        val allFigures = mutableListOf<Figures>()
+        val allFigures = mutableListOf<Figure>()
         for (entry in board.entries) {
             if (entry.value.isWhite == whiteTurn) {
                 allFigures.add(entry.value)

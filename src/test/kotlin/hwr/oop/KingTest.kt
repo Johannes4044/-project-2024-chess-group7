@@ -19,7 +19,7 @@ class KingTest : AnnotationSpec() {
             Position('f', 2),  // oben rechts (diagonal)
         )
         val board = ChessBoard.emptyBoard()
-        chessBoard.placePieces(Position('e', 1), king)
+        board.placePieces(Position('e', 1), king)
 
         possibleMoves.forEach { board.getFigureAt(it) }
 
@@ -33,7 +33,7 @@ class KingTest : AnnotationSpec() {
         val king = King(true)
         val from = Position('e', 4)
         val board = ChessBoard.emptyBoard()
-        chessBoard.placePieces(Position('e', 4), king)
+        board.placePieces(Position('e', 4), king)
 
         val invalidMoves = listOf(
             Position('e', 6), // zwei Felder nach oben
@@ -53,10 +53,10 @@ class KingTest : AnnotationSpec() {
         val king = King(true)
         val from = Position('e', 4)
         val board = ChessBoard.emptyBoard()
-        chessBoard.placePieces(Position('e', 4), king)
+        board.placePieces(Position('e', 4), king)
         val friendly = King(true)
         val to = Position('e', 5)
-        chessBoard.placePieces(Position('e', 5), friendly)
+        board.placePieces(Position('e', 5), friendly)
 
         assertThat(king.availableMoves(from, board))
     }
@@ -66,10 +66,10 @@ class KingTest : AnnotationSpec() {
         val king = King(true)
         val from = Position('e', 4)
         val board = ChessBoard.emptyBoard()
-        chessBoard.placePieces(Position('e', 4), king)
+        board.placePieces(Position('e', 4), king)
         val enemy = King(false)
         val to = Position('e', 5)
-        chessBoard.placePieces(Position('e', 5), enemy)
+        board.placePieces(Position('e', 5), enemy)
 
         assertThat(king.availableMoves(from, board)).contains(to)
     }
@@ -79,7 +79,7 @@ class KingTest : AnnotationSpec() {
         val king = King(true)
         val from = Position('a', 1)
         val board = ChessBoard.emptyBoard()
-        chessBoard.placePieces(Position('a', 1), king)
+        board.placePieces(Position('a', 1), king)
 
         val moves = king.availableMoves(from, board)
         moves.forEach {

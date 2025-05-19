@@ -1,6 +1,6 @@
 package hwr.oop
 
-class Queen(override val isWhite: Boolean) : Figures {
+class Queen(override val isWhite: Boolean) : Figure {
     override fun symbol() = if (isWhite) "d" else "D"
 
     override fun availableMoves(from: Position, board: ChessBoard): List<Position> {

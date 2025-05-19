@@ -1,6 +1,6 @@
 package hwr.oop
 
-class Rook(override val isWhite: Boolean) : Figures {
+class Rook(override val isWhite: Boolean) : Figure {
     override fun symbol() = if (isWhite) "t" else "T"
 
     override fun availableMoves(from: Position, board: ChessBoard): List<Position> {
