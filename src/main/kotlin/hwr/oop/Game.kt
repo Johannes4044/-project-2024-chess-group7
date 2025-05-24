@@ -30,29 +30,6 @@ class Game {
         }
     }
 
-    fun kingPositions(): Pair <Position?, Position?>  {    //paar gibt die Positionen der Könige zurück
-        var whiteKingPosition : Position? = null
-        var blackKingPosition : Position? = null
-        var col = 'a'..'h'
-        var row = 1..8
-        outer@for (Column in col) {                        //durchläuft alle Spalten und Zeilen
-            for (Row in row) {
-                val position = Position(Column, Row)
-                val figur = board.getFigureAt(position)
-
-                if (figur is King && figur.symbol() == "k") {      // wenn die Figur ein Weißer König ist dann true
-                    whiteKingPosition = position
-                }
-                if (figur is King && figur.symbol() == "K") {       // wenn die Figur ein schwarzer König ist dann true
-                    blackKingPosition = position
-                }
-                if(whiteKingPosition != null && blackKingPosition != null) {    // wenn beide gefunden wurden bricht es ab
-                    break@outer
-                }
-            }
-        }
-        return Pair(whiteKingPosition, blackKingPosition)
-    }
     fun getAllMoves(board: ChessBoard): Pair<List<Position>, List<Position>> {  //gibt ein paar aus Listen wieder
         val whiteMoves = mutableListOf<Position>() //enthält alle weißen möglichen Züge
         val blackMoves = mutableListOf<Position>() //enthält alle schwarzen möglichen Züge
@@ -76,18 +53,21 @@ class Game {
         }
         return Pair(whiteMoves, blackMoves)
     }
+
     fun whiteCheck(): Boolean {
         val (_, blackMoves) = getAllMoves(board)
-        val (whiteKing, _) = kingPositions()
+        val whiteKing = board.findKing(true)
         if (whiteKing == null) return false
         return blackMoves.contains(whiteKing)
     }
+
     fun blackCheck(): Boolean {
         val (whiteMoves, _) = getAllMoves(board)
-        val (_, blackKing) = kingPositions()
+        val blackKing = board.findKing(false)
         if (blackKing == null) return false
         return whiteMoves.contains(blackKing)
     }
+
     fun isGameOver(): Boolean {
         fun isKingInCheck(whiteTurn: Boolean): Boolean {
             val kingPosition = board.findKing(whiteTurn) ?: return false

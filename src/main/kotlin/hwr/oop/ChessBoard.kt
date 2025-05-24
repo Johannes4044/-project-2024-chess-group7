@@ -10,7 +10,6 @@ import hwr.oop.figures.Rook
 
 class ChessBoard(private val board: MutableMap<Position, Figure>) {
 
-
     companion object {
         fun emptyBoard(): ChessBoard = ChessBoard(mutableMapOf())
 
@@ -42,41 +41,6 @@ class ChessBoard(private val board: MutableMap<Position, Figure>) {
 
             board[Position('e', 1)] = King(true)
             board[Position('e', 8)] = King(false)
-
-            return ChessBoard(board)
-        }
-
-        fun fromFEN(fen: String): ChessBoard {
-            val board = mutableMapOf<Position, Figure>()
-            val rows = fen.split(" ")[0].split("/")  // nur Feldbelegung
-            var rowIndex = 8
-
-            for (row in rows) {
-                var colIndex = 'a'
-                for (char in row) {
-                    when {
-                        char.isDigit() -> {
-                            colIndex += char.digitToInt()
-                        }
-
-                        else -> {
-                            val isWhite = char.isLowerCase()
-                            val figure = when (char.lowercaseChar()) {
-                                'b' -> Pawn(isWhite)
-                                't' -> Rook(isWhite)
-                                's' -> Knight(isWhite)
-                                'l' -> Bishop(isWhite)
-                                'd' -> Queen(isWhite)
-                                'k' -> King(isWhite)
-                                else -> throw IllegalArgumentException("Ungültige Figur in FEN: $char")
-                            }
-                            board[Position(colIndex, rowIndex)] = figure
-                            colIndex++
-                        }
-                    }
-                }
-                rowIndex--
-            }
 
             return ChessBoard(board)
         }
@@ -119,33 +83,6 @@ class ChessBoard(private val board: MutableMap<Position, Figure>) {
         board[position] = figure
     }
 
-    fun toFEN(): String {
-        val fen = StringBuilder()
-        for (j in 8 downTo 1) {
-            var emptyCount = 0
-            for (i in 'a'..'h') {
-                val pos = Position(i, j)
-                val fig = board[pos]
-                if (fig != null) {
-                    if (emptyCount > 0) {
-                        fen.append(emptyCount)
-                        emptyCount = 0
-                    }
-                    fen.append(fig.symbol())
-                } else {
-                    emptyCount++
-                }
-            }
-            if (emptyCount > 0) {
-                fen.append(emptyCount)
-            }
-            if (j > 1) {
-                fen.append("/")
-            }
-        }
-        return (fen.toString())
-    }
-
     fun getAllFigures(whiteTurn: Boolean): Any {
 
         val allFigures = mutableListOf<Figure>()
@@ -173,6 +110,5 @@ class ChessBoard(private val board: MutableMap<Position, Figure>) {
         }
         return allPositions
     }
-
 
 }
