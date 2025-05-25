@@ -1,5 +1,7 @@
 package hwr.oop
 import hwr.oop.Game
+import hwr.oop.figures.King
+import hwr.oop.figures.Rook
 
 data class Move(val from: Position, val to: Position, val board: ChessBoard) {
     override fun toString(): String {

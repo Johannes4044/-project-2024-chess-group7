@@ -108,7 +108,6 @@ class GameTest : AnnotationSpec() {
         val chessBoard = ChessBoard.emptyBoard()
         chessBoard.placePieces(Position('e', 2), King(true))
         chessBoard.placePieces(Position('e', 5), Rook(false))
-        val isChecked = game.whiteCheck()
         assertThat(game.whiteCheck()).isTrue()
     }
 
@@ -122,7 +121,6 @@ class GameTest : AnnotationSpec() {
 
         chessBoard.placePieces(Position('e', 2), King(false))
         chessBoard.placePieces(Position('e', 5), Rook(true))
-        val isChecked = game.whiteCheck()
         assertThat(game.blackCheck()).isTrue()
     }
     @Test
