@@ -5,6 +5,7 @@ import hwr.oop.figures.Knight
 import hwr.oop.figures.Pawn
 import hwr.oop.figures.Queen
 import hwr.oop.figures.Rook
+import hwr.oop.figures.King
 import io.kotest.core.spec.style.AnnotationSpec
 import org.assertj.core.api.Assertions.assertThat
 import java.io.ByteArrayOutputStream
@@ -392,6 +393,22 @@ class MovementTests : AnnotationSpec() {
 
         assertThat(move.isCapture()).isTrue()
         assertThat(move2.isCapture()).isFalse()
+    }
+
+    @Test
+    fun `Castling works`(){
+        val game = Game()
+        val board= ChessBoard.emptyBoard()
+        val variable = Move(Position('e',1), Position('b',1), board)
+        val chessBoard = ChessBoard.emptyBoard()
+        val king = King(true)
+        val rook = Rook(true)
+        board.placePieces(Position('e', 1), king)
+        board.placePieces(Position('a', 1), rook)
+        variable.castleKingSide(game)
+        board.displayBoard()
+        assertThat(chessBoard.getFigureAt(Position('b', 1))).isEqualTo("k")
+        assertThat(chessBoard.getFigureAt(Position('c', 1))).isEqualTo("r")
     }
 }
 
