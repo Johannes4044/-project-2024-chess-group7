@@ -106,6 +106,7 @@ class GameTest : AnnotationSpec() {
     fun `white is checked`() {
         val game = Game()
         val chessBoard = ChessBoard.emptyBoard()
+        game.board = chessBoard
         chessBoard.placePieces(Position('e', 2), King(true))
         chessBoard.placePieces(Position('e', 5), Rook(false))
         assertThat(game.whiteCheck()).isTrue()
@@ -115,12 +116,12 @@ class GameTest : AnnotationSpec() {
     fun `black is checked`(){
         val game = Game()
         val chessBoard = ChessBoard.emptyBoard()
-        game.getAllMoves(chessBoard)
-        game.kingPositions()
-
+        game.board  = chessBoard
 
         chessBoard.placePieces(Position('e', 2), King(false))
         chessBoard.placePieces(Position('e', 5), Rook(true))
+        game.getAllMoves(chessBoard)
+        game.kingPositions()
         assertThat(game.blackCheck()).isTrue()
     }
     @Test
@@ -189,7 +190,7 @@ class GameTest : AnnotationSpec() {
     fun `game is over when no king on board`() {
         val game = Game()
         game.board = ChessBoard.emptyBoard()
-        assertThat(game.isGameOver()).isFalse()
+        assertThat(game.isGameOver()).isTrue()
     }
 
     @Test

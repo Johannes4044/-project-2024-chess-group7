@@ -34,8 +34,8 @@ class Game {
     fun kingPositions(): Pair <Position?, Position?>  {    //paar gibt die Positionen der Könige zurück
         var whiteKingPosition : Position? = null
         var blackKingPosition : Position? = null
-        var col = 'a'..'h'
-        var row = 1..8
+        val col = 'a'..'h'
+        val row = 1..8
         outer@for (Column in col) {                        //durchläuft alle Spalten und Zeilen
             for (Row in row) {
                 val position = Position(Column, Row)
@@ -77,100 +77,43 @@ class Game {
         }
         return Pair(whiteMoves, blackMoves)
     }
-    fun whiteCheck(): Boolean {
-        val (_, blackMoves) = getAllMoves(board)
-        val (whiteKing, _) = kingPositions()
-        if (whiteKing == null) return false
-        return blackMoves.contains(whiteKing)
-    }
-    fun blackCheck(): Boolean {
-        val (whiteMoves, _) = getAllMoves(board)
-        val (_, blackKing) = kingPositions()
-        if (blackKing == null) return false
-        return whiteMoves.contains(blackKing)
-    }
-
-
 
     fun isGameOver(): Boolean {
-        fun isKingInCheck(whiteTurn: Boolean): Boolean {
-            val kingPosition = board.findKing(whiteTurn) ?: return false
+        val currentIsWhite = currentPlayerIsWhite
+        val (whiteMoves, blackMoves) = getAllMoves(board)
 
-            for (position in board.getAllPositions() as List<Position>) {
-                val figure = board.getFigureAt(position)
-                if (figure != null && figure.isWhite != whiteTurn) {
-                    if (figure.availableMoves(position, board).contains(kingPosition)) {
-                        return true
-                    }
-                }
-            }
-            return false
-        }
-        fun kingPositions(): Pair <Position?, Position?>  {    //paar gibt die Positionen der Könige zurück
-            var whiteKingPosition : Position? = null
-            var blackKingPosition : Position? = null
-            var col = 'a'..'h'
-            var row = 1..8
-            outer@for (Column in col) {                        //durchläuft alle Spalten und Zeilen
-                for (Row in row) {
-                    val position = Position(Column, Row)
-                    val figur = board.getFigureAt(position)
+        val inCheck = if (currentIsWhite) whiteCheck() else blackCheck()
+        val playerMoves = if (currentIsWhite) whiteMoves else blackMoves
+        val hasMoves = playerMoves.isNotEmpty()
 
-                    if (figur is King && figur.symbol() == "k") {      // wenn die Figur ein Weißer König ist dann true
-                        whiteKingPosition = position
-                    }
-                    if (figur is King && figur.symbol() == "K") {       // wenn die Figur ein schwarzer König ist dann true
-                        blackKingPosition = position
-                    }
-                    if(whiteKingPosition != null && blackKingPosition != null) {    // wenn beide gefunden wurden bricht es ab
-                        break@outer
-                    }
-                }
+        if (!hasMoves) {
+            if (inCheck) {
+                println("Schachmatt! Spieler ${if (currentIsWhite) "Weiß" else "Schwarz"} verliert.")
+            } else {
+                println("Patt! Unentschieden.")
             }
-            return Pair(whiteKingPosition, blackKingPosition)
+            return true
         }
-        fun getAllMoves(board: ChessBoard): Pair<List<Position>, List<Position>> {  //gibt ein paar aus Listen wieder
-            val whiteMoves = mutableListOf<Position>() //enthält alle weißen möglichen Züge
-            val blackMoves = mutableListOf<Position>() //enthält alle schwarzen möglichen Züge
-            val col = 'a'..'h'
-            val row = 1..8
+        return false
+    }
 
-            for (column in col) {
-                for (Row in row) {
-                    val from = Position(column, Row)
-                    val figure = board.getFigureAt(from)
+    fun whiteCheck(): Boolean {
+        val (whiteMoves, blackMoves) = getAllMoves(board)
+        val (whiteKing, blackKing) = kingPositions()
+        for (blackMove in blackMoves) {
+            if (whiteKing == blackMove)
+                return true
+        }
+        return false
+    }
 
-                    if (figure != King(true) && figure != null && figure.symbol()[0].isLowerCase()) {
-                        val moves = figure.availableMoves(from, board)
-                        whiteMoves.addAll(moves)    //fügt alle Züge einer weißen Figur zur Liste zu
-                    }
-                    if (figure != King(false) && figure != null && figure.symbol()[0].isUpperCase()) {
-                        val moves = figure.availableMoves(from, board)
-                        blackMoves.addAll(moves)    //fügt alle Züge einer schwarzen Figur zur Liste zu
-                    }
-                }
-            }
-            return Pair(whiteMoves, blackMoves)
+    fun blackCheck(): Boolean {
+        val (whiteMoves, blackMoves) = getAllMoves(board)
+        val (whiteKing, blackKing) = kingPositions()
+        for (whiteMove in whiteMoves) {
+            if (blackKing == whiteMove)
+                return true
         }
-        fun whiteCheck(): Boolean {
-            val (whiteMoves, blackMoves) = getAllMoves(board)
-            val (whiteKing, blackKing) = kingPositions()
-            for (white in whiteMoves) {
-                if(whiteKing == white)  //für alle Elemente(Positionen) die möglich sind wird geprüft == King sind
-                    return true
-            }
-            return false
-        }
-        fun blackCheck(): Boolean {
-            val (whiteMoves, blackMoves) =getAllMoves(board)
-            val (whiteKing, blackKing) = kingPositions()
-            for (black in blackMoves) {
-                if(blackKing == black)  //für alle Elemente(Positionen) die möglich sind wird geprüft == King sind
-                    return true
-            }
-            return false
-        }
-
-        return TODO("Provide the return value")
+        return false
     }
 }
