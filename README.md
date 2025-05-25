@@ -75,7 +75,7 @@ Das Ziel dieses Projekts ist es, ein funktionierendes Schachspiel zu implementie
 
 ## Instructions
 
-[TODO]: # (Remove these instructions once you finished your fork's setup.)
+[TODO]: (Remove these instructions once you finished your fork's setup.)
 
 ## TODO
 

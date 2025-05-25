@@ -1,5 +1,12 @@
 package hwr.oop
 
+import hwr.oop.figures.Bishop
+import hwr.oop.figures.King
+import hwr.oop.figures.Knight
+import hwr.oop.figures.Pawn
+import hwr.oop.figures.Queen
+import hwr.oop.figures.Rook
+
 
 class ChessBoard(private val board: MutableMap<Position, Figure>) {
 
@@ -152,7 +159,7 @@ class ChessBoard(private val board: MutableMap<Position, Figure>) {
 
     fun findKing(whiteTurn: Boolean): Position? {
         for (entry in board.entries) {
-            if (entry.value is King && entry.value.isWhite == whiteTurn) {
+            if (entry.value is King && (entry.value as King).isWhite == whiteTurn) {
                 return entry.key
             }
         }
@@ -167,5 +174,11 @@ class ChessBoard(private val board: MutableMap<Position, Figure>) {
         return allPositions
     }
 
+    fun isSpaceFree(Game: Game, Position: Position, isWhiteCastling: Boolean): Boolean {
+        val (whiteMoves, blackMoves) = Game.getAllMoves(this)
+        if (whiteMoves.contains(Position) && isWhiteCastling) return false
+        if (blackMoves.contains(Position) && !isWhiteCastling) return false
+        return true
+    }
 
 }

@@ -1,49 +1,42 @@
-package hwr.oop
-
+import hwr.oop.figures.Bishop
+import hwr.oop.figures.King
+import hwr.oop.figures.Knight
+import hwr.oop.figures.Pawn
+import hwr.oop.figures.Queen
+import hwr.oop.figures.Rook
 import io.kotest.core.spec.style.AnnotationSpec
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 
 class FiguresTest : AnnotationSpec() {
 
-    @Test
-    fun `Pawn gets correctly created`() {
-        val pawnExample = Pawn(true)
-        assertThat(pawnExample.symbol()).isEqualTo("b")
-        assertThat(pawnExample.isWhite).isEqualTo(true)
-    }
-
-    @Test
-    fun `Rook gets correctly created`() {
-        val rookExample = Rook(true)
-        assertThat(rookExample.symbol()).isEqualTo("t")
-        assertThat(rookExample.isWhite).isEqualTo(true)
-    }
-
-    @Test
-    fun `Knight gets correctly created`() {
-        val knightExample = Knight(true)
-        assertThat(knightExample.symbol()).isEqualTo("s")
-        assertThat(knightExample.isWhite).isEqualTo(true)
-    }
-
-    @Test
-    fun `Bishop gets correctly created`() {
-        val bishopExample = Bishop(true)
-        assertThat(bishopExample.symbol()).isEqualTo("l")
-        assertThat(bishopExample.isWhite).isEqualTo(true)
-    }
-
-    @Test
-    fun `Queen gets correctly created`() {
-        val queenExample = Queen(true)
-        assertThat(queenExample.symbol()).isEqualTo("d")
-        assertThat(queenExample.isWhite).isEqualTo(true)
-    }
-
-    @Test
-    fun `King gets correctly created`() {
-        val kingExample = King(true)
-        assertThat(kingExample.symbol()).isEqualTo("k")
-        assertThat(kingExample.isWhite).isEqualTo(true)
+    @ParameterizedTest
+    @CsvSource(
+        "Pawn,true,b",
+        "Pawn,false,B",
+        "Rook,true,t",
+        "Rook,false,T",
+        "Knight,true,s",
+        "Knight,false,S",
+        "Bishop,true,l",
+        "Bishop,false,L",
+        "Queen,true,d",
+        "Queen,false,D",
+        "King,true,k",
+        "King,false,K"
+    )
+    fun `figure symbol and color are correct`(figureType: String, isWhite: Boolean, expectedSymbol: String) {
+        val figure = when (figureType) {
+            "Pawn" -> Pawn(isWhite)
+            "Rook" -> Rook(isWhite)
+            "Knight" -> Knight(isWhite)
+            "Bishop" -> Bishop(isWhite)
+            "Queen" -> Queen(isWhite)
+            "King" -> King(isWhite)
+            else -> throw IllegalArgumentException("Unknown figure type")
+        }
+        assertThat(figure.symbol()).isEqualTo(expectedSymbol)
+        assertThat(figure.isWhite).isEqualTo(isWhite)
     }
 }

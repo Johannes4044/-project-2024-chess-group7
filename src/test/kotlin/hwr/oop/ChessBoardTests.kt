@@ -1,5 +1,8 @@
 package hwr.oop
 
+import hwr.oop.figures.Bishop
+import hwr.oop.figures.Knight
+import hwr.oop.figures.Rook
 import io.kotest.core.spec.style.AnnotationSpec
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.assertThrows
@@ -65,6 +68,26 @@ class ChessBoardTests : AnnotationSpec() {
         }
 
         assertThat(exception.message?.contains("Ungültige Figur in FEN") == true)
+    }
+
+    @Test
+    fun `IsSpaceFree returns true for empty position`() {
+        val Game = Game()
+        val chessBoard = ChessBoard.emptyBoard()
+        val position = Position('a', 1)
+        assertThat(chessBoard.isSpaceFree(Game, position, true)).isTrue()
+    }
+
+    @Test
+    fun `IsSpaceFree returns false for occupied position`() {
+        val Game = Game()
+        val chessBoard = ChessBoard.emptyBoard()
+        val position = Position('a', 1)
+        val position2 = Position('b', 2)
+        chessBoard.placePieces(position, Rook(true))
+        chessBoard.placePieces(position2, Rook(false))
+        assertThat(chessBoard.isSpaceFree(Game, Position('b', 1), false)).isFalse()
+        assertThat(chessBoard.isSpaceFree(Game, Position('b', 1), true)).isFalse()
     }
 
 }

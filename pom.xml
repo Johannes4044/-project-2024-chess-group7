@@ -43,7 +43,7 @@
     <dependency>
       <groupId>org.jline</groupId>
       <artifactId>jline</artifactId>
-      <version>3.21.0</version>
+      <version>3.25.0</version>
     </dependency>
     <!-- KotlinX Coroutines -->
     <dependency>
@@ -71,7 +71,12 @@
       <version>${kotest-extensions-pitest.version}</version>
       <scope>test</scope>
     </dependency>
-
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-params</artifactId>
+      <version>5.11.0</version>
+      <scope>test</scope>
+    </dependency>
     <!-- AssertJ for Assertions -->
     <dependency>
       <groupId>org.assertj</groupId>

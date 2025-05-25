@@ -1,6 +1,8 @@
-package hwr.oop
+package hwr.oop.figures
 
-import kotlin.math.abs
+import hwr.oop.ChessBoard
+import hwr.oop.Figure
+import hwr.oop.Position
 
 class Knight(override val isWhite: Boolean) : Figure {
     override fun symbol() = if (isWhite) "s" else "S"

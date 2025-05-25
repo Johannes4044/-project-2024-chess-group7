@@ -1,8 +1,9 @@
 package hwr.oop
 
+import hwr.oop.figures.King
 
 class Game {
-    val board: ChessBoard = ChessBoard.fullBoard()
+    var board: ChessBoard = ChessBoard.fullBoard()
     var currentPlayerIsWhite: Boolean = true
     val moves = mutableListOf<Triple<Figure, Position, Position>>()
 
@@ -77,22 +78,16 @@ class Game {
         return Pair(whiteMoves, blackMoves)
     }
     fun whiteCheck(): Boolean {
-        val (whiteMoves, blackMoves) = getAllMoves(board)
-        val (whiteKing, blackKing) = kingPositions()
-        for (white in whiteMoves) {
-            if(whiteKing == white)  //für alle Elemente(Positionen) die möglich sind wird geprüft == King sind
-                return true
-        }
-        return false
+        val (_, blackMoves) = getAllMoves(board)
+        val (whiteKing, _) = kingPositions()
+        if (whiteKing == null) return false
+        return blackMoves.contains(whiteKing)
     }
     fun blackCheck(): Boolean {
-        val (whiteMoves, blackMoves) =getAllMoves(board)
-        val (whiteKing, blackKing) = kingPositions()
-        for (black in blackMoves) {
-            if(whiteKing == black)  //für alle Elemente(Positionen) die möglich sind wird geprüft == King sind
-                return true
-        }
-        return false
+        val (whiteMoves, _) = getAllMoves(board)
+        val (_, blackKing) = kingPositions()
+        if (blackKing == null) return false
+        return whiteMoves.contains(blackKing)
     }
 
 
@@ -178,5 +173,4 @@ class Game {
 
         return TODO("Provide the return value")
     }
-
 }
