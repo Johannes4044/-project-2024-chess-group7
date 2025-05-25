@@ -3,6 +3,7 @@ package hwr.oop
 import kotlin.math.abs
 
 class King(override val isWhite: Boolean) : Figure {
+    var firstMove = true
     override fun symbol() = if (isWhite) "k" else "K"
 
     override fun availableMoves(from: Position, board: ChessBoard): List<Position> {
@@ -32,4 +33,14 @@ class King(override val isWhite: Boolean) : Figure {
 
         return moves
     }
+
+    fun kingCastle(): Boolean{
+        if (firstMove) {
+            firstMove = false
+            return true
+        }else{
+            return false
+        }
+    }
+
 }

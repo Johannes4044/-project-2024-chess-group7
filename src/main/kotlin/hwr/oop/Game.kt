@@ -1,10 +1,10 @@
 package hwr.oop
 
 
-
 class Game {
     val board: ChessBoard = ChessBoard.fullBoard()
     var currentPlayerIsWhite: Boolean = true
+    val moves = mutableListOf<Triple<Figure, Position, Position>>()
 
     fun startGame() {
         board.displayBoard()
@@ -22,9 +22,10 @@ class Game {
             board.move(from, to)
             currentPlayerIsWhite = !currentPlayerIsWhite
             println("Zug erfolgreich!")
+            moves.add(Triple(figure, from, to))
             return true
         } else {
-            println("Ungültiger Zug!")
+              println("Ungültiger Zug!")
             return false
         }
     }
@@ -93,6 +94,7 @@ class Game {
         }
         return false
     }
+
 
 
     fun isGameOver(): Boolean {
@@ -168,7 +170,7 @@ class Game {
             val (whiteMoves, blackMoves) =getAllMoves(board)
             val (whiteKing, blackKing) = kingPositions()
             for (black in blackMoves) {
-                if(whiteKing == black)  //für alle Elemente(Positionen) die möglich sind wird geprüft == King sind
+                if(blackKing == black)  //für alle Elemente(Positionen) die möglich sind wird geprüft == King sind
                     return true
             }
             return false

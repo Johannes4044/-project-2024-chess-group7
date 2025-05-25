@@ -100,7 +100,7 @@ class GameTest : AnnotationSpec() {
         chessBoard.placePieces(Position('e', 2), King(true))
         chessBoard.placePieces(Position('e', 5), Rook(false))
         val isChecked = game.whiteCheck()
-        assertThat(isChecked).isTrue()
+        assertThat(game.whiteCheck()).isTrue()
     }
 
     @Test
@@ -114,6 +114,22 @@ class GameTest : AnnotationSpec() {
         chessBoard.placePieces(Position('e', 2), King(false))
         chessBoard.placePieces(Position('e', 5), Rook(true))
         val isChecked = game.whiteCheck()
-        assertThat(isChecked).isTrue()
+        assertThat(game.blackCheck()).isTrue()
     }
+
+    @Test
+    fun `zug history`(){
+        val game = Game()
+        val from = Position('e', 2)
+        val to = Position('e',4)
+        val figure = game.board.getFigureAt(from)
+        val listTest = listOf (
+            Triple(figure, from, to),
+        )
+        game.makeMove(from,to)
+        val history = game.moves
+        assertThat(history).isEqualTo(listTest)
+    }
+
+
 }
