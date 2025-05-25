@@ -5,6 +5,7 @@ import hwr.oop.figures.Knight
 import hwr.oop.figures.Pawn
 import hwr.oop.figures.Queen
 import hwr.oop.figures.Rook
+import hwr.oop.figures.King
 import io.kotest.core.spec.style.AnnotationSpec
 import org.assertj.core.api.Assertions.assertThat
 import java.io.ByteArrayOutputStream
