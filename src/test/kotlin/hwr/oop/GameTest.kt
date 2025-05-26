@@ -113,8 +113,6 @@ class GameTest : AnnotationSpec() {
 
         chessBoard.placePieces(Position('e', 2), King(false))
         chessBoard.placePieces(Position('e', 5), Rook(true))
-        game.getAllMoves(chessBoard)
-        game.kingPositions()
         assertThat(game.blackCheck()).isTrue()
     }
     @Test

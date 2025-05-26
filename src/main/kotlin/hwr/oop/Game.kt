@@ -31,29 +31,6 @@ class Game {
         }
     }
 
-    fun kingPositions(): Pair <Position?, Position?>  {    //paar gibt die Positionen der Könige zurück
-        var whiteKingPosition : Position? = null
-        var blackKingPosition : Position? = null
-        val col = 'a'..'h'
-        val row = 1..8
-        outer@for (Column in col) {                        //durchläuft alle Spalten und Zeilen
-            for (Row in row) {
-                val position = Position(Column, Row)
-                val figur = board.getFigureAt(position)
-
-                if (figur is King && figur.symbol() == "k") {      // wenn die Figur ein Weißer König ist dann true
-                    whiteKingPosition = position
-                }
-                if (figur is King && figur.symbol() == "K") {       // wenn die Figur ein schwarzer König ist dann true
-                    blackKingPosition = position
-                }
-                if(whiteKingPosition != null && blackKingPosition != null) {    // wenn beide gefunden wurden bricht es ab
-                    break@outer
-                }
-            }
-        }
-        return Pair(whiteKingPosition, blackKingPosition)
-    }
 
     fun getAllMoves(board: ChessBoard): Pair<List<Position>, List<Position>> {  //gibt ein paar aus Listen wieder
         val whiteMoves = mutableListOf<Position>() //enthält alle weißen möglichen Züge
@@ -103,11 +80,10 @@ class Game {
 
         if (!hasMoves) {
             if (inCheck) {
-                println("Schachmatt! Spieler ${if (currentIsWhite) "Weiß" else "Schwarz"} verliert.")
+                return true
             } else {
-                println("Patt! Unentschieden.")
+                return true
             }
-            return true
         }
         return false
     }
