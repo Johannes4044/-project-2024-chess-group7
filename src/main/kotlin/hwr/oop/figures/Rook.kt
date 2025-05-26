@@ -17,9 +17,9 @@ class Rook(override val isWhite: Boolean) : Figure {
         val moves = mutableListOf<Position>()
 
         for (direction in directionsRook) {
-            val dx = direction.dx
-            val dy = direction.dy
-            var current = Position(from.column + dx, from.row + dy)
+            val deltaX = direction.deltaX
+            val deltaY = direction.deltaY
+            var current = Position(from.column + deltaX, from.row + deltaY)
             while (current.column in 'a'..'h' && current.row in 1..8) {
                 val figureAtCurrent = board.getFigureAt(current)
                 if (figureAtCurrent == null) {
@@ -30,7 +30,7 @@ class Rook(override val isWhite: Boolean) : Figure {
                     }
                     break // Stoppen, wenn eine Figur im Weg ist
                 }
-                current = Position(current.column + dx, current.row + dy)
+                current = Position(current.column + deltaX, current.row + deltaY)
             }
         }
         return moves

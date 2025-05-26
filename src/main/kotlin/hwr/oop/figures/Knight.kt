@@ -23,9 +23,9 @@ class Knight(override val isWhite: Boolean) : Figure {
 
         // Ein component davon machen
         for (direction in directionsKnight) {
-            val dx = direction.dx
-            val dy = direction.dy
-            val target = Position(from.column + dx, from.row + dy)
+            val deltaX = direction.deltaX
+            val deltaY = direction.deltaY
+            val target = Position(from.column + deltaX, from.row + deltaY)
             if (target.column in 'a'..'h' && target.row in 1..8) {
                 val destination = board.getFigureAt(target)
                 if (destination == null || destination.isWhite != this.isWhite) {
