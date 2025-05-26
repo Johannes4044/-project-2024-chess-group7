@@ -1,18 +1,17 @@
 package hwr.oop.figures
 
 import hwr.oop.ChessBoard
+import hwr.oop.Directions
 import hwr.oop.Figure
 import hwr.oop.Position
 
-enum class RookDirection(val dx: Int, val dy: Int) {
-    RIGHT(1, 0),   // Rechts
-    LEFT(-1, 0),   // Links
-    UP(0, 1),      // Oben
-    DOWN(0, -1)    // Unten
-}
-val directionsRook = RookDirection.entries
-
 class Rook(override val isWhite: Boolean) : Figure {
+    private val directionsRook = listOf(
+        Directions.UP,
+        Directions.DOWN,
+        Directions.LEFT,
+        Directions.RIGHT
+    )
     override fun symbol() = if (isWhite) "t" else "T"
     override fun availableMoves(from: Position, board: ChessBoard): List<Position> {
         val moves = mutableListOf<Position>()
