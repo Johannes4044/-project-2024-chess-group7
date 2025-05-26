@@ -111,6 +111,9 @@
             </goals>
           </execution>
         </executions>
+        <configuration>
+          <apiVersion>1.8</apiVersion>
+        </configuration>
       </plugin>
 
       <!-- Maven Assembly Plugin -->

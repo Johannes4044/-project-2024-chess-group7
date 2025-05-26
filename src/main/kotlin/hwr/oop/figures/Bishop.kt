@@ -1,30 +1,29 @@
 package hwr.oop.figures
 
 import hwr.oop.ChessBoard
+import hwr.oop.Directions
 import hwr.oop.Figure
 import hwr.oop.Position
 
 
-enum class BishopDirection(val dx: Int, val dy: Int) {
-    RECHTS_OBEN(1, 1),
-    RECHTS_UNTEN(1, -1),
-    LINKS_OBEN(-1, 1),
-    LINKS_UNTEN(-1, -1)
-}
-val directionsBishop = BishopDirection.entries
-
 class Bishop(override val isWhite: Boolean) : Figure {
+    private val directionsBishop = listOf(
+        Directions.UP_LEFT,   // Rechts oben
+        Directions.DOWN_RIGHT,  // Rechts unten
+        Directions.DOWN_LEFT,  // Links oben
+        Directions.UP_RIGHT // Links unten
+    )
+
     override fun symbol() = if (isWhite) "l" else "L"
 
     override fun availableMoves(from: Position, board: ChessBoard): List<Position> {
         val moves = mutableListOf<Position>()
-
         // Prüfen aller möglichen diagonalen Richtungen
 
         for (direction in directionsBishop) {
-            val dx = direction.dx
-            val dy = direction.dy
-            var current = Position(from.column + dx, from.row + dy)
+            val deltaX = direction.deltaX
+            val deltaY = direction.deltaY
+            var current = Position(from.column + deltaX, from.row + deltaY)
             while (current.column in 'a'..'h' && current.row in 1..8) {
                 val figureAtCurrent = board.getFigureAt(current)
                 if (figureAtCurrent == null) {
@@ -35,7 +34,7 @@ class Bishop(override val isWhite: Boolean) : Figure {
                     }
                     break // Stoppen, wenn eine Figur im Weg ist
                 }
-                current = Position(current.column + dx, current.row + dy)
+                current = Position(current.column + deltaX, current.row + deltaY)
             }
         }
 
