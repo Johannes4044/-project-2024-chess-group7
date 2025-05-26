@@ -6,43 +6,46 @@ import hwr.oop.figures.Knight
 import hwr.oop.figures.Pawn
 import hwr.oop.figures.Queen
 import hwr.oop.figures.Rook
-import io.kotest.core.spec.style.AnnotationSpec
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.CsvSource
+import io.kotest.core.spec.style.FunSpec
 
-class FiguresTest : AnnotationSpec() {
+import io.kotest.data.forAll
+import io.kotest.data.row
 
-    @ParameterizedTest
-    @CsvSource(
-        "Pawn,true,b",
-        "Pawn,false,B",
-        "Rook,true,t",
-        "Rook,false,T",
-        "Knight,true,s",
-        "Knight,false,S",
-        "Bishop,true,l",
-        "Bishop,false,L",
-        "Queen,true,d",
-        "Queen,false,D",
-        "King,true,k",
-        "King,false,K"
-    )
-    fun `figure symbol and color are correct`(figureType: String, isWhite: Boolean, expectedSymbol: String) {
-        val figure = when (figureType) {
-            "Pawn" -> Pawn(isWhite)
-            "Rook" -> Rook(isWhite)
-            "Knight" -> Knight(isWhite)
-            "Bishop" -> Bishop(isWhite)
-            "Queen" -> Queen(isWhite)
-            "King" -> King(isWhite)
-            else -> throw IllegalArgumentException("Unknown figure type")
+import io.kotest.matchers.booleans.shouldBeTrue
+import io.kotest.matchers.collections.shouldContain
+import io.kotest.matchers.collections.shouldNotContain
+import io.kotest.matchers.shouldBe
+
+class FigureSymbolTest : FunSpec({
+    test("figure symbol and color are correct") {
+            forAll(
+                row("Pawn", true, "b"),
+                row("Pawn", false, "B"),
+                row("Rook", true, "t"),
+                row("Rook", false, "T"),
+                row("Knight", true, "s"),
+                row("Knight", false, "S"),
+                row("Bishop", true, "l"),
+                row("Bishop", false, "L"),
+                row("Queen", true, "d"),
+                row("Queen", false, "D"),
+                row("King", true, "k"),
+                row("King", false, "K")
+            ) { figureType: String, isWhite: Boolean, expectedSymbol: String ->
+                val figure = when (figureType) {
+                    "Pawn" -> Pawn(isWhite)
+                    "Rook" -> Rook(isWhite)
+                    "Knight" -> Knight(isWhite)
+                    "Bishop" -> Bishop(isWhite)
+                    "Queen" -> Queen(isWhite)
+                    "King" -> King(isWhite)
+                    else -> throw IllegalArgumentException("Unknown figure type")
+                }
+                figure.symbol() shouldBe expectedSymbol
+                figure.isWhite shouldBe isWhite
+            }
         }
-        assertThat(figure.symbol()).isEqualTo(expectedSymbol)
-        assertThat(figure.isWhite).isEqualTo(isWhite)
-    }
-    @Test
-    fun `King can move if destination is empty`() {
+    test("King can move if destination is empty") {
         val king = King(true)
         val from = Position('e', 1)
         val possibleMoves = listOf(
@@ -53,21 +56,20 @@ class FiguresTest : AnnotationSpec() {
             Position('f', 2),
         )
         val board = ChessBoard.emptyBoard()
-        board.placePieces(Position('e', 1), king)
+        board.placePieces(from, king)
 
-        possibleMoves.forEach { board.getFigureAt(it) }
+        val moves = king.availableMoves(from, board)
 
         possibleMoves.forEach { to ->
-            assertThat(king.availableMoves(from, board))
+            moves shouldContain to
         }
     }
 
-    @Test
-    fun `King cannot move more than one square in any direction`() {
+    test("King cannot move more than one square in any direction") {
         val king = King(true)
         val from = Position('e', 4)
         val board = ChessBoard.emptyBoard()
-        board.placePieces(Position('e', 4), king)
+        board.placePieces(from, king)
 
         val invalidMoves = listOf(
             Position('e', 6),
@@ -77,47 +79,50 @@ class FiguresTest : AnnotationSpec() {
             Position('g', 6)
         )
 
+        val moves = king.availableMoves(from, board)
+
         invalidMoves.forEach { to ->
-            assertThat(king.availableMoves(from, board))
+            moves shouldNotContain to
         }
     }
 
-    @Test
-    fun `King cannot move to a square occupied by same color`() {
+    test("King cannot move to a square occupied by same color") {
         val king = King(true)
         val from = Position('e', 4)
         val board = ChessBoard.emptyBoard()
-        board.placePieces(Position('e', 4), king)
+        board.placePieces(from, king)
         val friendly = King(true)
         val to = Position('e', 5)
-        board.placePieces(Position('e', 5), friendly)
+        board.placePieces(to, friendly)
 
-        assertThat(king.availableMoves(from, board))
+        val moves = king.availableMoves(from, board)
+
+        moves shouldNotContain to
     }
 
-    @Test
-    fun `King can capture enemy piece`() {
+    test("King can capture enemy piece") {
         val king = King(true)
         val from = Position('e', 4)
         val board = ChessBoard.emptyBoard()
-        board.placePieces(Position('e', 4), king)
+        board.placePieces(from, king)
         val enemy = King(false)
         val to = Position('e', 5)
-        board.placePieces(Position('e', 5), enemy)
+        board.placePieces(to, enemy)
 
-        assertThat(king.availableMoves(from, board)).contains(to)
+        val moves = king.availableMoves(from, board)
+
+        moves shouldContain to
     }
 
-    @Test
-    fun `availableMoves returns only valid squares`() {
+    test("availableMoves returns only valid squares") {
         val king = King(true)
         val from = Position('a', 1)
         val board = ChessBoard.emptyBoard()
-        board.placePieces(Position('a', 1), king)
+        board.placePieces(from, king)
 
         val moves = king.availableMoves(from, board)
         moves.forEach {
-            assertThat(it.column in 'a'..'h' && it.row in 1..8).isTrue()
+            (it.column in 'a'..'h' && it.row in 1..8).shouldBeTrue()
         }
     }
-}
+})
