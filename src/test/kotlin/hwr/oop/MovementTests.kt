@@ -8,8 +8,6 @@ import hwr.oop.figures.Rook
 import hwr.oop.figures.King
 import io.kotest.core.spec.style.AnnotationSpec
 import org.assertj.core.api.Assertions.assertThat
-import java.io.ByteArrayOutputStream
-import java.io.PrintStream
 
 class MovementTests : AnnotationSpec() {
 

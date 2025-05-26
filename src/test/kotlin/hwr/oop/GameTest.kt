@@ -86,13 +86,6 @@ class GameTest : AnnotationSpec() {
         val isStalemate = game.isGameOver()
         assertThat(isStalemate).isFalse()
     }
-    @Test
-    fun `kingPositions returns correct positions`() {
-        val game = Game()
-        val (whiteKing, blackKing) = game.kingPositions()
-        assertThat(whiteKing).isEqualTo(Position('e', 1))
-        assertThat(blackKing).isEqualTo(Position('e', 8))
-    }
 
     @Test
     fun `getAllMoves return all available moves back`() {

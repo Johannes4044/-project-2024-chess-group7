@@ -54,6 +54,7 @@ class Game {
         }
         return Pair(whiteKingPosition, blackKingPosition)
     }
+
     fun getAllMoves(board: ChessBoard): Pair<List<Position>, List<Position>> {  //gibt ein paar aus Listen wieder
         val whiteMoves = mutableListOf<Position>() //enthält alle weißen möglichen Züge
         val blackMoves = mutableListOf<Position>() //enthält alle schwarzen möglichen Züge
@@ -76,6 +77,20 @@ class Game {
             }
         }
         return Pair(whiteMoves, blackMoves)
+    }
+
+    fun whiteCheck(): Boolean {
+        val (_, blackMoves) = getAllMoves(board)
+        val whiteKing = board.findKing(true)
+        if (whiteKing == null) return false
+        return blackMoves.contains(whiteKing)
+    }
+
+    fun blackCheck(): Boolean {
+        val (whiteMoves, _) = getAllMoves(board)
+        val blackKing = board.findKing(false)
+        if (blackKing == null) return false
+        return whiteMoves.contains(blackKing)
     }
 
     fun isGameOver(): Boolean {

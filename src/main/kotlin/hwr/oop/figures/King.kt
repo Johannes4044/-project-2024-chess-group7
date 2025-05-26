@@ -4,6 +4,19 @@ import hwr.oop.ChessBoard
 import hwr.oop.Figure
 import hwr.oop.Position
 
+
+enum class KingDirection(val dx: Int, val dy: Int) {
+    RECHTS(1, 0),
+    LINKS(-1, 0),
+    OBEN(0, 1),
+    UNTEN(0, -1),
+    RECHTS_OBEN(1, 1),
+    RECHTS_UNTEN(1, -1),
+    LINKS_OBEN(-1, 1),
+    LINKS_UNTEN(-1, -1)
+}
+val directionsKing = KingDirection.entries
+
 class King(override val isWhite: Boolean) : Figure {
     var firstMove = true
     override fun symbol() = if (isWhite) "k" else "K"
@@ -11,19 +24,9 @@ class King(override val isWhite: Boolean) : Figure {
     override fun availableMoves(from: Position, board: ChessBoard): List<Position> {
         val moves = mutableListOf<Position>()
 
-        // Alle möglichen Bewegungsrichtungen des Königs
-        val directions = listOf(
-            Pair(1, 0),   // Rechts
-            Pair(-1, 0),  // Links
-            Pair(0, 1),   // Oben
-            Pair(0, -1),  // Unten
-            Pair(1, 1),   // Rechts oben
-            Pair(1, -1),  // Rechts unten
-            Pair(-1, 1),  // Links oben
-            Pair(-1, -1)  // Links unten
-        )
-
-        for ((dx, dy) in directions) {
+        for (direction in directionsKing) {
+            val dx = direction.dx
+            val dy = direction.dy
             val target = Position(from.column + dx, from.row + dy)
             if (target.column in 'a'..'h' && target.row in 1..8) {
                 val destination = board.getFigureAt(target)
