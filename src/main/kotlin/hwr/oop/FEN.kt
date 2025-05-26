@@ -8,13 +8,13 @@ import hwr.oop.figures.Queen
 import hwr.oop.figures.Rook
 
 class FEN {
-    fun toFEN(board: Map<Position, Figure>): String {
+    fun toFEN(board: ChessBoard): String {
         val fen = StringBuilder()
         for (j in 8 downTo 1) {
             var emptyCount = 0
             for (i in 'a'..'h') {
                 val pos = Position(i, j)
-                val fig = board[pos]
+                val fig = board.getFigureAt(pos)
                 if (fig != null) {
                     if (emptyCount > 0) {
                         fen.append(emptyCount)
