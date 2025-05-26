@@ -14,7 +14,6 @@ val directionsRook = RookDirection.entries
 
 class Rook(override val isWhite: Boolean) : Figure {
     override fun symbol() = if (isWhite) "t" else "T"
-
     override fun availableMoves(from: Position, board: ChessBoard): List<Position> {
         val moves = mutableListOf<Position>()
 
@@ -35,7 +34,7 @@ class Rook(override val isWhite: Boolean) : Figure {
                 current = Position(current.column + dx, current.row + dy)
             }
         }
-
         return moves
     }
+
 }

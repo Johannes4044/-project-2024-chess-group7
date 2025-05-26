@@ -99,22 +99,23 @@ class GameTest : AnnotationSpec() {
     fun `white is checked`() {
         val game = Game()
         val chessBoard = ChessBoard.emptyBoard()
+        game.board = chessBoard
         chessBoard.placePieces(Position('e', 2), King(true))
         chessBoard.placePieces(Position('e', 5), Rook(false))
-        game.board = chessBoard
-        val isChecked = game.whiteCheck()
-        assertThat(isChecked).isTrue()
+        assertThat(game.whiteCheck()).isTrue()
     }
 
     @Test
-    fun `black is checked`() {
+    fun `black is checked`(){
         val game = Game()
         val chessBoard = ChessBoard.emptyBoard()
-        chessBoard.placePieces(Position('e', 6), King(false))
-        chessBoard.placePieces(Position('e', 3), Rook(true))
-        game.board = chessBoard
-        val isChecked = game.blackCheck()
-        assertThat(isChecked).isTrue()
+        game.board  = chessBoard
+
+        chessBoard.placePieces(Position('e', 2), King(false))
+        chessBoard.placePieces(Position('e', 5), Rook(true))
+        game.getAllMoves(chessBoard)
+        game.kingPositions()
+        assertThat(game.blackCheck()).isTrue()
     }
     @Test
     fun `getAllFigures return all white figures back`() {
@@ -182,6 +183,22 @@ class GameTest : AnnotationSpec() {
     fun `game is over when no king on board`() {
         val game = Game()
         game.board = ChessBoard.emptyBoard()
-        assertThat(game.isGameOver()).isFalse()
+        assertThat(game.isGameOver()).isTrue()
     }
+
+    @Test
+    fun `zug history`(){
+        val game = Game()
+        val from = Position('e', 2)
+        val to = Position('e',4)
+        val figure = game.board.getFigureAt(from)
+        val listTest = listOf (
+            Triple(figure, from, to),
+        )
+        game.makeMove(from,to)
+        val history = game.moves
+        assertThat(history).isEqualTo(listTest)
+    }
+
+
 }

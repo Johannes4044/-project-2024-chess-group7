@@ -1,4 +1,7 @@
 package hwr.oop
+import hwr.oop.Game
+import hwr.oop.figures.King
+import hwr.oop.figures.Rook
 
 data class Move(val from: Position, val to: Position, val board: ChessBoard) {
     override fun toString(): String {
@@ -27,5 +30,23 @@ data class Move(val from: Position, val to: Position, val board: ChessBoard) {
         }
 
         return board.move(from, to)
+    }
+
+    fun castleKingSide(Game: Game):Boolean{
+        val kingFirstMove = true
+        val rookFirstMove = true
+        val rookW = Rook(true)
+        val kingW = King(true)
+
+        if(kingFirstMove && rookFirstMove){
+            val kingPosition = Position('e', 1)
+            val kingTo = Position('b', 1)
+            val rookPosition = Position('a', 1)
+            val rookTo = Position('c', 1)
+
+            board.placePieces(rookTo, rookW)
+            board.placePieces(kingTo, kingW)
+        }
+        return true
     }
 }

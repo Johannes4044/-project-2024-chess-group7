@@ -2,10 +2,10 @@ package hwr.oop
 
 import hwr.oop.figures.King
 
-
 class Game {
     var board: ChessBoard = ChessBoard.fullBoard()
     var currentPlayerIsWhite: Boolean = true
+    val moves = mutableListOf<Triple<Figure, Position, Position>>()
 
     fun startGame() {
         board.displayBoard()
@@ -23,11 +23,36 @@ class Game {
             board.move(from, to)
             currentPlayerIsWhite = !currentPlayerIsWhite
             println("Zug erfolgreich!")
+            moves.add(Triple(figure, from, to))
             return true
         } else {
-            println("Ungültiger Zug!")
+              println("Ungültiger Zug!")
             return false
         }
+    }
+
+    fun kingPositions(): Pair <Position?, Position?>  {    //paar gibt die Positionen der Könige zurück
+        var whiteKingPosition : Position? = null
+        var blackKingPosition : Position? = null
+        val col = 'a'..'h'
+        val row = 1..8
+        outer@for (Column in col) {                        //durchläuft alle Spalten und Zeilen
+            for (Row in row) {
+                val position = Position(Column, Row)
+                val figur = board.getFigureAt(position)
+
+                if (figur is King && figur.symbol() == "k") {      // wenn die Figur ein Weißer König ist dann true
+                    whiteKingPosition = position
+                }
+                if (figur is King && figur.symbol() == "K") {       // wenn die Figur ein schwarzer König ist dann true
+                    blackKingPosition = position
+                }
+                if(whiteKingPosition != null && blackKingPosition != null) {    // wenn beide gefunden wurden bricht es ab
+                    break@outer
+                }
+            }
+        }
+        return Pair(whiteKingPosition, blackKingPosition)
     }
 
     fun getAllMoves(board: ChessBoard): Pair<List<Position>, List<Position>> {  //gibt ein paar aus Listen wieder
@@ -69,18 +94,40 @@ class Game {
     }
 
     fun isGameOver(): Boolean {
-        fun isKingInCheck(whiteTurn: Boolean): Boolean {
-            val kingPosition = board.findKing(whiteTurn) ?: return false
+        val currentIsWhite = currentPlayerIsWhite
+        val (whiteMoves, blackMoves) = getAllMoves(board)
 
-            for (position in board.getAllPositions() as List<Position>) {
-                val figure = board.getFigureAt(position)
-                if (figure != null && figure.isWhite != whiteTurn) {
-                    if (figure.availableMoves(position, board).contains(kingPosition)) {
-                        return true
-                    }
-                }
+        val inCheck = if (currentIsWhite) whiteCheck() else blackCheck()
+        val playerMoves = if (currentIsWhite) whiteMoves else blackMoves
+        val hasMoves = playerMoves.isNotEmpty()
+
+        if (!hasMoves) {
+            if (inCheck) {
+                println("Schachmatt! Spieler ${if (currentIsWhite) "Weiß" else "Schwarz"} verliert.")
+            } else {
+                println("Patt! Unentschieden.")
             }
-            return false
+            return true
+        }
+        return false
+    }
+
+    fun whiteCheck(): Boolean {
+        val (whiteMoves, blackMoves) = getAllMoves(board)
+        val (whiteKing, blackKing) = kingPositions()
+        for (blackMove in blackMoves) {
+            if (whiteKing == blackMove)
+                return true
+        }
+        return false
+    }
+
+    fun blackCheck(): Boolean {
+        val (whiteMoves, blackMoves) = getAllMoves(board)
+        val (whiteKing, blackKing) = kingPositions()
+        for (whiteMove in whiteMoves) {
+            if (blackKing == whiteMove)
+                return true
         }
         return false
     }
