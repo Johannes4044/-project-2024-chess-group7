@@ -112,23 +112,4 @@ class Game {
         return false
     }
 
-    fun whiteCheck(): Boolean {
-        val (whiteMoves, blackMoves) = getAllMoves(board)
-        val (whiteKing, blackKing) = kingPositions()
-        for (blackMove in blackMoves) {
-            if (whiteKing == blackMove)
-                return true
-        }
-        return false
-    }
-
-    fun blackCheck(): Boolean {
-        val (whiteMoves, blackMoves) = getAllMoves(board)
-        val (whiteKing, blackKing) = kingPositions()
-        for (whiteMove in whiteMoves) {
-            if (blackKing == whiteMove)
-                return true
-        }
-        return false
-    }
 }
