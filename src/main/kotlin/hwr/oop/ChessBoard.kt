@@ -44,6 +44,10 @@ class ChessBoard(private val board: MutableMap<Position, Figure>) {
 
             return ChessBoard(board)
         }
+
+        fun fromFEN(fenString: String): ChessBoard {
+            return FEN().fromFEN(fenString)
+        }
     }
 
     fun getFigureAt(position: Position): Figure? = board[position]
