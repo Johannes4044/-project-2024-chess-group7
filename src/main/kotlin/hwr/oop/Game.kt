@@ -1,6 +1,8 @@
 package hwr.oop
 
+import hwr.oop.figures.FigureType
 import hwr.oop.figures.King
+import hwr.oop.figures.Pawn
 
 class Game {
     var board: ChessBoard = ChessBoard.fullBoard()
@@ -12,21 +14,16 @@ class Game {
         println("Das Spiel beginnt!")
     }
 
-    fun makeMove(from: Position, to: Position): Boolean {
-        val figure = board.getFigureAt(from)
-        if (figure == null || figure.isWhite != currentPlayerIsWhite) {
-            println("Ungültiger Zug: Es ist der Zug des ${if (currentPlayerIsWhite) "weißen" else "schwarzen"} Spielers.")
-            return false
-        }
-
-        if (figure.availableMoves(from, board).contains(to)) {
-            board.move(from, to)
-            currentPlayerIsWhite = !currentPlayerIsWhite
-            println("Zug erfolgreich!")
-            moves.add(Triple(figure, from, to))
+    fun makeMove(from: Position, to: Position, promotionFigure: FigureType? = null): Boolean {
+        val figure = board.getFigureAt(from)?: return false
+        val move = Move(from, to, board)
+        if (move.isValid()) {
+            move.execute()
+            if (board.getFigureAt(to) is Pawn && ((to.row == 8 && figure.isWhite) || (to.row == 1 && !figure.isWhite))) {
+                board.promoteFigure(to, promotionFigure)
+            }
             return true
-        } else {
-              println("Ungültiger Zug!")
+        }else {
             return false
         }
     }

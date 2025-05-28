@@ -1,9 +1,6 @@
 package hwr.oop
 
-import hwr.oop.figures.King
-import hwr.oop.figures.Pawn
-import hwr.oop.figures.Queen
-import hwr.oop.figures.Rook
+import hwr.oop.figures.*
 import io.kotest.core.spec.style.AnnotationSpec
 import org.assertj.core.api.Assertions.assertThat
 
@@ -21,7 +18,7 @@ class GameTest : AnnotationSpec() {
         val game = Game()
         val from = Position('e', 2)
         val to = Position('e', 4)
-        game.makeMove(from, to)
+        game.makeMove(from, to, null)
         assertThat(game.isGameOver()).isFalse()
     }
 
@@ -174,7 +171,7 @@ class GameTest : AnnotationSpec() {
         game.currentPlayerIsWhite = true
         val result = game.makeMove(Position('a', 7), Position('a', 8))
         assertThat(result).isTrue()
-        assertThat(game.board.getFigureAt(Position('a', 8))).isInstanceOf(Queen::class.java)
+        assertThat(game.board.getFigureAt(Position('a', 8))?.symbol()).isEqualTo("d")
     }
 
     @Test

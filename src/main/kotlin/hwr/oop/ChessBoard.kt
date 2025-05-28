@@ -1,11 +1,6 @@
 package hwr.oop
 
-import hwr.oop.figures.Bishop
-import hwr.oop.figures.King
-import hwr.oop.figures.Knight
-import hwr.oop.figures.Pawn
-import hwr.oop.figures.Queen
-import hwr.oop.figures.Rook
+import hwr.oop.figures.*
 
 
 class ChessBoard(private val board: MutableMap<Position, Figure>) {
@@ -56,18 +51,28 @@ class ChessBoard(private val board: MutableMap<Position, Figure>) {
         val figure = board[from] ?: return false
         if (figure.availableMoves(from, this).contains(to)) {
             board.remove(from)
-            if (figure is Pawn && ((to.row == 8 && figure.isWhite) || (to.row == 1 && !figure.isWhite))) {
-                board[to] = promoteTo?.invoke(figure.isWhite) ?: Queen(figure.isWhite)
-                println("Bauer wird zur Dame befördert!")
-            } else {
-                board[to] = figure
-            }
+            board[to] = figure
             return true
-        }
+
+    } else {
         println("Ungültiger Zug für ${figure.symbol()} von $from nach $to")
         return false
     }
-
+    }
+    fun promoteFigure(position: Position, promoteTo: FigureType?): Boolean {
+        val figure = board[position] ?: return false
+        if (figure is Pawn) {
+            board[position] = when (promoteTo){
+                FigureType.Rook -> Rook(figure.isWhite)
+                FigureType.Knight -> Knight(figure.isWhite)
+                FigureType.Bishop -> Bishop(figure.isWhite)
+                FigureType.Queen -> Queen(figure.isWhite)
+                else -> Queen(figure.isWhite)
+            }
+            return true
+        }
+        return false
+    }
     fun displayBoard() {
         for (j in 8 downTo 1) {
             for (i in 'a'..'h') {
