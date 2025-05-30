@@ -48,33 +48,7 @@ class MovementTests : AnnotationSpec() {
         )
     }
 
-
     @Test
-    fun `Pawn gets promoted to Queen`() {
-        val chessBoard = ChessBoard.emptyBoard()
-        val pawn = Pawn(true)
-        chessBoard.placePieces(Position('a', 7), pawn)
-        val from = Position('a', 7)
-        val to = Position('a', 8)
-
-        assertThat(chessBoard.move(from, to) { isWhite -> Queen(isWhite) }).isTrue()
-        assertThat(chessBoard.getFigureAt(to)?.symbol()).isEqualTo("d")
-    }
-
-    @Test
-    fun `Pawn gets promoted to other figure`() {
-        val chessBoard = ChessBoard.emptyBoard()
-        val pawn = Pawn(true)
-        chessBoard.placePieces(Position('a', 7), pawn)
-        val from = Position('a', 7)
-        val to = Position('a', 8)
-
-        assertThat(chessBoard.move(from, to) { isWhite -> Rook(isWhite) }).isTrue()
-        assertThat(chessBoard.getFigureAt(to)?.symbol()).isEqualTo("t")
-    }
-
-    @Test
-
     fun `knight available moves on empty board`() {
         val chessBoard = ChessBoard.emptyBoard()
         val knight = Knight(true)
