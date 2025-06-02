@@ -1,6 +1,8 @@
 package hwr.oop
 
-import hwr.oop.figures.*
+import hwr.oop.figures.King
+import hwr.oop.figures.Pawn
+import hwr.oop.figures.Rook
 import io.kotest.core.spec.style.AnnotationSpec
 import org.assertj.core.api.Assertions.assertThat
 
@@ -236,6 +238,57 @@ class GameTest : AnnotationSpec() {
         assertThat(game.isGameOver()).isTrue()
         val result = game.makeMove(Position('a', 1), Position('a', 2))
         assertThat(result).isFalse()
+    }
+    @Test
+    fun `game ends after 50 moves without pawn move or captur`() {
+        val game = Game()
+        val board = ChessBoard.emptyBoard()
+
+        // Platziere nur Türme und Könige für einfache Züge
+        board.placePieces(Position('a', 1), King(Color.WHITE))
+        board.placePieces(Position('h', 1), Rook(Color.WHITE))
+        board.placePieces(Position('a', 8), King(Color.BLACK))
+        board.placePieces(Position('h', 8), Rook(Color.BLACK))
+
+        game.board = board
+
+        // Führe 50 Züge aus
+        repeat(25) {
+            game.makeMove(Position('h', 1), Position('h', 2))
+            game.makeMove(Position('h', 8), Position('h', 7))
+            game.makeMove(Position('h', 2), Position('h', 1))
+            game.makeMove(Position('h', 7), Position('h', 8))
+        }
+
+        assertThat(game.isGameOver()).isTrue()
+    }
+
+    @Test
+    fun `game keeps going after over 50 moves if a pawn moves`() {
+        val game = Game()
+        val board = ChessBoard.emptyBoard()
+
+        // Platziere Figuren
+        board.placePieces(Position('a', 1), King(Color.WHITE))
+        board.placePieces(Position('e', 2), Pawn(Color.WHITE))
+        board.placePieces(Position('a', 8), King(Color.BLACK))
+        board.placePieces(Position('h', 8), Rook(Color.BLACK))
+
+        game.board = board
+
+        // Mache 48 Züge
+        repeat(24) {
+            game.makeMove(Position('a', 1), Position('b', 1))
+            game.makeMove(Position('h', 8), Position('h', 7))
+            game.makeMove(Position('b', 1), Position('a', 1))
+            game.makeMove(Position('h', 7), Position('h', 8))
+        }
+
+        // Führe Bauernzug aus
+        game.makeMove(Position('e', 2), Position('e', 3))
+
+        assertThat(game.totalMoves).isEqualTo(0)
+        assertThat(game.isGameOver()).isFalse()
     }
 
 }

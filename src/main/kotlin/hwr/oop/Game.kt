@@ -3,11 +3,13 @@ package hwr.oop
 import hwr.oop.figures.FigureType
 import hwr.oop.figures.King
 import hwr.oop.figures.Pawn
+import hwr.oop.Move
 
 class Game {
     var board: ChessBoard = ChessBoard.fullBoard()
     var currentPlayerIsWhite: Boolean = true
     val moves = mutableListOf<Triple<Figure, Position, Position>>()
+    var totalMoves = 0;
 
     fun startGame() {
     }
@@ -15,8 +17,15 @@ class Game {
     fun makeMove(from: Position, to: Position, promotionFigure: FigureType? = null): Boolean {
         val figure = board.getFigureAt(from)?: return false
         val move = Move(from, to, board)
+
+
         if (move.isValid()) {
+            totalMoves += 1
             move.execute()
+            if (move.isCapture() || figure is Pawn) {
+                totalMoves = 0 // Reset total moves if a pawn moves or a piece is captured
+            }
+
             if (board.getFigureAt(to) is Pawn &&
                 ((to.row == 8 && figure.color == Color.WHITE) || (to.row == 1 && figure.color == Color.BLACK))) {
                 board.promoteFigure(to, promotionFigure)
@@ -71,6 +80,7 @@ class Game {
         val currentIsWhite = currentPlayerIsWhite
         val (whiteMoves, blackMoves) = getAllMoves(board)
 
+
         val inCheck = if (currentIsWhite) whiteCheck() else blackCheck()
         val playerMoves = if (currentIsWhite) whiteMoves else blackMoves
         val hasMoves = playerMoves.isNotEmpty()
@@ -81,6 +91,10 @@ class Game {
             } else {
                 true
             }
+        }
+
+        if (totalMoves >= 50) {
+            return true // 50-Moves rule
         }
         return false
     }

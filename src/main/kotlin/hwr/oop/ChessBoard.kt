@@ -53,10 +53,13 @@ class ChessBoard(private val board: MutableMap<Position, Figure>) {
             board[to] = figure
             return true
 
-        } else {
-            println("Ungültiger Zug für ${figure.symbol()} von $from nach $to")
-            return false
-        }
+
+    } else {
+        error("Ungültiger Zug von ${figure.symbol()} von $from nach $to")
+        
+        return false
+    }
+
     }
 
     fun promoteFigure(position: Position, promoteTo: FigureType?): Boolean {
