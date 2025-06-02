@@ -6,7 +6,7 @@ import hwr.oop.Directions
 import hwr.oop.Figure
 import hwr.oop.Position
 
-class Knight(override val color: Color) : Figure {
+class Knight(private val knightColor: Color) : Figure {
     private val directionsKnight = listOf(
         Directions.KNIGHT_UP_LEFT,
         Directions.KNIGHT_UP_RIGHT,
@@ -17,19 +17,21 @@ class Knight(override val color: Color) : Figure {
         Directions.KNIGHT_RIGHT_UP,
         Directions.KNIGHT_RIGHT_DOWN
     )
-    override fun symbol() = if (color == Color.WHITE) "s" else "S"
 
-    override fun availableMoves(from: Position, board: ChessBoard): List<Position> {
+    override fun color() = knightColor
+    override fun symbol() = if (knightColor == Color.WHITE) "s" else "S"
+
+    override fun availableTargets(from: Position, board: ChessBoard): List<Position> {
         val moves = mutableListOf<Position>()
 
         // Ein component davon machen
         for (direction in directionsKnight) {
             val deltaX = direction.deltaX
             val deltaY = direction.deltaY
-            val target = Position(from.column + deltaX, from.row + deltaY)
+            val target = Position.valueOf((from.column + deltaX).toString() + (from.row + deltaY).toString())
             if (target.column in 'a'..'h' && target.row in 1..8) {
                 val destination = board.getFigureAt(target)
-                if (destination == null || destination.color != this.color) {
+                if (destination == null || destination.color() != this.color()) {
                     moves.add(target)
                 }
             }

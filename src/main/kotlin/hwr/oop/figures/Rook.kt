@@ -6,32 +6,33 @@ import hwr.oop.Directions
 import hwr.oop.Figure
 import hwr.oop.Position
 
-class Rook(override val color: Color) : Figure {
+class Rook(private val rookColor: Color) : Figure {
     private val directionsRook = listOf(
         Directions.UP,
         Directions.DOWN,
         Directions.LEFT,
         Directions.RIGHT
     )
-    override fun symbol() = if (color == Color.WHITE) "t" else "T"
-    override fun availableMoves(from: Position, board: ChessBoard): List<Position> {
+    override fun color() = rookColor
+    override fun symbol() = if (rookColor == Color.WHITE) "t" else "T"
+    override fun availableTargets(from: Position, board: ChessBoard): List<Position> {
         val moves = mutableListOf<Position>()
 
         for (direction in directionsRook) {
             val deltaX = direction.deltaX
             val deltaY = direction.deltaY
-            var current = Position(from.column + deltaX, from.row + deltaY)
-            while (current.column in 'a'..'h' && current.row in 1..8) {
+            var current = Position.from(from.column + deltaX, from.row + deltaY)
+            while (current != null && current.column in 'a'..'h' && current.row in 1..8) {
                 val figureAtCurrent = board.getFigureAt(current)
                 if (figureAtCurrent == null) {
                     moves.add(current)
                 } else {
-                    if (figureAtCurrent.color != this.color) {
+                    if (figureAtCurrent.color() != this.color()) {
                         moves.add(current)
                     }
                     break // Stoppen, wenn eine Figur im Weg ist
                 }
-                current = Position(current.column + deltaX, current.row + deltaY)
+                current = Position.from(current.column + deltaX, current.row + deltaY)
             }
         }
         return moves

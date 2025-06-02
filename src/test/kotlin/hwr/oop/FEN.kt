@@ -6,6 +6,7 @@ import hwr.oop.figures.Knight
 import hwr.oop.figures.Pawn
 import hwr.oop.figures.Queen
 import hwr.oop.figures.Rook
+import kotlin.text.iterator
 
 class FEN {
     fun toFEN(board: ChessBoard): String {
@@ -13,7 +14,7 @@ class FEN {
         for (j in 8 downTo 1) {
             var emptyCount = 0
             for (i in 'a'..'h') {
-                val pos = Position(i, j)
+                val pos = Position.valueOf("${i.uppercaseChar()}$j")
                 val fig = board.getFigureAt(pos)
                 if (fig != null) {
                     if (emptyCount > 0) {
@@ -58,7 +59,7 @@ class FEN {
                             'k' -> King(if (isWhite) Color.WHITE else Color.BLACK)
                             else -> throw IllegalArgumentException("Ungültige Figur in FEN: $char")
                         }
-                        board[Position(colIndex, rowIndex)] = figure
+                        board[Position.valueOf("${colIndex.uppercaseChar()}$rowIndex")] = figure
                         colIndex++
                     }
                 }

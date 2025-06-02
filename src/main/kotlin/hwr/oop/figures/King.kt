@@ -1,13 +1,8 @@
 package hwr.oop.figures
 
-import hwr.oop.ChessBoard
-import hwr.oop.Color
-import hwr.oop.Directions
-import hwr.oop.Figure
-import hwr.oop.Position
+import hwr.oop.*
 
-
-class King(override val color: Color) : Figure {
+class King(private val kingColor: Color) : Figure {
     private var firstMove = true
     private val directionsKing = listOf(
         Directions.UP,
@@ -19,18 +14,21 @@ class King(override val color: Color) : Figure {
         Directions.DOWN_LEFT,
         Directions.DOWN_RIGHT,
     )
-    override fun symbol() = if (color == Color.WHITE) "k" else "K"
 
-    override fun availableMoves(from: Position, board: ChessBoard): List<Position> {
+    override fun color() = kingColor
+
+    override fun symbol() = if (kingColor == Color.WHITE) "k" else "K"
+
+    override fun availableTargets(from: Position, board: ChessBoard): List<Position> {
         val moves = mutableListOf<Position>()
 
         for (direction in directionsKing) {
             val deltaX = direction.deltaX
             val deltaY = direction.deltaY
-            val target = Position(from.column + deltaX, from.row + deltaY)
+            val target = Position.valueOf((from.column + deltaX).toString() + (from.row + deltaY).toString())
             if (target.column in 'a'..'h' && target.row in 1..8) {
                 val destination = board.getFigureAt(target)
-                if (destination == null || destination.color != this.color) {
+                if (destination == null || destination.color() != this.color()) {
                     moves.add(target)
                 }
             }

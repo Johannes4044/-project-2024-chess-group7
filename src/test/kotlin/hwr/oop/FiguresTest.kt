@@ -43,23 +43,23 @@ class FigureSymbolTest : FunSpec({
                 else -> throw IllegalArgumentException("Unknown figure type")
             }
             figure.symbol() shouldBe expectedSymbol
-            figure.color shouldBe color
+            figure.color() shouldBe color
         }
     }
     test("King can move if destination is empty") {
         val king = King(Color.WHITE)
-        val from = Position('e', 1)
+        val from = Position.E1
         val possibleMoves = listOf(
-            Position('e', 2),
-            Position('d', 1),
-            Position('f', 1),
-            Position('d', 2),
-            Position('f', 2),
+            Position.E2,
+            Position.D1,
+            Position.F1,
+            Position.D2,
+            Position.F2,
         )
         val board = ChessBoard.emptyBoard()
         board.placePieces(from, king)
 
-        val moves = king.availableMoves(from, board)
+        val moves = king.availableTargets(from, board)
 
         possibleMoves.forEach { to ->
             moves shouldContain to
@@ -68,19 +68,19 @@ class FigureSymbolTest : FunSpec({
 
     test("King cannot move more than one square in any direction") {
         val king = King(Color.WHITE)
-        val from = Position('e', 4)
+        val from = Position.E4
         val board = ChessBoard.emptyBoard()
         board.placePieces(from, king)
 
         val invalidMoves = listOf(
-            Position('e', 6),
-            Position('g', 4),
-            Position('c', 4),
-            Position('e', 2),
-            Position('g', 6)
+            Position.E6,
+            Position.G4,
+            Position.C4,
+            Position.E2,
+            Position.G6
         )
 
-        val moves = king.availableMoves(from, board)
+        val moves = king.availableTargets(from, board)
 
         invalidMoves.forEach { to ->
             moves shouldNotContain to
@@ -89,39 +89,39 @@ class FigureSymbolTest : FunSpec({
 
     test("King cannot move to a square occupied by same color") {
         val king = King(Color.WHITE)
-        val from = Position('e', 4)
+        val from = Position.E4
         val board = ChessBoard.emptyBoard()
         board.placePieces(from, king)
         val friendly = King(Color.WHITE)
-        val to = Position('e', 5)
+        val to = Position.E5
         board.placePieces(to, friendly)
 
-        val moves = king.availableMoves(from, board)
+        val moves = king.availableTargets(from, board)
 
         moves shouldNotContain to
     }
 
     test("King can capture enemy piece") {
         val king = King(Color.WHITE)
-        val from = Position('e', 4)
+        val from = Position.E4
         val board = ChessBoard.emptyBoard()
         board.placePieces(from, king)
         val enemy = King(Color.BLACK)
-        val to = Position('e', 5)
+        val to = Position.E5
         board.placePieces(to, enemy)
 
-        val moves = king.availableMoves(from, board)
+        val moves = king.availableTargets(from, board)
 
         moves shouldContain to
     }
 
-    test("availableMoves returns only valid squares") {
+    test("availableTargets returns only valid squares") {
         val king = King(Color.WHITE)
-        val from = Position('a', 1)
+        val from = Position.A1
         val board = ChessBoard.emptyBoard()
         board.placePieces(from, king)
 
-        val moves = king.availableMoves(from, board)
+        val moves = king.availableTargets(from, board)
         moves.forEach {
             (it.column in 'a'..'h' && it.row in 1..8).shouldBeTrue()
         }
