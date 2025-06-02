@@ -4,11 +4,14 @@ import hwr.oop.figures.King
 import hwr.oop.figures.Pawn
 import hwr.oop.figures.Rook
 
+
+
 data class Move(val from: Position, val to: Position, val board: ChessBoard) {
-    var TotalMoves: Int = 0
+
     override fun toString(): String {
         return "Zug von ${from.column}${from.row} nach ${to.column}${to.row}"
     }
+
 
     fun isValid(): Boolean {
         val figure = board.getFigureAt(from) ?: return false
@@ -32,7 +35,7 @@ data class Move(val from: Position, val to: Position, val board: ChessBoard) {
 
 //            println("Figur wurde geschlagen!")
         if (isCapture() || board.getFigureAt(from) is Pawn) {
-            TotalMoves = 0
+
         }
 
         return board.move(from, to)
@@ -57,4 +60,7 @@ data class Move(val from: Position, val to: Position, val board: ChessBoard) {
     }
         return true
     }
+
+
 }
+
