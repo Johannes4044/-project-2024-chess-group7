@@ -53,15 +53,16 @@ class ChessBoard(private val board: MutableMap<Position, Figure>) {
             board[to] = figure
             return true
 
-    } else {
-        println("Ungültiger Zug für ${figure.symbol()} von $from nach $to")
-        return false
+        } else {
+            println("Ungültiger Zug für ${figure.symbol()} von $from nach $to")
+            return false
+        }
     }
-    }
+
     fun promoteFigure(position: Position, promoteTo: FigureType?): Boolean {
         val figure = board[position] ?: return false
         if (figure is Pawn) {
-            board[position] = when (promoteTo){
+            board[position] = when (promoteTo) {
                 FigureType.Rook -> Rook(figure.color)
                 FigureType.Knight -> Knight(figure.color)
                 FigureType.Bishop -> Bishop(figure.color)
@@ -109,10 +110,6 @@ class ChessBoard(private val board: MutableMap<Position, Figure>) {
         val (whiteMoves, blackMoves) = Game.getAllMoves(this)
         if (whiteMoves.contains(Position) && isWhiteCastling) return false
         if (blackMoves.contains(Position) && !isWhiteCastling) return false
-    fun isSpaceFree(game: Game, position: Position, isWhiteCastling: Boolean): Boolean {
-        val (whiteMoves, blackMoves) = game.getAllMoves(this)
-        if (whiteMoves.contains(position) && isWhiteCastling) return false
-        if (blackMoves.contains(position) && !isWhiteCastling) return false
         return true
     }
 }
