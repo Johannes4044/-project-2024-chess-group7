@@ -72,14 +72,6 @@ class ChessBoard(private val board: MutableMap<Position, Figure>) {
         }
         return false
     }
-    fun displayBoard() {
-        for (j in 8 downTo 1) {
-            for (i in 'a'..'h') {
-                val pos = Position(i, j)
-                val fig = board[pos]
-            }
-        }
-    }
 
     fun placePieces(position: Position, figure: Figure) {
         board[position] = figure

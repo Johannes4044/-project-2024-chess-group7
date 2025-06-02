@@ -9,7 +9,7 @@ class ChessBoardTests : AnnotationSpec() {
     @Test
     fun `initialize Chessboard does not return false`() {
         val chessBoardExample = ChessBoard.fullBoard()
-        assertThat(chessBoardExample.displayBoard()).isNotNull
+        assertThat(chessBoardExample).isNotNull
     }
 
     @Test
