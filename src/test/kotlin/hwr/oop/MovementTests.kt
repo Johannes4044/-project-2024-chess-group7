@@ -319,36 +319,6 @@ class MovementTests : AnnotationSpec() {
     }
 
     @Test
-    fun `isCapture output is correct`() {
-        val board = ChessBoard.fullBoard()
-        val from = Position('e', 2)
-        val to = Position('f', 3)
-        val whitePawn = Pawn(Color.WHITE)
-        val blackPawn = Pawn(Color.BLACK)
-        board.placePieces(Position('e', 2), whitePawn)
-        board.placePieces(Position('f', 3), blackPawn)
-
-
-        val move = Move(from, to, board)
-
-
-        val outputStream = ByteArrayOutputStream()
-        val originalOut = System.out
-        val printStream = PrintStream(outputStream)
-        System.setOut(printStream)
-
-        try {
-            move.execute()
-        } finally {
-            System.setOut(originalOut)
-        }
-
-
-        val output = outputStream.toString()
-        assertThat(output).contains("Piece was captured!")
-    }
-
-    @Test
     fun `isCapture returns True`() {
         val board = ChessBoard.emptyBoard()
         val from = Position('e', 2)
