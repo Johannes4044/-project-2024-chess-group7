@@ -26,12 +26,10 @@ data class Move(val from: Position, val to: Position, val board: ChessBoard) {
             return false
         }
 
-        if (isCapture()) {
-//            println("Figur wurde geschlagen!")
         if (isCapture() || board.getFigureAt(from) is Pawn) {
             TotalMoves = 0
         }
-
+        TotalMoves ++
         return board.move(from, to)
     }
 
@@ -52,6 +50,4 @@ data class Move(val from: Position, val to: Position, val board: ChessBoard) {
         }
         return true
     }
-        return true
     }
-}
