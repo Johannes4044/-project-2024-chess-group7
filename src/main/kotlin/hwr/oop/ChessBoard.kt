@@ -1,5 +1,4 @@
 package hwr.oop
-
 import hwr.oop.figures.*
 
 
@@ -11,31 +10,31 @@ class ChessBoard(private val board: MutableMap<Position, Figure>) {
         fun fullBoard(): ChessBoard {
             val board = mutableMapOf<Position, Figure>()
             for (i in 'a'..'h') {
-                board[Position(i, 2)] = Pawn(true)
+                board[Position(i, 2)] = Pawn(Color.WHITE)
             }
             for (i in 'a'..'h') {
-                board[Position(i, 7)] = Pawn(false)
+                board[Position(i, 7)] = Pawn(Color.BLACK)
             }
-            board[Position('a', 1)] = Rook(true)
-            board[Position('a', 8)] = Rook(false)
-            board[Position('h', 1)] = Rook(true)
-            board[Position('h', 8)] = Rook(false)
+            board[Position('a', 1)] = Rook(Color.WHITE)
+            board[Position('a', 8)] = Rook(Color.BLACK)
+            board[Position('h', 1)] = Rook(Color.WHITE)
+            board[Position('h', 8)] = Rook(Color.BLACK)
 
-            board[Position('b', 1)] = Knight(true)
-            board[Position('b', 8)] = Knight(false)
-            board[Position('g', 1)] = Knight(true)
-            board[Position('g', 8)] = Knight(false)
+            board[Position('b', 1)] = Knight(Color.WHITE)
+            board[Position('b', 8)] = Knight(Color.BLACK)
+            board[Position('g', 1)] = Knight(Color.WHITE)
+            board[Position('g', 8)] = Knight(Color.BLACK)
 
-            board[Position('c', 1)] = Bishop(true)
-            board[Position('c', 8)] = Bishop(false)
-            board[Position('f', 1)] = Bishop(true)
-            board[Position('f', 8)] = Bishop(false)
+            board[Position('c', 1)] = Bishop(Color.WHITE)
+            board[Position('c', 8)] = Bishop(Color.BLACK)
+            board[Position('f', 1)] = Bishop(Color.WHITE)
+            board[Position('f', 8)] = Bishop(Color.BLACK)
 
-            board[Position('d', 1)] = Queen(true)
-            board[Position('d', 8)] = Queen(false)
+            board[Position('d', 1)] = Queen(Color.WHITE)
+            board[Position('d', 8)] = Queen(Color.BLACK)
 
-            board[Position('e', 1)] = King(true)
-            board[Position('e', 8)] = King(false)
+            board[Position('e', 1)] = King(Color.WHITE)
+            board[Position('e', 8)] = King(Color.BLACK)
 
             return ChessBoard(board)
         }
@@ -63,11 +62,11 @@ class ChessBoard(private val board: MutableMap<Position, Figure>) {
         val figure = board[position] ?: return false
         if (figure is Pawn) {
             board[position] = when (promoteTo){
-                FigureType.Rook -> Rook(figure.isWhite)
-                FigureType.Knight -> Knight(figure.isWhite)
-                FigureType.Bishop -> Bishop(figure.isWhite)
-                FigureType.Queen -> Queen(figure.isWhite)
-                else -> Queen(figure.isWhite)
+                FigureType.Rook -> Rook(figure.color)
+                FigureType.Knight -> Knight(figure.color)
+                FigureType.Bishop -> Bishop(figure.color)
+                FigureType.Queen -> Queen(figure.color)
+                else -> Queen(figure.color)
             }
             return true
         }
@@ -78,13 +77,7 @@ class ChessBoard(private val board: MutableMap<Position, Figure>) {
             for (i in 'a'..'h') {
                 val pos = Position(i, j)
                 val fig = board[pos]
-                if (fig != null) {
-                    print(fig.symbol() + " ")
-                } else {
-                    print(". ")
-                }
             }
-            println()
         }
     }
 
@@ -96,7 +89,7 @@ class ChessBoard(private val board: MutableMap<Position, Figure>) {
 
         val allFigures = mutableListOf<Figure>()
         for (entry in board.entries) {
-            if (entry.value.isWhite == whiteTurn) {
+            if (entry.value.color == Color.WHITE == whiteTurn) {
                 allFigures.add(entry.value)
             }
         }
@@ -105,7 +98,7 @@ class ChessBoard(private val board: MutableMap<Position, Figure>) {
 
     fun findKing(whiteTurn: Boolean): Position? {
         for (entry in board.entries) {
-            if (entry.value is King && (entry.value as King).isWhite == whiteTurn) {
+            if (entry.value is King && (entry.value as King).color == Color.WHITE == whiteTurn) {
                 return entry.key
             }
         }

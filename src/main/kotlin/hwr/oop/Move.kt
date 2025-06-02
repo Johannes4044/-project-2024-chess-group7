@@ -18,15 +18,16 @@ data class Move(val from: Position, val to: Position, val board: ChessBoard) {
     fun isCapture(): Boolean {
         val targetFigure = board.getFigureAt(to)
         val movingFigure = board.getFigureAt(from)
-        return targetFigure != null && movingFigure != null && targetFigure.isWhite != movingFigure.isWhite
-    }
+        return targetFigure != null && movingFigure != null && targetFigure.color != movingFigure.color    }
 
     fun execute(): Boolean {
         if (!isValid()) {
-            println("Ungültiger Zug!")
+//            println("Ungültiger Zug!")
             return false
         }
 
+        if (isCapture()) {
+//            println("Figur wurde geschlagen!")
         if (isCapture() || board.getFigureAt(from) is Pawn) {
             TotalMoves = 0
         }
@@ -37,8 +38,8 @@ data class Move(val from: Position, val to: Position, val board: ChessBoard) {
     fun castleKingSide(Game: Game):Boolean{
         val kingFirstMove = true
         val rookFirstMove = true
-        val rookW = Rook(true)
-        val kingW = King(true)
+        val rookW = Rook(Color.WHITE)
+        val kingW = King(Color.WHITE)
 
         if(kingFirstMove && rookFirstMove){
             val kingPosition = Position('e', 1)
@@ -49,6 +50,8 @@ data class Move(val from: Position, val to: Position, val board: ChessBoard) {
             board.placePieces(rookTo, rookW)
             board.placePieces(kingTo, kingW)
         }
+        return true
+    }
         return true
     }
 }

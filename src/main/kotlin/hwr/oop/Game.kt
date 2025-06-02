@@ -11,7 +11,6 @@ class Game {
 
     fun startGame() {
         board.displayBoard()
-        println("Das Spiel beginnt!")
     }
 
     fun makeMove(from: Position, to: Position, promotionFigure: FigureType? = null): Boolean {
@@ -19,7 +18,8 @@ class Game {
         val move = Move(from, to, board)
         if (move.isValid()) {
             move.execute()
-            if (board.getFigureAt(to) is Pawn && ((to.row == 8 && figure.isWhite) || (to.row == 1 && !figure.isWhite))) {
+            if (board.getFigureAt(to) is Pawn &&
+                ((to.row == 8 && figure.color == Color.WHITE) || (to.row == 1 && figure.color == Color.BLACK))) {
                 board.promoteFigure(to, promotionFigure)
             }
             return true
@@ -40,11 +40,11 @@ class Game {
                 val from = Position(column, Row)
                 val figure = board.getFigureAt(from)
 
-                if (figure != King(true) && figure != null && figure.symbol()[0].isLowerCase()) {
+                if (figure != King(Color.WHITE) && figure != null && figure.symbol()[0].isLowerCase()) {
                     val moves = figure.availableMoves(from, board)
                     whiteMoves.addAll(moves)    //fügt alle Züge einer weißen Figur zur Liste zu
                 }
-                if (figure != King(false) && figure != null && figure.symbol()[0].isUpperCase()) {
+                if (figure != King(Color.BLACK) && figure != null && figure.symbol()[0].isUpperCase()) {
                     val moves = figure.availableMoves(from, board)
                     blackMoves.addAll(moves)    //fügt alle Züge einer schwarzen Figur zur Liste zu
                 }

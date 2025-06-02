@@ -1,4 +1,5 @@
 import hwr.oop.ChessBoard
+import hwr.oop.Color
 import hwr.oop.Position
 import hwr.oop.figures.Bishop
 import hwr.oop.figures.King
@@ -18,35 +19,35 @@ import io.kotest.matchers.shouldBe
 
 class FigureSymbolTest : FunSpec({
     test("figure symbol and color are correct") {
-            forAll(
-                row("Pawn", true, "b"),
-                row("Pawn", false, "B"),
-                row("Rook", true, "t"),
-                row("Rook", false, "T"),
-                row("Knight", true, "s"),
-                row("Knight", false, "S"),
-                row("Bishop", true, "l"),
-                row("Bishop", false, "L"),
-                row("Queen", true, "d"),
-                row("Queen", false, "D"),
-                row("King", true, "k"),
-                row("King", false, "K")
-            ) { figureType: String, isWhite: Boolean, expectedSymbol: String ->
-                val figure = when (figureType) {
-                    "Pawn" -> Pawn(isWhite)
-                    "Rook" -> Rook(isWhite)
-                    "Knight" -> Knight(isWhite)
-                    "Bishop" -> Bishop(isWhite)
-                    "Queen" -> Queen(isWhite)
-                    "King" -> King(isWhite)
-                    else -> throw IllegalArgumentException("Unknown figure type")
-                }
-                figure.symbol() shouldBe expectedSymbol
-                figure.isWhite shouldBe isWhite
+        forAll(
+            row("Pawn", Color.WHITE, "b"),
+            row("Pawn", Color.BLACK, "B"),
+            row("Rook", Color.WHITE, "t"),
+            row("Rook", Color.BLACK, "T"),
+            row("Knight", Color.WHITE, "s"),
+            row("Knight", Color.BLACK, "S"),
+            row("Bishop", Color.WHITE, "l"),
+            row("Bishop", Color.BLACK, "L"),
+            row("Queen", Color.WHITE, "d"),
+            row("Queen", Color.BLACK, "D"),
+            row("King", Color.WHITE, "k"),
+            row("King", Color.BLACK, "K")
+        ) { figureType: String, color: Color, expectedSymbol: String ->
+            val figure = when (figureType) {
+                "Pawn" -> Pawn(color)
+                "Rook" -> Rook(color)
+                "Knight" -> Knight(color)
+                "Bishop" -> Bishop(color)
+                "Queen" -> Queen(color)
+                "King" -> King(color)
+                else -> throw IllegalArgumentException("Unknown figure type")
             }
+            figure.symbol() shouldBe expectedSymbol
+            figure.color shouldBe color
         }
+    }
     test("King can move if destination is empty") {
-        val king = King(true)
+        val king = King(Color.WHITE)
         val from = Position('e', 1)
         val possibleMoves = listOf(
             Position('e', 2),
@@ -66,7 +67,7 @@ class FigureSymbolTest : FunSpec({
     }
 
     test("King cannot move more than one square in any direction") {
-        val king = King(true)
+        val king = King(Color.WHITE)
         val from = Position('e', 4)
         val board = ChessBoard.emptyBoard()
         board.placePieces(from, king)
@@ -87,11 +88,11 @@ class FigureSymbolTest : FunSpec({
     }
 
     test("King cannot move to a square occupied by same color") {
-        val king = King(true)
+        val king = King(Color.WHITE)
         val from = Position('e', 4)
         val board = ChessBoard.emptyBoard()
         board.placePieces(from, king)
-        val friendly = King(true)
+        val friendly = King(Color.WHITE)
         val to = Position('e', 5)
         board.placePieces(to, friendly)
 
@@ -101,11 +102,11 @@ class FigureSymbolTest : FunSpec({
     }
 
     test("King can capture enemy piece") {
-        val king = King(true)
+        val king = King(Color.WHITE)
         val from = Position('e', 4)
         val board = ChessBoard.emptyBoard()
         board.placePieces(from, king)
-        val enemy = King(false)
+        val enemy = King(Color.BLACK)
         val to = Position('e', 5)
         board.placePieces(to, enemy)
 
@@ -115,7 +116,7 @@ class FigureSymbolTest : FunSpec({
     }
 
     test("availableMoves returns only valid squares") {
-        val king = King(true)
+        val king = King(Color.WHITE)
         val from = Position('a', 1)
         val board = ChessBoard.emptyBoard()
         board.placePieces(from, king)

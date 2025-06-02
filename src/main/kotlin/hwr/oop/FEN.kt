@@ -50,12 +50,12 @@ class FEN {
                     else -> {
                         val isWhite = char.isLowerCase()
                         val figure = when (char.lowercaseChar()) {
-                            'b' -> Pawn(isWhite)
-                            't' -> Rook(isWhite)
-                            's' -> Knight(isWhite)
-                            'l' -> Bishop(isWhite)
-                            'd' -> Queen(isWhite)
-                            'k' -> King(isWhite)
+                            'b' -> Pawn(if (isWhite) Color.WHITE else Color.BLACK)
+                            't' -> Rook(if (isWhite) Color.WHITE else Color.BLACK)
+                            's' -> Knight(if (isWhite) Color.WHITE else Color.BLACK)
+                            'l' -> Bishop(if (isWhite) Color.WHITE else Color.BLACK)
+                            'd' -> Queen(if (isWhite) Color.WHITE else Color.BLACK)
+                            'k' -> King(if (isWhite) Color.WHITE else Color.BLACK)
                             else -> throw IllegalArgumentException("Ungültige Figur in FEN: $char")
                         }
                         board[Position(colIndex, rowIndex)] = figure

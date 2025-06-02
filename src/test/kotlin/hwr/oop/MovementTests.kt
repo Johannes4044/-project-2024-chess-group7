@@ -8,15 +8,17 @@ import hwr.oop.figures.Rook
 import hwr.oop.figures.King
 import io.kotest.core.spec.style.AnnotationSpec
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
+import java.io.ByteArrayOutputStream
+import java.io.PrintStream
 
 class MovementTests : AnnotationSpec() {
 
 
     @Test
-
     fun `Bishop available moves on empty board`() {
         val chessBoard = ChessBoard.emptyBoard()
-        val bishop = Bishop(true)
+        val bishop = Bishop(Color.WHITE)
         chessBoard.placePieces(Position('d', 4), bishop)
         val from = Position('d', 4)
 
@@ -32,9 +34,9 @@ class MovementTests : AnnotationSpec() {
     @Test
     fun `Bishop available moves with blocking pieces`() {
         val chessBoard = ChessBoard.emptyBoard()
-        val bishop = Bishop(true)
-        val blockingPawn = Pawn(true)
-        val opponentPawn = Pawn(false)
+        val bishop = Bishop(Color.WHITE)
+        val blockingPawn = Pawn(Color.WHITE)
+        val opponentPawn = Pawn(Color.BLACK)
         chessBoard.placePieces(Position('d', 4), bishop)
         chessBoard.placePieces(Position('e', 5), blockingPawn)
         chessBoard.placePieces(Position('c', 3), opponentPawn)
@@ -51,7 +53,7 @@ class MovementTests : AnnotationSpec() {
     @Test
     fun `knight available moves on empty board`() {
         val chessBoard = ChessBoard.emptyBoard()
-        val knight = Knight(true)
+        val knight = Knight(Color.WHITE)
         chessBoard.placePieces(Position('d', 4), knight)
         val from = Position('d', 4)
 
@@ -65,9 +67,9 @@ class MovementTests : AnnotationSpec() {
     @Test
     fun `knight available moves with blocking pieces`() {
         val chessBoard = ChessBoard.emptyBoard()
-        val knight = Knight(true)
-        val blockingPawn = Pawn(true)
-        val opponentPawn = Pawn(false)
+        val knight = Knight(Color.WHITE)
+        val blockingPawn = Pawn(Color.WHITE)
+        val opponentPawn = Pawn(Color.BLACK)
         chessBoard.placePieces(Position('d', 4), knight)
         chessBoard.placePieces(Position('b', 3), blockingPawn)
         chessBoard.placePieces(Position('f', 5), opponentPawn)
@@ -83,7 +85,7 @@ class MovementTests : AnnotationSpec() {
     @Test
     fun `Pawn available moves on empty board`() {
         val chessBoard = ChessBoard.emptyBoard()
-        val pawn = Pawn(true)
+        val pawn = Pawn(Color.WHITE)
         chessBoard.placePieces(Position('a', 2), pawn)
         val from = Position('a', 2)
 
@@ -96,10 +98,10 @@ class MovementTests : AnnotationSpec() {
     @Test
     fun `Pawn available moves with blocking pieces`() {
         val chessBoard = ChessBoard.emptyBoard()
-        val pawn = Pawn(true)
-        val blockingPawn = Pawn(true)
-        val opponentPawn = Pawn(false)
-        val opponentPawn2 = Pawn(false)
+        val pawn = Pawn(Color.WHITE)
+        val blockingPawn = Pawn(Color.WHITE)
+        val opponentPawn = Pawn(Color.BLACK)
+        val opponentPawn2 = Pawn(Color.BLACK)
         chessBoard.placePieces(Position('b', 2), pawn)
         chessBoard.placePieces(Position('b', 3), blockingPawn)
         chessBoard.placePieces(Position('c', 3), opponentPawn)
@@ -116,7 +118,7 @@ class MovementTests : AnnotationSpec() {
 
     fun `Queen available moves on empty board`() {
         val chessBoard = ChessBoard.emptyBoard()
-        val queen = Queen(true)
+        val queen = Queen(Color.WHITE)
         chessBoard.placePieces(Position('d', 4), queen)
         val from = Position('d', 4)
 
@@ -162,7 +164,7 @@ class MovementTests : AnnotationSpec() {
     @Test
     fun `Rook available moves on empty board`() {
         val chessBoard = ChessBoard.emptyBoard()
-        val rook = Rook(true)
+        val rook = Rook(Color.WHITE)
         chessBoard.placePieces(Position('d', 4), rook)
         val from = Position('d', 4)
 
@@ -193,7 +195,7 @@ class MovementTests : AnnotationSpec() {
         val board = ChessBoard.emptyBoard()
         val from = Position('e', 2)
         val to = Position('e', 3)
-        val pawn = Pawn(true)
+        val pawn = Pawn(Color.WHITE)
         board.placePieces(Position('e', 2), pawn)
         val move = Move(from, to, board)
         assertThat(move.isValid()).isTrue()
@@ -204,7 +206,7 @@ class MovementTests : AnnotationSpec() {
         val board = ChessBoard.emptyBoard()
         val from = Position('e', 2)
         val to = Position('e', 5)
-        val pawn = Pawn(true)
+        val pawn = Pawn(Color.WHITE)
         board.placePieces(Position('e', 2), pawn)
         val move = Move(from, to, board)
         assertThat(move.isValid()).isFalse()
@@ -224,8 +226,8 @@ class MovementTests : AnnotationSpec() {
         val board = ChessBoard.emptyBoard()
         val from = Position('e', 2)
         val to = Position('e', 3)
-        val whitePawn = Pawn(true)
-        val blackPawn = Pawn(false)
+        val whitePawn = Pawn(Color.WHITE)
+        val blackPawn = Pawn(Color.BLACK)
         board.placePieces(Position('e', 2), whitePawn)
         board.placePieces(Position('e', 3), blackPawn)
         val move = Move(from, to, board)
@@ -237,8 +239,8 @@ class MovementTests : AnnotationSpec() {
         val board = ChessBoard.emptyBoard()
         val from = Position('e', 2)
         val to = Position('e', 3)
-        val whitePawn1 = Pawn(true)
-        val whitePawn2 = Pawn(true)
+        val whitePawn1 = Pawn(Color.WHITE)
+        val whitePawn2 = Pawn(Color.WHITE)
         board.placePieces(Position('e', 2), whitePawn1)
         board.placePieces(Position('e', 3), whitePawn2)
         val move = Move(from, to, board)
@@ -250,7 +252,7 @@ class MovementTests : AnnotationSpec() {
         val board = ChessBoard.emptyBoard()
         val from = Position('e', 2)
         val to = Position('e', 3)
-        val whitePawn = Pawn(true)
+        val whitePawn = Pawn(Color.WHITE)
         board.placePieces(Position('e', 2), whitePawn)
         val move = Move(from, to, board)
         assertThat(move.isCapture()).isFalse()
@@ -258,11 +260,11 @@ class MovementTests : AnnotationSpec() {
 
     @Test
     fun `execute returns true for valid move`() {
-        val board = ChessBoard.emptyBoard()
+        val board = ChessBoard.fullBoard()
         val from = Position('e', 2)
         val to = Position('e', 3)
-        val pawn = Pawn(true)
-        board.placePieces(Position('e', 2), pawn)
+        val pawn = Pawn(Color.WHITE)
+        board.placePieces(from, pawn)
         val move = Move(from, to, board)
         assertThat(move.execute()).isTrue()
         assertThat(board.getFigureAt(to)).isEqualTo(pawn)
@@ -274,7 +276,7 @@ class MovementTests : AnnotationSpec() {
         val board = ChessBoard.emptyBoard()
         val from = Position('e', 2)
         val to = Position('e', 5)
-        val pawn = Pawn(true)
+        val pawn = Pawn(Color.WHITE)
         board.placePieces(Position('e', 2), pawn)
         val move = Move(from, to, board)
         assertThat(move.execute()).isFalse()
@@ -316,35 +318,35 @@ class MovementTests : AnnotationSpec() {
         assertThat(move.toString()).isEqualTo("Zug von e2 nach e3")
     }
 
-//    @Test
-//    fun `isCapture output is correct`() {
-//        val board = ChessBoard.emptyBoard()
-//        val from = Position('e', 2)
-//        val to = Position('f', 3)
-//        val whitePawn = Pawn(true)
-//        val blackPawn = Pawn(false)
-//        board.placePieces(Position('e', 2), whitePawn)
-//        board.placePieces(Position('f', 3), blackPawn)
-//
-//
-//        val move = Move(from, to, board)
-//
-//
-//        val outputStream = ByteArrayOutputStream()
-//        val originalOut = System.out
-//        val printStream = PrintStream(outputStream)
-//        System.setOut(printStream)
-//
-//        try {
-//            move.execute()
-//        } finally {
-//            System.setOut(originalOut)
-//        }
-//
-//
-//        val output = outputStream.toString()
-//        assertThat(output).contains("Piece was captured!")
-//    }
+    @Test
+    fun `isCapture output is correct`() {
+        val board = ChessBoard.fullBoard()
+        val from = Position('e', 2)
+        val to = Position('f', 3)
+        val whitePawn = Pawn(Color.WHITE)
+        val blackPawn = Pawn(Color.BLACK)
+        board.placePieces(Position('e', 2), whitePawn)
+        board.placePieces(Position('f', 3), blackPawn)
+
+
+        val move = Move(from, to, board)
+
+
+        val outputStream = ByteArrayOutputStream()
+        val originalOut = System.out
+        val printStream = PrintStream(outputStream)
+        System.setOut(printStream)
+
+        try {
+            move.execute()
+        } finally {
+            System.setOut(originalOut)
+        }
+
+
+        val output = outputStream.toString()
+        assertThat(output).contains("Piece was captured!")
+    }
 
     @Test
     fun `isCapture returns True`() {
@@ -353,9 +355,9 @@ class MovementTests : AnnotationSpec() {
         val from2 = Position('a', 3)
         val to = Position('f', 3)
         val to2 = Position('a', 4)
-        val whitePawn = Pawn(true)
-        val whitePawn2 = Pawn(true)
-        val blackPawn = Pawn(false)
+        val whitePawn = Pawn(Color.WHITE)
+        val whitePawn2 = Pawn(Color.WHITE)
+        val blackPawn = Pawn(Color.BLACK)
         board.placePieces(Position('e', 2), whitePawn)
         board.placePieces(Position('f', 3), blackPawn)
         board.placePieces(Position('a', 3), whitePawn2)
@@ -366,22 +368,55 @@ class MovementTests : AnnotationSpec() {
         assertThat(move.isCapture()).isTrue()
         assertThat(move2.isCapture()).isFalse()
     }
+    @Test
+    fun `isCapture gibt true zurück wenn Ziel gegnerische Figur ist`() {
+        val board = ChessBoard.emptyBoard()
+        val from = Position('e', 2)
+        val to = Position('e', 3)
+        val whitePawn = Pawn(Color.WHITE)
+        val blackPawn = Pawn(Color.BLACK)
+        board.placePieces(from, whitePawn)
+        board.placePieces(to, blackPawn)
+        val move = Move(from, to, board)
+        assertThat(move.isCapture()).isTrue()
+    }
 
-//    @Test
-//    fun `Castling works`(){
-//        val game = Game()
-//        val board= ChessBoard.emptyBoard()
-//        val variable = Move(Position('e',1), Position('b',1), board)
-//        val chessBoard = ChessBoard.emptyBoard()
-//        val king = King(true)
-//        val rook = Rook(true)
-//        board.placePieces(Position('e', 1), king)
-//        board.placePieces(Position('a', 1), rook)
-//        variable.castleKingSide(game)
-//        board.displayBoard()
-//        assertThat(chessBoard.getFigureAt(Position('b', 1))).isEqualTo("k")
-//        assertThat(chessBoard.getFigureAt(Position('c', 1))).isEqualTo("r")
-//    }
+    @Test
+    fun `isCapture gibt false zurück wenn Ziel leer ist`() {
+        val board = ChessBoard.emptyBoard()
+        val from = Position('e', 2)
+        val to = Position('e', 3)
+        val whitePawn = Pawn(Color.WHITE)
+        board.placePieces(from, whitePawn)
+        val move = Move(from, to, board)
+        assertThat(move.isCapture()).isFalse()
+    }
+
+    @Test
+    fun `execute gibt true zurück für gültigen Zug und entfernt Figur vom Startfeld`() {
+        val board = ChessBoard.fullBoard()
+        val from = Position('e', 2)
+        val to = Position('e', 3)
+        val whitePawn = Pawn(Color.WHITE)
+        board.placePieces(from, whitePawn)
+        val move = Move(from, to, board)
+        assertThat(move.execute()).isTrue()
+        assertThat(board.getFigureAt(from)).isNull()
+        assertThat(board.getFigureAt(to)).isEqualTo(whitePawn)
+    }
+
+    @Test
+    fun `execute gibt false zurück für ungültigen Zug und verändert nichts`() {
+        val board = ChessBoard.emptyBoard()
+        val from = Position('e', 2)
+        val to = Position('e', 5)
+        val whitePawn = Pawn(Color.WHITE)
+        board.placePieces(from, whitePawn)
+        val move = Move(from, to, board)
+        assertThat(move.execute()).isFalse()
+        assertThat(board.getFigureAt(from)).isEqualTo(whitePawn)
+        assertThat(board.getFigureAt(to)).isNull()
+    }
 }
 
 

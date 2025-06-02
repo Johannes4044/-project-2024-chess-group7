@@ -31,9 +31,9 @@ class ChessBoardTests : AnnotationSpec() {
     @Test
     fun `FEN string is generated correctly for custom board`() {
         val chessBoard = ChessBoard.emptyBoard()
-        chessBoard.placePieces(Position('a', 1), Rook(true))
-        chessBoard.placePieces(Position('b', 2), Knight(false))
-        chessBoard.placePieces(Position('c', 3), Bishop(true))
+        chessBoard.placePieces(Position('a', 1), Rook(Color.WHITE))
+        chessBoard.placePieces(Position('b', 2), Knight(Color.BLACK))
+        chessBoard.placePieces(Position('c', 3), Bishop(Color.WHITE))
 
         val fenString = FEN().toFEN(chessBoard)
         assertThat(fenString).isEqualTo("8/8/8/8/8/2l5/1S6/t7")
@@ -79,8 +79,8 @@ class ChessBoardTests : AnnotationSpec() {
          val chessBoard = ChessBoard.emptyBoard()
          val position = Position('a', 1)
          val position2 = Position('b', 2)
-         chessBoard.placePieces(position, Rook(true))
-         chessBoard.placePieces(position2, Rook(false))
+         chessBoard.placePieces(position, Rook(Color.WHITE))
+         chessBoard.placePieces(position2, Rook(Color.BLACK))
          assertThat(chessBoard.isSpaceFree(Game, Position('b', 1), false)).isFalse()
          assertThat(chessBoard.isSpaceFree(Game, Position('b', 1), true)).isFalse()
      }
@@ -92,10 +92,10 @@ class ChessBoardTests : AnnotationSpec() {
         val Knight = FigureType.Knight
         val Bishop = FigureType.Bishop
         val Queen = FigureType.Queen
-        chessBoard.placePieces(Position('a', 8), Pawn(true))
-        chessBoard.placePieces(Position('b', 8), Pawn(true))
-        chessBoard.placePieces(Position('c', 8), Pawn(true))
-        chessBoard.placePieces(Position('d', 8), Pawn(true))
+        chessBoard.placePieces(Position('a', 8), Pawn(Color.WHITE))
+        chessBoard.placePieces(Position('b', 8), Pawn(Color.WHITE))
+        chessBoard.placePieces(Position('c', 8), Pawn(Color.WHITE))
+        chessBoard.placePieces(Position('d', 8), Pawn(Color.WHITE))
 
         assertThat(chessBoard.promoteFigure(Position('a', 8), Rook)).isTrue()
         assertThat(chessBoard.getFigureAt(Position('a', 8))?.symbol()).isEqualTo("t")
@@ -114,10 +114,10 @@ class ChessBoardTests : AnnotationSpec() {
         val Knight = FigureType.Knight
         val Bishop = FigureType.Bishop
         val Queen = FigureType.Queen
-        chessBoard.placePieces(Position('a', 1), Pawn(false))
-        chessBoard.placePieces(Position('b', 1), Pawn(false))
-        chessBoard.placePieces(Position('c', 1), Pawn(false))
-        chessBoard.placePieces(Position('d', 1), Pawn(false))
+        chessBoard.placePieces(Position('a', 1), Pawn(Color.BLACK))
+        chessBoard.placePieces(Position('b', 1), Pawn(Color.BLACK))
+        chessBoard.placePieces(Position('c', 1), Pawn(Color.BLACK))
+        chessBoard.placePieces(Position('d', 1), Pawn(Color.BLACK))
 
         assertThat(chessBoard.promoteFigure(Position('a', 1), Rook)).isTrue()
         assertThat(chessBoard.getFigureAt(Position('a', 1))?.symbol()).isEqualTo("T")
@@ -133,10 +133,10 @@ class ChessBoardTests : AnnotationSpec() {
     fun`Promotion does not work for non-pawn figures`() {
         val chessBoard = ChessBoard.emptyBoard()
         val Rook = FigureType.Rook
-        chessBoard.placePieces(Position('a', 8), Rook(true))
-        chessBoard.placePieces(Position('b', 8), Knight(true))
-        chessBoard.placePieces(Position('c', 8), Bishop(true))
-        chessBoard.placePieces(Position('d', 8), Queen(true))
+        chessBoard.placePieces(Position('a', 8), Rook(Color.WHITE))
+        chessBoard.placePieces(Position('b', 8), Knight(Color.WHITE))
+        chessBoard.placePieces(Position('c', 8), Bishop(Color.WHITE))
+        chessBoard.placePieces(Position('d', 8), Queen(Color.WHITE))
 
         assertThat(chessBoard.promoteFigure(Position('a', 8), Rook)).isFalse()
         assertThat(chessBoard.getFigureAt(Position('a', 8))?.symbol()).isEqualTo("t")

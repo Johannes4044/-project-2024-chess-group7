@@ -1,11 +1,12 @@
 package hwr.oop.figures
 
 import hwr.oop.ChessBoard
+import hwr.oop.Color
 import hwr.oop.Directions
 import hwr.oop.Figure
 import hwr.oop.Position
 
-class Queen(override val isWhite: Boolean) : Figure {
+class Queen(override val color: Color) : Figure {
     private val directionsQueen = listOf(
         Directions.UP,
         Directions.DOWN,
@@ -16,7 +17,7 @@ class Queen(override val isWhite: Boolean) : Figure {
         Directions.DOWN_LEFT,
         Directions.DOWN_RIGHT
     )
-    override fun symbol() = if (isWhite) "d" else "D"
+    override fun symbol() = if (color == Color.WHITE) "d" else "D"
 
     override fun availableMoves(from: Position, board: ChessBoard): List<Position> {
         val moves = mutableListOf<Position>()
@@ -30,7 +31,7 @@ class Queen(override val isWhite: Boolean) : Figure {
                 if (destination == null) {
                     moves.add(current)
                 } else {
-                    if (destination.isWhite != this.isWhite) {
+                    if (destination.color != this.color) {
                         moves.add(current)
                     }
                     break
