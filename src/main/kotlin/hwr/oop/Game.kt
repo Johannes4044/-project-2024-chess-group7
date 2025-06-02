@@ -12,7 +12,6 @@ class Game {
     var totalMoves = 0;
 
     fun startGame() {
-        board.displayBoard()
     }
 
     fun makeMove(from: Position, to: Position, promotionFigure: FigureType? = null): Boolean {
@@ -31,6 +30,7 @@ class Game {
                 ((to.row == 8 && figure.color == Color.WHITE) || (to.row == 1 && figure.color == Color.BLACK))) {
                 board.promoteFigure(to, promotionFigure)
             }
+            currentPlayerIsWhite = !currentPlayerIsWhite
             return true
         }else {
             return false
@@ -45,8 +45,8 @@ class Game {
         val row = 1..8
 
         for (column in col) {
-            for (Row in row) {
-                val from = Position(column, Row)
+            for (row in row) {
+                val from = Position(column, row)
                 val figure = board.getFigureAt(from)
 
                 if (figure != King(Color.WHITE) && figure != null && figure.symbol()[0].isLowerCase()) {
@@ -86,10 +86,10 @@ class Game {
         val hasMoves = playerMoves.isNotEmpty()
 
         if (!hasMoves) {
-            if (inCheck) {
-                return true
+            return if (inCheck) {
+                true
             } else {
-                return true
+                true
             }
         }
 

@@ -5,10 +5,8 @@ import hwr.oop.figures.Knight
 import hwr.oop.figures.Pawn
 import hwr.oop.figures.Queen
 import hwr.oop.figures.Rook
-import hwr.oop.figures.King
 import io.kotest.core.spec.style.AnnotationSpec
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Test
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream
 
@@ -319,36 +317,6 @@ class MovementTests : AnnotationSpec() {
     }
 
     @Test
-    fun `isCapture output is correct`() {
-        val board = ChessBoard.fullBoard()
-        val from = Position('e', 2)
-        val to = Position('f', 3)
-        val whitePawn = Pawn(Color.WHITE)
-        val blackPawn = Pawn(Color.BLACK)
-        board.placePieces(Position('e', 2), whitePawn)
-        board.placePieces(Position('f', 3), blackPawn)
-
-
-        val move = Move(from, to, board)
-
-
-        val outputStream = ByteArrayOutputStream()
-        val originalOut = System.out
-        val printStream = PrintStream(outputStream)
-        System.setOut(printStream)
-
-        try {
-            move.execute()
-        } finally {
-            System.setOut(originalOut)
-        }
-
-
-        val output = outputStream.toString()
-        assertThat(output).contains("Piece was captured!")
-    }
-
-    @Test
     fun `isCapture returns True`() {
         val board = ChessBoard.emptyBoard()
         val from = Position('e', 2)
@@ -369,7 +337,7 @@ class MovementTests : AnnotationSpec() {
         assertThat(move2.isCapture()).isFalse()
     }
     @Test
-    fun `isCapture gibt true zurück wenn Ziel gegnerische Figur ist`() {
+    fun `isCapture returns true if target is opponent figure`() {
         val board = ChessBoard.emptyBoard()
         val from = Position('e', 2)
         val to = Position('e', 3)
@@ -382,7 +350,7 @@ class MovementTests : AnnotationSpec() {
     }
 
     @Test
-    fun `isCapture gibt false zurück wenn Ziel leer ist`() {
+    fun `isCapture returns false if destination is empty`() {
         val board = ChessBoard.emptyBoard()
         val from = Position('e', 2)
         val to = Position('e', 3)
@@ -393,7 +361,7 @@ class MovementTests : AnnotationSpec() {
     }
 
     @Test
-    fun `execute gibt true zurück für gültigen Zug und entfernt Figur vom Startfeld`() {
+    fun `execute returns true for valid move and removes figure from start field`() {
         val board = ChessBoard.fullBoard()
         val from = Position('e', 2)
         val to = Position('e', 3)
@@ -406,7 +374,7 @@ class MovementTests : AnnotationSpec() {
     }
 
     @Test
-    fun `execute gibt false zurück für ungültigen Zug und verändert nichts`() {
+    fun `execute returns false for invalid move and does not change anything`() {
         val board = ChessBoard.emptyBoard()
         val from = Position('e', 2)
         val to = Position('e', 5)

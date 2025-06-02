@@ -1,5 +1,4 @@
 package hwr.oop
-import hwr.oop.Game
 import hwr.oop.figures.King
 import hwr.oop.figures.Pawn
 import hwr.oop.figures.Rook
@@ -31,17 +30,11 @@ data class Move(val from: Position, val to: Position, val board: ChessBoard) {
 
         }
 
-        if (isCapture()) {
-
-//            println("Figur wurde geschlagen!")
-        if (isCapture() || board.getFigureAt(from) is Pawn) {
-
-        }
 
         return board.move(from, to)
     }
 
-    fun castleKingSide(Game: Game):Boolean{
+    fun castleKingSide(game: Game):Boolean{
         val kingFirstMove = true
         val rookFirstMove = true
         val rookW = Rook(Color.WHITE)
@@ -58,9 +51,7 @@ data class Move(val from: Position, val to: Position, val board: ChessBoard) {
         }
         return true
     }
-        return true
     }
-
 
 }
 

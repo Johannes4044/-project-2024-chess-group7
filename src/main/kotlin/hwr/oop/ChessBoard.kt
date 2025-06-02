@@ -53,16 +53,19 @@ class ChessBoard(private val board: MutableMap<Position, Figure>) {
             board[to] = figure
             return true
 
+
     } else {
         error("Ungültiger Zug von ${figure.symbol()} von $from nach $to")
-        //println("Ungültiger Zug für ${figure.symbol()} von $from nach $to")
+        
         return false
     }
+
     }
+
     fun promoteFigure(position: Position, promoteTo: FigureType?): Boolean {
         val figure = board[position] ?: return false
         if (figure is Pawn) {
-            board[position] = when (promoteTo){
+            board[position] = when (promoteTo) {
                 FigureType.Rook -> Rook(figure.color)
                 FigureType.Knight -> Knight(figure.color)
                 FigureType.Bishop -> Bishop(figure.color)
@@ -72,14 +75,6 @@ class ChessBoard(private val board: MutableMap<Position, Figure>) {
             return true
         }
         return false
-    }
-    fun displayBoard() {
-        for (j in 8 downTo 1) {
-            for (i in 'a'..'h') {
-                val pos = Position(i, j)
-                val fig = board[pos]
-            }
-        }
     }
 
     fun placePieces(position: Position, figure: Figure) {
