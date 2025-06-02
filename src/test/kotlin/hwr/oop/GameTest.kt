@@ -16,7 +16,7 @@ class GameTest : AnnotationSpec() {
     }
 
     @Test
-    fun `whiteCheck gibt true zurück wenn schwarzer Zug weißen König bedroht`() {
+    fun `whiteCheck returns true if black move threatens white king`() {
         val game = Game()
         val board = ChessBoard.emptyBoard()
         board.placePieces(Position('e', 1), King(Color.WHITE))
@@ -25,14 +25,14 @@ class GameTest : AnnotationSpec() {
         assertThat(game.whiteCheck()).isTrue()
     }
     @Test
-    fun `blackCheck gibt false zurück wenn kein schwarzer König auf dem Brett ist`() {
+    fun `blackCheck returns false if there is no black king on the board`() {
         val game = Game()
         game.board = ChessBoard.emptyBoard()
         assertThat(game.blackCheck()).isFalse()
     }
 
     @Test
-    fun `blackCheck gibt true zurück wenn weißer Zug schwarzen König bedroht`() {
+    fun `blackCheck returns true if white move threatens black king`() {
         val game = Game()
         val board = ChessBoard.emptyBoard()
         board.placePieces(Position('e', 1), King(Color.BLACK))
@@ -59,7 +59,7 @@ class GameTest : AnnotationSpec() {
     }
 
     @Test
-    fun `whiteCheck gibt false zurück wenn kein weißer König auf dem Brett ist`() {
+    fun `whiteCheck returns false if there is no white king on the board`() {
         val game = Game()
         game.board = ChessBoard.emptyBoard()
         assertThat(game.whiteCheck()).isFalse()
@@ -235,7 +235,6 @@ class GameTest : AnnotationSpec() {
     fun `cannot move if game is over`() {
         val game = Game()
         game.board = ChessBoard.emptyBoard()
-        // Kein König auf dem Brett, Spiel ist vorbei
         assertThat(game.isGameOver()).isTrue()
         val result = game.makeMove(Position('a', 1), Position('a', 2))
         assertThat(result).isFalse()

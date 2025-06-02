@@ -8,14 +8,14 @@ import hwr.oop.Position
 
 class Knight(override val color: Color) : Figure {
     private val directionsKnight = listOf(
-        Directions.Knight_UP_LEFT,
-        Directions.Knight_UP_RIGHT,
-        Directions.Knight_DOWN_LEFT,
-        Directions.Knight_DOWN_RIGHT,
-        Directions.Knight_LEFT_UP,
-        Directions.Knight_LEFT_DOWN,
-        Directions.Knight_RIGHT_UP,
-        Directions.Knight_RIGHT_DOWN
+        Directions.KNIGHT_UP_LEFT,
+        Directions.KNIGHT_UP_RIGHT,
+        Directions.KNIGHT_DOWN_LEFT,
+        Directions.KNIGHT_DOWN_RIGHT,
+        Directions.KNIGHT_LEFT_UP,
+        Directions.KNIGHT_LEFT_DOWN,
+        Directions.KNIGHT_RIGHT_UP,
+        Directions.KNIGHT_RIGHT_DOWN
     )
     override fun symbol() = if (color == Color.WHITE) "s" else "S"
 

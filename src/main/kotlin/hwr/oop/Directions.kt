@@ -9,12 +9,12 @@ enum class Directions(val deltaX: Int, val deltaY: Int) {
     UP_RIGHT(1, 1),
     DOWN_LEFT(-1, -1),
     DOWN_RIGHT(1, -1),
-    Knight_UP_LEFT(-1,2),
-    Knight_UP_RIGHT(1,2),
-    Knight_DOWN_LEFT(-1,-2),
-    Knight_DOWN_RIGHT(1,-2),
-    Knight_LEFT_UP(-2,1),
-    Knight_LEFT_DOWN(-2,-1),
-    Knight_RIGHT_UP(2,1),
-    Knight_RIGHT_DOWN(2,-1)
+    KNIGHT_UP_LEFT(-1,2),
+    KNIGHT_UP_RIGHT(1,2),
+    KNIGHT_DOWN_LEFT(-1,-2),
+    KNIGHT_DOWN_RIGHT(1,-2),
+    KNIGHT_LEFT_UP(-2,1),
+    KNIGHT_LEFT_DOWN(-2,-1),
+    KNIGHT_RIGHT_UP(2,1),
+    KNIGHT_RIGHT_DOWN(2,-1)
 }
