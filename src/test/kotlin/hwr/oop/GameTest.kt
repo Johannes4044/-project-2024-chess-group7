@@ -1,6 +1,8 @@
 package hwr.oop
 
-import hwr.oop.figures.*
+import hwr.oop.figures.King
+import hwr.oop.figures.Pawn
+import hwr.oop.figures.Rook
 import io.kotest.core.spec.style.AnnotationSpec
 import org.assertj.core.api.Assertions.assertThat
 

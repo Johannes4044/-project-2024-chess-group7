@@ -54,7 +54,8 @@ class ChessBoard(private val board: MutableMap<Position, Figure>) {
             return true
 
     } else {
-        println("Ungültiger Zug für ${figure.symbol()} von $from nach $to")
+        error("Ungültiger Zug von ${figure.symbol()} von $from nach $to")
+        //println("Ungültiger Zug für ${figure.symbol()} von $from nach $to")
         return false
     }
     }

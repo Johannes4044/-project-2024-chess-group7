@@ -22,11 +22,14 @@ data class Move(val from: Position, val to: Position, val board: ChessBoard) {
 
     fun execute(): Boolean {
         if (!isValid()) {
+            error("Ungültiger Zug von ${from.column}${from.row} nach ${to.column}${to.row}")
 //            println("Ungültiger Zug!")
             return false
+
         }
 
         if (isCapture()) {
+
 //            println("Figur wurde geschlagen!")
         if (isCapture() || board.getFigureAt(from) is Pawn) {
             TotalMoves = 0
