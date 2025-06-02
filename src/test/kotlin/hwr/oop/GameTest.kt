@@ -11,7 +11,6 @@ class GameTest : AnnotationSpec() {
         val game = Game()
         game.startGame()
         val board = ChessBoard.fullBoard()
-        board.displayBoard()
         assertThat(game.isGameOver()).isFalse()
     }
 
@@ -205,14 +204,13 @@ class GameTest : AnnotationSpec() {
     }
 
     @Test
-    fun `pawn promotion works`() {
+    fun `makeMove returns false, if move is not valid`() {
         val game = Game()
         game.board = ChessBoard.fullBoard()
-        game.board.placePieces(Position('a', 7), Pawn(Color.BLACK))
+        game.board.placePieces(Position('a', 7), Pawn(Color.WHITE))
         game.currentPlayerIsWhite = false
-        val result = game.makeMove(Position('a', 7), Position('a', 8))
-        assertThat(result).isTrue()
-        assertThat(game.board.getFigureAt(Position('a', 8))?.symbol()).isEqualTo("D")
+        val result = game.makeMove(Position('a', 7), Position('a', 8), FigureType.Queen)
+        assertThat(result).isFalse()
     }
 
     @Test

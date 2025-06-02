@@ -10,7 +10,6 @@ class Game {
     val moves = mutableListOf<Triple<Figure, Position, Position>>()
 
     fun startGame() {
-        board.displayBoard()
     }
 
     fun makeMove(from: Position, to: Position, promotionFigure: FigureType? = null): Boolean {
@@ -22,6 +21,7 @@ class Game {
                 ((to.row == 8 && figure.color == Color.WHITE) || (to.row == 1 && figure.color == Color.BLACK))) {
                 board.promoteFigure(to, promotionFigure)
             }
+            currentPlayerIsWhite = !currentPlayerIsWhite
             return true
         }else {
             return false
