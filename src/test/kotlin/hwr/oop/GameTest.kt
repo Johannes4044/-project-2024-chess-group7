@@ -4,19 +4,13 @@ import hwr.oop.figures.FigureType
 import hwr.oop.figures.King
 import hwr.oop.figures.Pawn
 import hwr.oop.figures.Rook
+import hwr.oop.figures.FigureType
 import io.kotest.core.spec.style.AnnotationSpec
+
 import org.assertj.core.api.Assertions.assertThat
 
 
 class GameTest : AnnotationSpec() {
-    @Test
-    fun `start game initializes the game correctly`() {
-        val game = Game()
-        game.startGame()
-        val board = ChessBoard.fullBoard()
-        assertThat(game.isGameOver()).isFalse()
-    }
-
     @Test
     fun `whiteCheck returns true if black move threatens white king`() {
         val game = Game()
@@ -152,7 +146,6 @@ class GameTest : AnnotationSpec() {
         val game = Game()
         val chessBoard = ChessBoard.emptyBoard()
         game.board  = chessBoard
-
         chessBoard.placePieces(Position(Column.E, Row.TWO), King(Color.BLACK))
         chessBoard.placePieces(Position(Column.E, Row.FIVE), Rook(Color.WHITE))
         assertThat(game.blackCheck()).isTrue()
@@ -162,14 +155,14 @@ class GameTest : AnnotationSpec() {
         val chessBoard = ChessBoard.fullBoard()
         val whiteFigures = chessBoard.getAllFigures(true) as List<*>
         assertThat(whiteFigures).hasSize(16)
-        assertThat(whiteFigures.all { (it as Figure).color == Color.WHITE }).isTrue()    }
+        assertThat(whiteFigures.all { (it as Figure).color() == Color.WHITE }).isTrue()    }
 
     @Test
     fun `getAllFigures return all black figures back`() {
         val chessBoard = ChessBoard.fullBoard()
         val blackFigures = chessBoard.getAllFigures(false) as List<*>
         assertThat(blackFigures).hasSize(16)
-        assertThat(blackFigures.all { (it as Figure).color == Color.BLACK }).isTrue()}
+        assertThat(blackFigures.all { (it as Figure).color() == Color.BLACK }).isTrue()}
 
     @Test
     fun `getAllPositions return all occupied positions back`() {
@@ -178,15 +171,6 @@ class GameTest : AnnotationSpec() {
         assertThat(positions).hasSize(32)
         assertThat(positions.all { it is Position }).isTrue()
     }
-
-//    @Test
-//    fun `move from invalid position returns false`() {
-//        val game = Game()
-//        val from = Position('z', 9)
-//        val to = Position(Column.E, 1)
-//        val result = game.makeMove(from, to)
-//        assertThat(result).isFalse()
-//    }
 
     @Test
     fun `move from empty position returns false`() {
@@ -222,15 +206,6 @@ class GameTest : AnnotationSpec() {
         game.board = ChessBoard.emptyBoard()
         assertThat(game.isGameOver()).isTrue()
     }
-
-//    @Test
-//    fun `move outside board returns false`() {
-//        val game = Game()
-//        val from = Position('i', 9)
-//        val to = Position('j', 10)
-//        val result = game.makeMove(from, to)
-//        assertThat(result).isFalse()
-//    }
 
     @Test
     fun `cannot move if game is over`() {

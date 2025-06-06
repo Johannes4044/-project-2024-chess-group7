@@ -3,7 +3,6 @@ package hwr.oop
 import hwr.oop.figures.*
 import io.kotest.core.spec.style.AnnotationSpec
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.assertThrows
 
 class ChessBoardTests : AnnotationSpec() {
     @Test
@@ -13,10 +12,15 @@ class ChessBoardTests : AnnotationSpec() {
     }
 
     @Test
-    fun `FEN string is generated correctly`() {
-        val chessBoard = ChessBoard.fullBoard()
-        val fenString = FEN().toFEN(chessBoard)
-        assertThat(fenString).isEqualTo("TSLDKLST/BBBBBBBB/8/8/8/8/bbbbbbbb/tsldklst")
+    fun `FEN string is parsed correctly for full board`() {
+        val fenString = "TSLDKLST/BBBBBBBB/8/8/8/8/bbbbbbbb/tsldklst w KQkq - 0 1"
+        val fen = FEN(fenString)
+        assertThat(fen.getPiecePlacement()).isEqualTo("TSLDKLST/BBBBBBBB/8/8/8/8/bbbbbbbb/tsldklst")
+        assertThat(fen.getActiveColor()).isEqualTo("w")
+        assertThat(fen.getCastlingAvailability()).isEqualTo("KQkq")
+        assertThat(fen.getEnPassantTarget()).isEqualTo("-")
+        assertThat(fen.getHalfmoveClock()).isEqualTo(0)
+        assertThat(fen.getFullmoveNumber()).isEqualTo(1)
     }
 
     @Test
@@ -86,6 +90,7 @@ class ChessBoardTests : AnnotationSpec() {
      }
 
     @Test
+
     fun `Promotion works for every white figure`() {
         val chessBoard = ChessBoard.emptyBoard()
         val rook = FigureType.Rook

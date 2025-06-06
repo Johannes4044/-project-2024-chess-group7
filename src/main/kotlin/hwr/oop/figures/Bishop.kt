@@ -2,42 +2,46 @@ package hwr.oop.figures
 
 import hwr.oop.*
 
-class Bishop(override val color: Color) : Figure {
-    private val directionsBishop = listOf(
-        Directions.UP_LEFT,
-        Directions.DOWN_RIGHT,
-        Directions.DOWN_LEFT,
-        Directions.UP_RIGHT
+/**
+ * Represents a Bishop chess piece.
+ *
+ * @property bishopColor The color of the bishop (white or black).
+ */
+class Bishop(private val bishopColor: Color) : Figure {
+    // Directions in which a bishop can move (diagonally)
+    private val directionBishops = listOf(
+        Direction.UP_LEFT,
+        Direction.DOWN_RIGHT,
+        Direction.DOWN_LEFT,
+        Direction.UP_RIGHT
     )
 
-    override fun symbol() = if (color == Color.WHITE) "l" else "L"
+    /**
+     * Returns the color of the bishop.
+     *
+     * @return The color of the bishop.
+     */
+    override fun color() = bishopColor
 
-    override fun availableMoves(from: Position, board: ChessBoard): List<Position> {
-        val moves = mutableListOf<Position>()
-        for (direction in directionsBishop) {
-            val deltaX = direction.deltaX
-            val deltaY = direction.deltaY
-            var newColumnIndex = from.column.ordinal + deltaX
-            var newRowIndex = from.row.ordinal + deltaY
+    /**
+     * Returns the symbol representing the bishop.
+     * "l" for white, "L" for black.
+     *
+     * @return The symbol of the bishop.
+     */
+    override fun symbol() = if (bishopColor == Color.WHITE) "l" else "L"
 
-            while (newColumnIndex in Column.values().indices && newRowIndex in Row.values().indices) {
-                val current = Position(
-                    Column.values()[newColumnIndex],
-                    Row.values()[newRowIndex]
-                )
-                val figureAtCurrent = board.getFigureAt(current)
-                if (figureAtCurrent == null) {
-                    moves.add(current)
-                } else {
-                    if (figureAtCurrent.color != this.color) {
-                        moves.add(current)
-                    }
-                    break
-                }
-                newColumnIndex += deltaX
-                newRowIndex += deltaY
-            }
-        }
-        return moves
+    /**
+     * Calculates all valid target positions for the bishop from the given position on the current chessboard.
+     *
+     * The bishop can move diagonally in all four directions until it encounters another piece
+     * or leaves the board. Own pieces block the path, opponent pieces can be captured.
+     *
+     * @param from The starting position of the bishop.
+     * @param board The current chessboard.
+     * @return A list of all valid target positions.
+     */
+    override fun availableTargets(from: Position, board: ChessBoard): List<Position> {
+        return MoveUtils.slidingMoves(from, board, directionBishops, bishopColor)
     }
 }

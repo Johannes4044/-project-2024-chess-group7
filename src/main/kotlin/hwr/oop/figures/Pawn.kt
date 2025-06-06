@@ -2,14 +2,42 @@ package hwr.oop.figures
 
 import hwr.oop.*
 
+/**
+ * Represents a Pawn chess piece.
+ *
+ * @property pawnColor The color of the pawn (white or black).
+ */
+class Pawn(private val pawnColor: Color) : Figure {
+    /**
+     * Returns the color of the pawn.
+     *
+     * @return The color of the pawn.
+     */
+    override fun color() = pawnColor
 
-class Pawn(override val color: Color) : Figure {
-    override fun symbol() = if (color == Color.WHITE) "b" else "B"
+    /**
+     * Returns the symbol representing the pawn.
+     * "b" for white, "B" for black.
+     *
+     * @return The symbol of the pawn.
+     */
+    override fun symbol() = if (pawnColor == Color.WHITE) "b" else "B"
 
-    override fun availableMoves(from: Position, board: ChessBoard): List<Position> {
+    /**
+     * Calculates all valid target positions for the pawn from the given position on the current chessboard.
+     *
+     * The pawn can move forward one square if the square is empty, or two squares from its starting position.
+     * It can also capture diagonally to the left or right if an opponent's piece is present.
+     *
+     * @param from The starting position of the pawn.
+     * @param board The current chessboard.
+     * @return A list of all valid target positions.
+     */
+    override fun availableTargets(from: Position, board: ChessBoard): List<Position> {
         val moves = mutableListOf<Position>()
-        val direction = if (color == Color.WHITE) 1 else -1
-        val startZeile = if (color == Color.WHITE) 2 else 7
+        val direction = if (color() == Color.WHITE) 1 else -1
+        val startZeile = if (color() == Color.WHITE) 2 else 7
+
 
         // Normaler Zug
         val forwardOneIndex = from.row.ordinal + direction
@@ -44,6 +72,7 @@ class Pawn(override val color: Color) : Figure {
                 if (leftTarget != null && leftTarget.color != this.color) {
                     moves.add(attackLeft)
                 }
+
             }
 
             if (attackRightColumnIndex in Column.values().indices) {

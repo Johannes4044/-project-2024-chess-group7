@@ -1,4 +1,6 @@
-import hwr.oop.*
+
+package hwr.oop
+
 import hwr.oop.figures.Bishop
 import hwr.oop.figures.King
 import hwr.oop.figures.Knight
@@ -41,7 +43,7 @@ class FigureSymbolTest : FunSpec({
                 else -> throw IllegalArgumentException("Unknown figure type")
             }
             figure.symbol() shouldBe expectedSymbol
-            figure.color shouldBe color
+            figure.color() shouldBe color
         }
     }
     test("King can move if destination is empty") {
@@ -57,8 +59,7 @@ class FigureSymbolTest : FunSpec({
         val board = ChessBoard.emptyBoard()
         board.placePieces(from, king)
 
-        val moves = king.availableMoves(from, board)
-
+        val moves = king.availableTargets(from, board)
         possibleMoves.forEach { to ->
             moves shouldContain to
         }
@@ -78,7 +79,7 @@ class FigureSymbolTest : FunSpec({
             Position(Column.G, Row.SIX)
         )
 
-        val moves = king.availableMoves(from, board)
+        val moves = king.availableTargets(from, board)
 
         invalidMoves.forEach { to ->
             moves shouldNotContain to
@@ -94,7 +95,7 @@ class FigureSymbolTest : FunSpec({
         val to = Position(Column.E, Row.FIVE)
         board.placePieces(to, friendly)
 
-        val moves = king.availableMoves(from, board)
+        val moves = king.availableTargets(from, board)
 
         moves shouldNotContain to
     }
@@ -108,18 +109,18 @@ class FigureSymbolTest : FunSpec({
         val to = Position(Column.E, Row.FIVE)
         board.placePieces(to, enemy)
 
-        val moves = king.availableMoves(from, board)
+        val moves = king.availableTargets(from, board)
 
         moves shouldContain to
     }
 
-    test("availableMoves returns only valid squares") {
+    test("availableTargets returns only valid squares") {
         val king = King(Color.WHITE)
         val from = Position(Column.A, Row.ONE)
         val board = ChessBoard.emptyBoard()
         board.placePieces(from, king)
 
-        val moves = king.availableMoves(from, board)
+        val moves = king.availableTargets(from, board)
         moves.forEach {
             (it.column in Column.values() && it.row in Row.values()).shouldBeTrue()
         }

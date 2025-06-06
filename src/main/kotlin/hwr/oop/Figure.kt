@@ -1,7 +1,7 @@
 package hwr.oop
 
 interface Figure {
-    val color: Color
+    fun color(): Color
     fun symbol(): String
-    fun availableMoves(from: Position, board: ChessBoard): List<Position>
+    fun availableTargets(from: Position, board: ChessBoard): List<Position>
 }

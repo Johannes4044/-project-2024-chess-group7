@@ -18,7 +18,7 @@ class MovementTests : AnnotationSpec() {
         chessBoard.placePieces(Position(Column.D, Row.FOUR), bishop)
         val from = Position(Column.D, Row.FOUR)
 
-        val moves = bishop.availableMoves(from, chessBoard)
+        val moves = bishop.availableTargets(from, chessBoard)
         assertThat(moves).containsExactlyInAnyOrder(
             Position(Column.E, Row.FIVE),
             Position(Column.F, Row.SIX),
@@ -47,7 +47,7 @@ class MovementTests : AnnotationSpec() {
         chessBoard.placePieces(Position(Column.C, Row.THREE), opponentPawn)
         val from = Position(Column.D, Row.FOUR)
 
-        val moves = bishop.availableMoves(from, chessBoard)
+        val moves = bishop.availableTargets(from, chessBoard)
         assertThat(moves).containsExactlyInAnyOrder(
             Position(Column.C, Row.THREE),
             Position(Column.E, Row.THREE), Position(Column.F, Row.TWO), Position(Column.G, Row.ONE),
@@ -62,7 +62,7 @@ class MovementTests : AnnotationSpec() {
         chessBoard.placePieces(Position(Column.D, Row.FOUR), knight)
         val from = Position(Column.D, Row.FOUR)
 
-        val moves = knight.availableMoves(from, chessBoard)
+        val moves = knight.availableTargets(from, chessBoard)
         assertThat(moves).containsExactlyInAnyOrder(
             Position(Column.B, Row.THREE),
             Position(Column.B, Row.FIVE),
@@ -86,7 +86,7 @@ class MovementTests : AnnotationSpec() {
         chessBoard.placePieces(Position(Column.F, Row.FIVE), opponentPawn)
         val from = Position(Column.D, Row.FOUR)
 
-        val moves = knight.availableMoves(from, chessBoard)
+        val moves = knight.availableTargets(from, chessBoard)
         assertThat(moves).containsExactlyInAnyOrder(
             Position(Column.B, Row.FIVE),
             Position(Column.C, Row.TWO),
@@ -105,7 +105,7 @@ class MovementTests : AnnotationSpec() {
         chessBoard.placePieces(Position(Column.A, Row.TWO), pawn)
         val from = Position(Column.A, Row.TWO)
 
-        val moves = pawn.availableMoves(from, chessBoard)
+        val moves = pawn.availableTargets(from, chessBoard)
         assertThat(moves).containsExactlyInAnyOrder(
             Position(Column.A, Row.THREE), Position(Column.A, Row.FOUR)
         )
@@ -124,7 +124,7 @@ class MovementTests : AnnotationSpec() {
         chessBoard.placePieces(Position(Column.A, Row.THREE), opponentPawn2)
         val from = Position(Column.B, Row.TWO)
 
-        val moves = pawn.availableMoves(from, chessBoard)
+        val moves = pawn.availableTargets(from, chessBoard)
         assertThat(moves).containsExactlyInAnyOrder(
             Position(Column.C, Row.THREE), Position(Column.A, Row.THREE),
         )
@@ -137,7 +137,7 @@ class MovementTests : AnnotationSpec() {
         chessBoard.placePieces(Position(Column.D, Row.FOUR), queen)
         val from = Position(Column.D, Row.FOUR)
 
-        val moves = queen.availableMoves(from, chessBoard)
+        val moves = queen.availableTargets(from, chessBoard)
         assertThat(moves).containsExactlyInAnyOrder(
             // Vertikal
             Position(Column.D, Row.ONE),
@@ -179,7 +179,7 @@ class MovementTests : AnnotationSpec() {
         chessBoard.placePieces(Position(Column.D, Row.FOUR), rook)
         val from = Position(Column.D, Row.FOUR)
 
-        val moves = rook.availableMoves(from, chessBoard)
+        val moves = rook.availableTargets(from, chessBoard)
         assertThat(moves).containsExactlyInAnyOrder(
             // Vertikal
             Position(Column.D, Row.ONE),
@@ -312,7 +312,6 @@ class MovementTests : AnnotationSpec() {
     fun `Position equals and hashCode work correctly`() {
         val pos1 = Position(Column.A, Row.ONE)
         val pos2 = Position(Column.A, Row.ONE)
-        val pos3 = Position(Column.B, Row.TWO)
         assertThat(pos1).isEqualTo(pos2)
         assertThat(pos1.hashCode()).isEqualTo(pos2.hashCode())
         assertThat(pos1).isNotEqualTo(pos3)

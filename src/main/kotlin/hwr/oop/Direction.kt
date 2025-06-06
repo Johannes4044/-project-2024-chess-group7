@@ -1,6 +1,6 @@
 package hwr.oop
 
-enum class Directions(val deltaX: Int, val deltaY: Int) {
+enum class Direction(val deltaX: Int, val deltaY: Int) {
     UP(0, 1),
     DOWN(0, -1),
     LEFT(-1, 0),
