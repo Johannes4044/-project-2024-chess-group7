@@ -10,9 +10,9 @@ import hwr.oop.figures.Rook
 class FEN {
     fun toFEN(board: ChessBoard): String {
         val fen = StringBuilder()
-        for (j in 8 downTo 1) {
+        for (j in Row.values().reversed()) {
             var emptyCount = 0
-            for (i in 'a'..'h') {
+            for (i in Column.values()) {
                 val pos = Position(i, j)
                 val fig = board.getFigureAt(pos)
                 if (fig != null) {
@@ -28,7 +28,7 @@ class FEN {
             if (emptyCount > 0) {
                 fen.append(emptyCount)
             }
-            if (j > 1) {
+            if (j > Row.ONE) {
                 fen.append("/")
             }
         }
@@ -38,15 +38,19 @@ class FEN {
     fun fromFEN(fen: String): ChessBoard {
         val board = mutableMapOf<Position, Figure>()
         val rows = fen.split(" ")[0].split("/")
-        var rowIndex = 8
+        var rowIndex = Row.EIGHT
 
         for (row in rows) {
-            var colIndex = 'a'
+            var colIndex = Column.A
             for (char in row) {
                 when {
                     char.isDigit() -> {
-                        colIndex += char.digitToInt()
+                        val skip = char.digitToInt()
+                        if (colIndex.ordinal + skip < Column.values().size) {
+                            colIndex = Column.values()[colIndex.ordinal + skip]
+                        }
                     }
+
                     else -> {
                         val isWhite = char.isLowerCase()
                         val figure = when (char.lowercaseChar()) {
@@ -59,13 +63,16 @@ class FEN {
                             else -> throw IllegalArgumentException("Ungültige Figur in FEN: $char")
                         }
                         board[Position(colIndex, rowIndex)] = figure
-                        colIndex++
+                        if (colIndex.ordinal + 1 < Column.values().size) {
+                            colIndex = Column.values()[colIndex.ordinal + 1]
+                        }
                     }
                 }
             }
-            rowIndex--
+            if (rowIndex.ordinal - 1 >= 0) {
+                rowIndex = Row.values()[rowIndex.ordinal - 1]
+            }
         }
-
         return ChessBoard(board)
     }
 }

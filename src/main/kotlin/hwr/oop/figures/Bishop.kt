@@ -17,8 +17,14 @@ class Bishop(override val color: Color) : Figure {
         for (direction in directionsBishop) {
             val deltaX = direction.deltaX
             val deltaY = direction.deltaY
-            var current = Position(from.column + deltaX, from.row + deltaY)
-            while (current.column in 'a'..'h' && current.row in 1..8) {
+            var newColumnIndex = from.column.ordinal + deltaX
+            var newRowIndex = from.row.ordinal + deltaY
+
+            while (newColumnIndex in Column.values().indices && newRowIndex in Row.values().indices) {
+                val current = Position(
+                    Column.values()[newColumnIndex],
+                    Row.values()[newRowIndex]
+                )
                 val figureAtCurrent = board.getFigureAt(current)
                 if (figureAtCurrent == null) {
                     moves.add(current)
@@ -28,7 +34,8 @@ class Bishop(override val color: Color) : Figure {
                     }
                     break
                 }
-                current = Position(current.column + deltaX, current.row + deltaY)
+                newColumnIndex += deltaX
+                newRowIndex += deltaY
             }
         }
         return moves

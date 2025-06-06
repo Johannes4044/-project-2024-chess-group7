@@ -1,10 +1,6 @@
 package hwr.oop.figures
 
-import hwr.oop.ChessBoard
-import hwr.oop.Color
-import hwr.oop.Directions
-import hwr.oop.Figure
-import hwr.oop.Position
+import hwr.oop.*
 
 
 class King(override val color: Color) : Figure {
@@ -27,8 +23,14 @@ class King(override val color: Color) : Figure {
         for (direction in directionsKing) {
             val deltaX = direction.deltaX
             val deltaY = direction.deltaY
-            val target = Position(from.column + deltaX, from.row + deltaY)
-            if (target.column in 'a'..'h' && target.row in 1..8) {
+            val newColumnIndex = from.column.ordinal + deltaX
+            val newRowIndex = from.row.ordinal + deltaY
+
+            if (newColumnIndex in Column.values().indices && newRowIndex in Row.values().indices) {
+                val target = Position(
+                    Column.values()[newColumnIndex],
+                    Row.values()[newRowIndex]
+                )
                 val destination = board.getFigureAt(target)
                 if (destination == null || destination.color != this.color) {
                     moves.add(target)

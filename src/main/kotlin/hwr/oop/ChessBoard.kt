@@ -9,32 +9,32 @@ class ChessBoard(private val board: MutableMap<Position, Figure>) {
 
         fun fullBoard(): ChessBoard {
             val board = mutableMapOf<Position, Figure>()
-            for (i in 'a'..'h') {
-                board[Position(i, 2)] = Pawn(Color.WHITE)
+            for (i in Column.values()) {
+                board[Position(i, Row.TWO)] = Pawn(Color.WHITE)
             }
-            for (i in 'a'..'h') {
-                board[Position(i, 7)] = Pawn(Color.BLACK)
+            for (i in Column.values()) {
+                board[Position(i, Row.SEVEN)] = Pawn(Color.BLACK)
             }
-            board[Position('a', 1)] = Rook(Color.WHITE)
-            board[Position('a', 8)] = Rook(Color.BLACK)
-            board[Position('h', 1)] = Rook(Color.WHITE)
-            board[Position('h', 8)] = Rook(Color.BLACK)
+            board[Position(Column.A, Row.ONE)] = Rook(Color.WHITE)
+            board[Position(Column.A, Row.EIGHT)] = Rook(Color.BLACK)
+            board[Position(Column.H, Row.ONE)] = Rook(Color.WHITE)
+            board[Position(Column.H, Row.EIGHT)] = Rook(Color.BLACK)
 
-            board[Position('b', 1)] = Knight(Color.WHITE)
-            board[Position('b', 8)] = Knight(Color.BLACK)
-            board[Position('g', 1)] = Knight(Color.WHITE)
-            board[Position('g', 8)] = Knight(Color.BLACK)
+            board[Position(Column.B, Row.ONE)] = Knight(Color.WHITE)
+            board[Position(Column.B, Row.EIGHT)] = Knight(Color.BLACK)
+            board[Position(Column.G, Row.ONE)] = Knight(Color.WHITE)
+            board[Position(Column.G, Row.EIGHT)] = Knight(Color.BLACK)
 
-            board[Position('c', 1)] = Bishop(Color.WHITE)
-            board[Position('c', 8)] = Bishop(Color.BLACK)
-            board[Position('f', 1)] = Bishop(Color.WHITE)
-            board[Position('f', 8)] = Bishop(Color.BLACK)
+            board[Position(Column.C, Row.ONE)] = Bishop(Color.WHITE)
+            board[Position(Column.C, Row.EIGHT)] = Bishop(Color.BLACK)
+            board[Position(Column.F, Row.ONE)] = Bishop(Color.WHITE)
+            board[Position(Column.F, Row.EIGHT)] = Bishop(Color.BLACK)
 
-            board[Position('d', 1)] = Queen(Color.WHITE)
-            board[Position('d', 8)] = Queen(Color.BLACK)
+            board[Position(Column.D, Row.ONE)] = Queen(Color.WHITE)
+            board[Position(Column.D, Row.EIGHT)] = Queen(Color.BLACK)
 
-            board[Position('e', 1)] = King(Color.WHITE)
-            board[Position('e', 8)] = King(Color.BLACK)
+            board[Position(Column.E, Row.ONE)] = King(Color.WHITE)
+            board[Position(Column.E, Row.EIGHT)] = King(Color.BLACK)
 
             return ChessBoard(board)
         }

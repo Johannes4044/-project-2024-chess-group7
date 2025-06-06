@@ -41,10 +41,10 @@ data class Move(val from: Position, val to: Position, val board: ChessBoard) {
         val kingW = King(Color.WHITE)
 
         if(kingFirstMove && rookFirstMove){
-            val kingPosition = Position('e', 1)
-            val kingTo = Position('b', 1)
-            val rookPosition = Position('a', 1)
-            val rookTo = Position('c', 1)
+            val kingPosition = Position(Column.E, Row.ONE)
+            val kingTo = Position(Column.B, Row.ONE)
+            val rookPosition = Position(Column.A, Row.ONE)
+            val rookTo = Position(Column.C, Row.ONE)
 
             board.placePieces(rookTo, rookW)
             board.placePieces(kingTo, kingW)
@@ -53,5 +53,4 @@ data class Move(val from: Position, val to: Position, val board: ChessBoard) {
     }
     }
 
-}
 

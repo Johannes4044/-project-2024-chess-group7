@@ -1,5 +1,6 @@
 package hwr.oop
 
+import hwr.oop.figures.FigureType
 import hwr.oop.figures.King
 import hwr.oop.figures.Pawn
 import hwr.oop.figures.Rook
@@ -20,8 +21,8 @@ class GameTest : AnnotationSpec() {
     fun `whiteCheck returns true if black move threatens white king`() {
         val game = Game()
         val board = ChessBoard.emptyBoard()
-        board.placePieces(Position('e', 1), King(Color.WHITE))
-        board.placePieces(Position('e', 8), Rook(Color.BLACK))
+        board.placePieces(Position(Column.E, Row.ONE), King(Color.WHITE))
+        board.placePieces(Position(Column.E, Row.EIGHT), Rook(Color.BLACK))
         game.board = board
         assertThat(game.whiteCheck()).isTrue()
     }
@@ -36,16 +37,16 @@ class GameTest : AnnotationSpec() {
     fun `blackCheck returns true if white move threatens black king`() {
         val game = Game()
         val board = ChessBoard.emptyBoard()
-        board.placePieces(Position('e', 1), King(Color.BLACK))
-        board.placePieces(Position('e', 8), Rook(Color.WHITE))
+        board.placePieces(Position(Column.E, Row.ONE), King(Color.BLACK))
+        board.placePieces(Position(Column.E, Row.EIGHT), Rook(Color.WHITE))
         game.board = board
         assertThat(game.blackCheck()).isTrue()
     }
     @Test
     fun `valid move changes player turn`() {
         val game = Game()
-        val from = Position('e', 2)
-        val to = Position('e', 4)
+        val from = Position(Column.E, Row.TWO)
+        val to = Position(Column.E, Row.FOUR)
         game.makeMove(from, to, null)
         assertThat(game.isGameOver()).isFalse()
     }
@@ -53,8 +54,8 @@ class GameTest : AnnotationSpec() {
     fun `currentPlayerIsWhite changes after valid move`() {
         val game = Game()
         val startValue = game.currentPlayerIsWhite
-        val from = Position('e', 2)
-        val to = Position('e', 4)
+        val from = Position(Column.E, Row.TWO)
+        val to = Position(Column.E, Row.FOUR)
         game.makeMove(from, to)
         assertThat(game.currentPlayerIsWhite).isNotEqualTo(startValue)
     }
@@ -69,8 +70,8 @@ class GameTest : AnnotationSpec() {
     @Test
     fun `invalid move does not change player turn`() {
         val game = Game()
-        val from = Position('e', 2)
-        val to = Position('e', 5)
+        val from = Position(Column.E, Row.TWO)
+        val to = Position(Column.E, Row.FIVE)
         game.makeMove(from, to)
         assertThat(game.isGameOver()).isFalse()
     }
@@ -78,8 +79,8 @@ class GameTest : AnnotationSpec() {
     @Test
     fun `move with wrong player's figure does not change player turn`() {
         val game = Game()
-        val from = Position('e', 2)
-        val to = Position('e', 4)
+        val from = Position(Column.E, Row.TWO)
+        val to = Position(Column.E, Row.FOUR)
         game.makeMove(from, to)
         game.makeMove(from, to)
         assertThat(game.isGameOver()).isFalse()
@@ -88,10 +89,10 @@ class GameTest : AnnotationSpec() {
     @Test
     fun `players alternate turns`() {
         val game = Game()
-        val fromWhite = Position('e', 2)
-        val toWhite = Position('e', 4)
-        val fromBlack = Position('d', 7)
-        val toBlack = Position('d', 5)
+        val fromWhite = Position(Column.E, Row.TWO)
+        val toWhite = Position(Column.E, Row.FOUR)
+        val fromBlack = Position(Column.D, Row.SEVEN)
+        val toBlack = Position(Column.D, Row.FIVE)
 
         game.makeMove(fromWhite, toWhite)
         assertThat(game.isGameOver()).isFalse()
@@ -103,14 +104,14 @@ class GameTest : AnnotationSpec() {
     @Test
     fun `valid move captures opponent's figure`() {
         val game = Game()
-        val from = Position('e', 2)
-        val to = Position('e', 4)
+        val from = Position(Column.E, Row.TWO)
+        val to = Position(Column.E, Row.FOUR)
         game.makeMove(from, to)
-        val fromBlack = Position('d', 7)
-        val toBlack = Position('d', 5)
+        val fromBlack = Position(Column.D, Row.SEVEN)
+        val toBlack = Position(Column.D, Row.FIVE)
         game.makeMove(fromBlack, toBlack)
-        val fromWhiteCapture = Position('e', 4)
-        val toWhiteCapture = Position('d', 5)
+        val fromWhiteCapture = Position(Column.E, Row.FOUR)
+        val toWhiteCapture = Position(Column.D, Row.FIVE)
         game.makeMove(fromWhiteCapture, toWhiteCapture)
         assertThat(game.isGameOver()).isFalse()
     }
@@ -119,9 +120,9 @@ class GameTest : AnnotationSpec() {
     fun `game ends in stalemate`() {
         val game = Game()
         val board = ChessBoard.fullBoard()
-        board.move(Position('h', 1), Position('h', 1))
-        board.move(Position('f', 2), Position('f', 2))
-        board.move(Position('g', 3), Position('g', 3))
+        board.move(Position(Column.H, Row.TWO), Position(Column.H, Row.THREE))
+        board.move(Position(Column.F, Row.TWO), Position(Column.F, Row.THREE))
+        board.move(Position(Column.G, Row.TWO), Position(Column.G, Row.THREE))
         game.currentPlayerIsWhite = true
 
         val isStalemate = game.isGameOver()
@@ -141,8 +142,8 @@ class GameTest : AnnotationSpec() {
         val game = Game()
         val chessBoard = ChessBoard.emptyBoard()
         game.board = chessBoard
-        chessBoard.placePieces(Position('e', 2), King(Color.WHITE))
-        chessBoard.placePieces(Position('e', 5), Rook(Color.BLACK))
+        chessBoard.placePieces(Position(Column.E, Row.TWO), King(Color.WHITE))
+        chessBoard.placePieces(Position(Column.E, Row.FIVE), Rook(Color.BLACK))
         assertThat(game.whiteCheck()).isTrue()
     }
 
@@ -152,8 +153,8 @@ class GameTest : AnnotationSpec() {
         val chessBoard = ChessBoard.emptyBoard()
         game.board  = chessBoard
 
-        chessBoard.placePieces(Position('e', 2), King(Color.BLACK))
-        chessBoard.placePieces(Position('e', 5), Rook(Color.WHITE))
+        chessBoard.placePieces(Position(Column.E, Row.TWO), King(Color.BLACK))
+        chessBoard.placePieces(Position(Column.E, Row.FIVE), Rook(Color.WHITE))
         assertThat(game.blackCheck()).isTrue()
     }
     @Test
@@ -178,20 +179,20 @@ class GameTest : AnnotationSpec() {
         assertThat(positions.all { it is Position }).isTrue()
     }
 
-    @Test
-    fun `move from invalid position returns false`() {
-        val game = Game()
-        val from = Position('z', 9)
-        val to = Position('a', 1)
-        val result = game.makeMove(from, to)
-        assertThat(result).isFalse()
-    }
+//    @Test
+//    fun `move from invalid position returns false`() {
+//        val game = Game()
+//        val from = Position('z', 9)
+//        val to = Position(Column.E, 1)
+//        val result = game.makeMove(from, to)
+//        assertThat(result).isFalse()
+//    }
 
     @Test
     fun `move from empty position returns false`() {
         val game = Game()
-        val from = Position('a', 3)
-        val to = Position('a', 4)
+        val from = Position(Column.A, Row.THREE)
+        val to = Position(Column.A, Row.FOUR)
         val result = game.makeMove(from, to)
         assertThat(result).isFalse()
     }
@@ -199,8 +200,8 @@ class GameTest : AnnotationSpec() {
     @Test
     fun `move to own figure returns false`() {
         val game = Game()
-        val from = Position('e', 2)
-        val to = Position('d', 1)
+        val from = Position(Column.E, Row.TWO)
+        val to = Position(Column.D, Row.ONE)
         val result = game.makeMove(from, to)
         assertThat(result).isFalse()
     }
@@ -209,9 +210,9 @@ class GameTest : AnnotationSpec() {
     fun `makeMove returns false, if move is not valid`() {
         val game = Game()
         game.board = ChessBoard.fullBoard()
-        game.board.placePieces(Position('a', 7), Pawn(Color.WHITE))
+        game.board.placePieces(Position(Column.A, Row.SEVEN), Pawn(Color.WHITE))
         game.currentPlayerIsWhite = false
-        val result = game.makeMove(Position('a', 7), Position('a', 8), FigureType.Queen)
+        val result = game.makeMove(Position(Column.A, Row.SEVEN), Position(Column.A, Row.EIGHT), FigureType.Queen)
         assertThat(result).isFalse()
     }
 
@@ -222,42 +223,42 @@ class GameTest : AnnotationSpec() {
         assertThat(game.isGameOver()).isTrue()
     }
 
-    @Test
-    fun `move outside board returns false`() {
-        val game = Game()
-        val from = Position('i', 9)
-        val to = Position('j', 10)
-        val result = game.makeMove(from, to)
-        assertThat(result).isFalse()
-    }
+//    @Test
+//    fun `move outside board returns false`() {
+//        val game = Game()
+//        val from = Position('i', 9)
+//        val to = Position('j', 10)
+//        val result = game.makeMove(from, to)
+//        assertThat(result).isFalse()
+//    }
 
     @Test
     fun `cannot move if game is over`() {
         val game = Game()
         game.board = ChessBoard.emptyBoard()
         assertThat(game.isGameOver()).isTrue()
-        val result = game.makeMove(Position('a', 1), Position('a', 2))
+        val result = game.makeMove(Position(Column.A, Row.ONE), Position(Column.A, Row.TWO))
         assertThat(result).isFalse()
     }
     @Test
-    fun `game ends after 50 moves without pawn move or captur`() {
+    fun `game ends after 50 moves without pawn move or capture`() {
         val game = Game()
         val board = ChessBoard.emptyBoard()
 
         // Platziere nur Türme und Könige für einfache Züge
-        board.placePieces(Position('a', 1), King(Color.WHITE))
-        board.placePieces(Position('h', 1), Rook(Color.WHITE))
-        board.placePieces(Position('a', 8), King(Color.BLACK))
-        board.placePieces(Position('h', 8), Rook(Color.BLACK))
+        board.placePieces(Position(Column.A, Row.ONE), King(Color.WHITE))
+        board.placePieces(Position(Column.H, Row.ONE), Rook(Color.WHITE))
+        board.placePieces(Position(Column.A, Row.EIGHT), King(Color.BLACK))
+        board.placePieces(Position(Column.H, Row.EIGHT), Rook(Color.BLACK))
 
         game.board = board
 
         // Führe 50 Züge aus
         repeat(25) {
-            game.makeMove(Position('h', 1), Position('h', 2))
-            game.makeMove(Position('h', 8), Position('h', 7))
-            game.makeMove(Position('h', 2), Position('h', 1))
-            game.makeMove(Position('h', 7), Position('h', 8))
+            game.makeMove(Position(Column.H, Row.ONE), Position(Column.H, Row.TWO))
+            game.makeMove(Position(Column.H, Row.EIGHT), Position(Column.H, Row.SEVEN))
+            game.makeMove(Position(Column.H, Row.TWO), Position(Column.H, Row.ONE))
+            game.makeMove(Position(Column.H, Row.SEVEN), Position(Column.H, Row.EIGHT))
         }
 
         assertThat(game.isGameOver()).isTrue()
@@ -269,23 +270,23 @@ class GameTest : AnnotationSpec() {
         val board = ChessBoard.emptyBoard()
 
         // Platziere Figuren
-        board.placePieces(Position('a', 1), King(Color.WHITE))
-        board.placePieces(Position('e', 2), Pawn(Color.WHITE))
-        board.placePieces(Position('a', 8), King(Color.BLACK))
-        board.placePieces(Position('h', 8), Rook(Color.BLACK))
+        board.placePieces(Position(Column.A, Row.ONE), King(Color.WHITE))
+        board.placePieces(Position(Column.E, Row.TWO), Pawn(Color.WHITE))
+        board.placePieces(Position(Column.A, Row.EIGHT), King(Color.BLACK))
+        board.placePieces(Position(Column.H, Row.EIGHT), Rook(Color.BLACK))
 
         game.board = board
 
         // Mache 48 Züge
         repeat(24) {
-            game.makeMove(Position('a', 1), Position('b', 1))
-            game.makeMove(Position('h', 8), Position('h', 7))
-            game.makeMove(Position('b', 1), Position('a', 1))
-            game.makeMove(Position('h', 7), Position('h', 8))
+            game.makeMove(Position(Column.A, Row.ONE), Position(Column.B, Row.ONE))
+            game.makeMove(Position(Column.H, Row.EIGHT), Position(Column.H, Row.SEVEN))
+            game.makeMove(Position(Column.B, Row.ONE), Position(Column.A, Row.ONE))
+            game.makeMove(Position(Column.H, Row.SEVEN), Position(Column.H, Row.EIGHT))
         }
 
         // Führe Bauernzug aus
-        game.makeMove(Position('e', 2), Position('e', 3))
+        game.makeMove(Position(Column.E, Row.TWO), Position(Column.E, Row.THREE))
 
         assertThat(game.totalMoves).isEqualTo(0)
         assertThat(game.isGameOver()).isFalse()

@@ -1,10 +1,6 @@
 package hwr.oop.figures
 
-import hwr.oop.ChessBoard
-import hwr.oop.Color
-import hwr.oop.Directions
-import hwr.oop.Figure
-import hwr.oop.Position
+import hwr.oop.*
 
 class Rook(override val color: Color) : Figure {
     private val directionsRook = listOf(
@@ -20,8 +16,14 @@ class Rook(override val color: Color) : Figure {
         for (direction in directionsRook) {
             val deltaX = direction.deltaX
             val deltaY = direction.deltaY
-            var current = Position(from.column + deltaX, from.row + deltaY)
-            while (current.column in 'a'..'h' && current.row in 1..8) {
+            var newColumnIndex = from.column.ordinal + deltaX
+            var newRowIndex = from.row.ordinal + deltaY
+
+            while (newColumnIndex in Column.values().indices && newRowIndex in Row.values().indices) {
+                val current = Position(
+                    Column.values()[newColumnIndex],
+                    Row.values()[newRowIndex]
+                )
                 val figureAtCurrent = board.getFigureAt(current)
                 if (figureAtCurrent == null) {
                     moves.add(current)
@@ -31,7 +33,8 @@ class Rook(override val color: Color) : Figure {
                     }
                     break // Stoppen, wenn eine Figur im Weg ist
                 }
-                current = Position(current.column + deltaX, current.row + deltaY)
+                newColumnIndex += deltaX
+                newRowIndex += deltaY
             }
         }
         return moves

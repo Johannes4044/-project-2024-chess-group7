@@ -1,10 +1,6 @@
 package hwr.oop.figures
 
-import hwr.oop.ChessBoard
-import hwr.oop.Color
-import hwr.oop.Directions
-import hwr.oop.Figure
-import hwr.oop.Position
+import hwr.oop.*
 
 class Queen(override val color: Color) : Figure {
     private val directionsQueen = listOf(
@@ -25,8 +21,14 @@ class Queen(override val color: Color) : Figure {
         for (direction in directionsQueen) {
             val deltaX = direction.deltaX
             val deltaY = direction.deltaY
-            var current = Position((from.column + deltaX), from.row + deltaY)
-            while (current.column in 'a'..'h' && current.row in 1..8) {
+            var newColumnIndex = from.column.ordinal + deltaX
+            var newRowIndex = from.row.ordinal + deltaY
+
+            while (newColumnIndex in Column.values().indices && newRowIndex in Row.values().indices) {
+                val current = Position(
+                    Column.values()[newColumnIndex],
+                    Row.values()[newRowIndex]
+                )
                 val destination = board.getFigureAt(current)
                 if (destination == null) {
                     moves.add(current)
@@ -36,7 +38,8 @@ class Queen(override val color: Color) : Figure {
                     }
                     break
                 }
-                current = Position((current.column + deltaX), current.row + deltaY)
+                newColumnIndex += deltaX
+                newRowIndex += deltaY
             }
         }
 
