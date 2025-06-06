@@ -1,7 +1,6 @@
 package hwr.oop
 import hwr.oop.figures.*
 import hwr.oop.FEN
-
 /**
  * Represents a chessboard containing positions and their corresponding chess pieces.
  *

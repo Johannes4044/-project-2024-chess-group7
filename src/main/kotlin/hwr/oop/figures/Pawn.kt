@@ -69,7 +69,7 @@ class Pawn(private val pawnColor: Color) : Figure {
             if (attackLeftColumnIndex in Column.values().indices) {
                 val attackLeft = Position(Column.values()[attackLeftColumnIndex], Row.values()[attackRowIndex])
                 val leftTarget = board.getFigureAt(attackLeft)
-                if (leftTarget != null && leftTarget.color != this.color) {
+                if (leftTarget != null && leftTarget.color() != this.color()) {
                     moves.add(attackLeft)
                 }
 
@@ -78,7 +78,7 @@ class Pawn(private val pawnColor: Color) : Figure {
             if (attackRightColumnIndex in Column.values().indices) {
                 val attackRight = Position(Column.values()[attackRightColumnIndex], Row.values()[attackRowIndex])
                 val rightTarget = board.getFigureAt(attackRight)
-                if (rightTarget != null && rightTarget.color != this.color) {
+                if (rightTarget != null && rightTarget.color() != this.color()) {
                     moves.add(attackRight)
                 }
             }

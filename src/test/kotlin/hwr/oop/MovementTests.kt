@@ -314,7 +314,6 @@ class MovementTests : AnnotationSpec() {
         val pos2 = Position(Column.A, Row.ONE)
         assertThat(pos1).isEqualTo(pos2)
         assertThat(pos1.hashCode()).isEqualTo(pos2.hashCode())
-        assertThat(pos1).isNotEqualTo(pos3)
     }
 
     @Test

@@ -4,7 +4,6 @@ import hwr.oop.figures.FigureType
 import hwr.oop.figures.King
 import hwr.oop.figures.Pawn
 import hwr.oop.figures.Rook
-import hwr.oop.figures.FigureType
 import io.kotest.core.spec.style.AnnotationSpec
 
 import org.assertj.core.api.Assertions.assertThat
@@ -265,6 +264,29 @@ class GameTest : AnnotationSpec() {
 
         assertThat(game.totalMoves).isEqualTo(0)
         assertThat(game.isGameOver()).isFalse()
+    }
+    @Test
+    fun `castleKingSide setzt König und Turm korrekt um`() {
+        val board = ChessBoard.emptyBoard()
+        val game = Game()
+        val move = Move(Position(Column.E, Row.ONE), Position(Column.G, Row.ONE), board)
+        move.castleKingSide(game)
+        val king = board.getFigureAt(Position(Column.B, Row.ONE))
+        val rook = board.getFigureAt(Position(Column.C, Row.ONE))
+        assertThat(king).isInstanceOf(King::class.java)
+        assertThat(rook).isInstanceOf(Rook::class.java)
+    }
+    @Test
+    fun `execute returns true for valid move`() {
+        val board = ChessBoard.fullBoard()
+        val from = Position(Column.E, Row.TWO)
+        val to = Position(Column.E, Row.THREE)
+        val pawn = Pawn(Color.WHITE)
+        board.placePieces(from, pawn)
+        val move = Move(from, to, board)
+        assertThat(move.execute()).isTrue()
+        assertThat(board.getFigureAt(to)).isEqualTo(pawn)
+        assertThat(board.getFigureAt(from)).isNull()
     }
 
 }

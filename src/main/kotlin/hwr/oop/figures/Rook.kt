@@ -21,7 +21,6 @@ class Rook(private val rookColor: Color) : Figure {
         Direction.RIGHT
     )
 
-
     /**
      * Returns the color of the rook.
      *
@@ -50,31 +49,6 @@ class Rook(private val rookColor: Color) : Figure {
      */
     override fun availableTargets(from: Position, board: ChessBoard): List<Position> {
         return MoveUtils.slidingMoves(from, board, directionRooks, rookColor)
-        for (direction in directionsRook) {
-            val deltaX = direction.deltaX
-            val deltaY = direction.deltaY
-            var newColumnIndex = from.column.ordinal + deltaX
-            var newRowIndex = from.row.ordinal + deltaY
-
-            while (newColumnIndex in Column.values().indices && newRowIndex in Row.values().indices) {
-                val current = Position(
-                    Column.values()[newColumnIndex],
-                    Row.values()[newRowIndex]
-                )
-                val figureAtCurrent = board.getFigureAt(current)
-                if (figureAtCurrent == null) {
-                    moves.add(current)
-                } else {
-                    if (figureAtCurrent.color != this.color) {
-                        moves.add(current)
-                    }
-                    break // Stoppen, wenn eine Figur im Weg ist
-                }
-                newColumnIndex += deltaX
-                newRowIndex += deltaY
-            }
-        }
-        return moves
     }
 
 }

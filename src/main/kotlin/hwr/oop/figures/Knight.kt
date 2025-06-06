@@ -3,10 +3,11 @@ package hwr.oop.figures
 
 import hwr.oop.ChessBoard
 import hwr.oop.Color
+import hwr.oop.Row
+import hwr.oop.Column
 import hwr.oop.Direction
 import hwr.oop.Figure
 import hwr.oop.Position
-import kotlin.text.uppercase
 
 
 /**
@@ -16,7 +17,7 @@ import kotlin.text.uppercase
  */
 class Knight(private val knightColor: Color) : Figure {
     // List of all possible movement directions for a knight
-    private val directionKnights = listOf(
+    private val directionsKnight = listOf(
         Direction.KNIGHT_UP_LEFT,
         Direction.KNIGHT_UP_RIGHT,
         Direction.KNIGHT_DOWN_LEFT,

@@ -1,17 +1,10 @@
-// In MoveUtils.kt
 package hwr.oop.figures
 
 import hwr.oop.*
 
 object MoveUtils {
     /**
-     * Berechnet alle möglichen Zielpositionen für eine Figur, die sich beliebig weit in den angegebenen Richtungen bewegen kann.
-     *
-     * @param from Startposition der Figur.
-     * @param board Das aktuelle Schachbrett.
-     * @param directions Liste der Bewegungsrichtungen.
-     * @param color Farbe der Figur.
-     * @return Liste aller gültigen Zielpositionen.
+    * Calculates all possible target positions for a piece that can move any distance in the given directions.
      */
     fun slidingMoves(
         from: Position,
@@ -21,10 +14,10 @@ object MoveUtils {
     ): MutableList<Position> {
         val moves = mutableListOf<Position>()
         for (direction in directions) {
-            val deltaX = direction.deltaX
-            val deltaY = direction.deltaY
-            var current = Position.from(from.column + deltaX, from.row + deltaY)
-            while (current != null && current.column in 'a'..'h' && current.row in 1..8) {
+            var colIndex = from.column.ordinal + direction.deltaX
+            var rowIndex = from.row.ordinal + direction.deltaY
+            while (colIndex in Column.values().indices && rowIndex in Row.values().indices) {
+                val current = Position(Column.values()[colIndex], Row.values()[rowIndex])
                 val figureAtCurrent = board.getFigureAt(current)
                 if (figureAtCurrent == null) {
                     moves.add(current)
@@ -34,7 +27,8 @@ object MoveUtils {
                     }
                     break
                 }
-                current = Position.from(current.column + deltaX, current.row + deltaY)
+                colIndex += direction.deltaX
+                rowIndex += direction.deltaY
             }
         }
         return moves

@@ -4,6 +4,7 @@ import hwr.oop.figures.FigureType
 import hwr.oop.figures.King
 import hwr.oop.figures.Pawn
 import hwr.oop.figures.Rook
+import kotlin.collections.plusAssign
 
 /**
  * Represents a chess game, managing the board state, player turns, moves, and game logic.
@@ -23,7 +24,7 @@ class Game {
      * @return True if the move was successful, false otherwise.
      */
     fun makeMove(from: Position, to: Position, promotionFigure: FigureType? = null): Boolean {
-        val figure = board.getFigureAt(from)?: return false
+        val figure = board.getFigureAt(from) ?: return false
         val move = Move(from, to, board)
 
         if (move.isValid()) {
@@ -34,12 +35,12 @@ class Game {
             }
 
             if (board.getFigureAt(to) is Pawn &&
-                ((to.row == Row.EIGHT && figure.color == Color.WHITE) || (to.row == Row.ONE && figure.color == Color.BLACK))) {
+                ((to.row == Row.EIGHT && figure.color() == Color.WHITE) || (to.row == Row.ONE && figure.color() == Color.BLACK))) {
                 board.promoteFigure(to, promotionFigure)
             }
             currentPlayerIsWhite = !currentPlayerIsWhite
             return true
-        }else {
+        } else {
             return false
         }
     }
@@ -51,7 +52,7 @@ class Game {
      * @return A pair of lists: (whiteMoves, blackMoves).
      */
 
-    fun getAllMoves(board: ChessBoard): Pair<List<Position>, List<Position>> {
+    fun getAllMoves(board: ChessBoard): Pair<List<Position>, List<Position>> {  //gibt ein paar aus Listen wieder
         val whiteMoves = mutableListOf<Position>() //enthält alle weißen möglichen Züge
         val blackMoves = mutableListOf<Position>() //enthält alle schwarzen möglichen Züge
         val col = Column.values()
@@ -59,7 +60,7 @@ class Game {
 
         for (column in col) {
             for (row in row) {
-                val from = Position.valueOf("${column}${row}")
+                val from = Position(column, row)
                 val figure = board.getFigureAt(from)
 
                 if (figure != King(Color.WHITE) && figure != null && figure.symbol()[0].isLowerCase()) {
@@ -154,10 +155,10 @@ class Game {
         val kingW = King(Color.WHITE)
 
         if(kingFirstMove && rookFirstMove){
-            val kingPosition = Position.E1
-            val kingTo = Position.B1
-            val rookPosition = Position.A1
-            val rookTo = Position.C1
+            val kingPosition = Position(Column.E, Row.ONE)
+            val kingTo = Position(Column.B, Row.ONE)
+            val rookPosition = Position(Column.A, Row.ONE)
+            val rookTo = Position(Column.C, Row.ONE)
 
             board.placePieces(rookTo, rookW)
             board.placePieces(kingTo, kingW)

@@ -1,6 +1,5 @@
 package hwr.oop
 
-
 class FEN(fenString: String? = null) {
     private var piecePlacement: String = ""
     private var activeColor: String = ""
@@ -10,7 +9,7 @@ class FEN(fenString: String? = null) {
     private var fullmoveNumber: Int = 1
     init {
         fenString?.let { parseFen(it) }
-
+    }
     private fun parseFen(fen: String) {
         val parts = fen.trim().split(" ")
         require(parts.size == 6) { "FEN-String muss aus 6 Teilen bestehen." }
@@ -33,8 +32,6 @@ class FEN(fenString: String? = null) {
     fun setEnPassantTarget(value: String) { enPassantTarget = value }
     fun setHalfmoveClock(value: Int) { halfmoveClock = value }
     fun setFullmoveNumber(value: Int) { fullmoveNumber = value }
-
-
     fun toFenString(): String {
         return listOf(
             piecePlacement,
