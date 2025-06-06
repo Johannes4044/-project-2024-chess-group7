@@ -1,4 +1,4 @@
-# HWR OOP Schach Project
+ # HWR OOP Schach Project
 
 This repository contains a student project created for an ongoing lecture on object-oriented
 programming with Kotlin at HWR Berlin (summer term 2025).

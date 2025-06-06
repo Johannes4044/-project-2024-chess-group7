@@ -10,6 +10,7 @@ import hwr.oop.figures.Rook
 
 class ChessBoard(private val board: MutableMap<Position, Figure>) {
 
+
     companion object {
         fun emptyBoard(): ChessBoard = ChessBoard(mutableMapOf())
 
@@ -120,5 +121,9 @@ class ChessBoard(private val board: MutableMap<Position, Figure>) {
         if (whiteMoves.contains(Position) && isWhiteCastling) return false
         if (blackMoves.contains(Position) && !isWhiteCastling) return false
         return true
+    }
+
+    fun removePiece(position: Position) {
+        board.remove(position)
     }
 }

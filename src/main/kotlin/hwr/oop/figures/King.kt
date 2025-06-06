@@ -3,11 +3,12 @@ package hwr.oop.figures
 import hwr.oop.ChessBoard
 import hwr.oop.Directions
 import hwr.oop.Figure
+import hwr.oop.Game
 import hwr.oop.Position
 
 
 class King(override val isWhite: Boolean) : Figure {
-    private var firstMove = true
+    var firstMove = true
     private val directionsKing = listOf(
         Directions.UP,
         Directions.DOWN,
@@ -38,13 +39,6 @@ class King(override val isWhite: Boolean) : Figure {
         return moves
     }
 
-    fun kingCastle(): Boolean{
-        if (firstMove) {
-            firstMove = false
-            return true
-        }else{
-            return false
-        }
-    }
+
 
 }

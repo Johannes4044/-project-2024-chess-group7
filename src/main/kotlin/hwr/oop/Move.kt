@@ -32,21 +32,90 @@ data class Move(val from: Position, val to: Position, val board: ChessBoard) {
         return board.move(from, to)
     }
 
-    fun castleKingSide(Game: Game):Boolean{
-        val kingFirstMove = true
-        val rookFirstMove = true
-        val rookW = Rook(true)
-        val kingW = King(true)
+    fun whiteCastling(figure: Figure, game: Game): Boolean {
+        if (game.currentPlayerIsWhite){
+            if(to == Position('g',1)) { //white kingside
+                for(col in 'e'..'g'){
+                    if (!board.isSpaceFree(game, Position(col, 1),true))return false
+                }
+                for(col in 'f'..'g'){
+                    if (board.getFigureAt(Position(col,1)) != null) return false
+                }
 
-        if(kingFirstMove && rookFirstMove){
-            val kingPosition = Position('e', 1)
-            val kingTo = Position('b', 1)
-            val rookPosition = Position('a', 1)
-            val rookTo = Position('c', 1)
-
-            board.placePieces(rookTo, rookW)
-            board.placePieces(kingTo, kingW)
+                val rookFrom = Position('h', 1)
+                val toRook = Position('f', 1)
+                val rook = board.getFigureAt(rookFrom)
+                if(rook != null) {
+                    board.placePieces(to, figure)
+                    board.placePieces(toRook, rook)
+                    board.removePiece(from)
+                    board.removePiece(rookFrom)
+                    return true
+                }
+            }
+            if(to == Position('c',1)) { //white queenside
+                for(col in 'c'..'e'){
+                    if (!board.isSpaceFree(game, Position(col, 1),true))return false
+                }
+                for(col in 'b'..'d'){
+                    if (board.getFigureAt(Position(col,1)) != null) return false
+                }
+                val rookFrom = Position('a', 1)
+                val toRook = Position('d', 1)
+                val rook = board.getFigureAt(rookFrom)
+                if(rook != null) {
+                    board.placePieces(to, figure)
+                    board.placePieces(toRook, rook)
+                    board.removePiece(from)
+                    board.removePiece(rookFrom)
+                    return true
+                }
+            }
+            return false
         }
-        return true
+        return false
+    }
+
+    fun blackCastling(figure: Figure, game: Game): Boolean {
+        if (!game.currentPlayerIsWhite) {
+            if(to == Position('g',8)) { //black kingside
+                for(col in 'e'..'g'){
+                    if (!board.isSpaceFree(game, Position(col, 1),false))return false
+                }
+                for(col in 'f'..'g'){
+                    if (board.getFigureAt(Position(col,8)) != null) return false
+                }
+                val rookFrom = Position('h', 8)
+                val toRook = Position('f', 8)
+                val rook = board.getFigureAt(rookFrom)
+                if(rook != null) {
+                    board.placePieces(to, figure)
+                    board.placePieces(toRook, rook)
+                    board.removePiece(from)
+                    board.removePiece(rookFrom)
+                    return true
+                }
+            }
+            if(to == Position('c',8)) {//black queenside
+                for(col in 'c'..'e'){
+                    if (!board.isSpaceFree(game, Position(col, 1),false)) return false
+                }
+                for(col in 'b'..'d'){
+                    if (board.getFigureAt(Position(col,8)) != null) return false
+                }
+                val rookFrom = Position('a', 8)
+                val toRook = Position('d', 8)
+                val rook = board.getFigureAt(rookFrom)
+                if(rook != null) {
+                    board.placePieces(to, figure)
+                    board.placePieces(toRook, rook)
+                    board.removePiece(from)
+                    board.removePiece(rookFrom)
+                    return true
+                }
+            }
+            return false
+        }
+        return false
     }
 }

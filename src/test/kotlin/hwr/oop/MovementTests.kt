@@ -394,19 +394,36 @@ class MovementTests : AnnotationSpec() {
     }
 
     @Test
-    fun `Castling works`(){
+    fun `white Castling works`(){
         val game = Game()
-        val board= ChessBoard.emptyBoard()
-        val variable = Move(Position('e',1), Position('b',1), board)
-        val chessBoard = ChessBoard.emptyBoard()
+        val board = ChessBoard.emptyBoard()
         val king = King(true)
         val rook = Rook(true)
-        board.placePieces(Position('e', 1), king)
-        board.placePieces(Position('a', 1), rook)
-        variable.castleKingSide(game)
-        board.displayBoard()
-        assertThat(chessBoard.getFigureAt(Position('b', 1))).isEqualTo("k")
-        assertThat(chessBoard.getFigureAt(Position('c', 1))).isEqualTo("r")
+        val from = Position('e', 1)
+        val to = Position('g', 1)
+        val posRook = Position('h',1)
+        board.placePieces(from, king)
+        board.placePieces(posRook, rook)
+        assertThat(Move(from,to,board).whiteCastling(king, game )).isTrue()
+        assertThat(board.getFigureAt(to)).isEqualTo (king)
+        assertThat(board.getFigureAt(Position('f',1))).isEqualTo (rook)
+    }
+
+    @Test
+    fun `black castling works`(){
+        val game = Game()
+        game.currentPlayerIsWhite = false
+        val board = ChessBoard.emptyBoard()
+        val king = King(false)
+        val rook = Rook(false)
+        val from = Position('e', 8)
+        val to = Position('g', 8)
+        val posRook = Position('h',8)
+        board.placePieces(from, king)
+        board.placePieces(posRook, rook)
+        assertThat(Move(from,to,board).blackCastling(king, game )).isTrue()
+        assertThat(board.getFigureAt(to)).isEqualTo (king)
+        assertThat(board.getFigureAt(Position('f',8))).isEqualTo (rook)
     }
 }
 
