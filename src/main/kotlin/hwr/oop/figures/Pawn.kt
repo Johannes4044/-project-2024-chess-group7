@@ -1,9 +1,6 @@
 package hwr.oop.figures
 
-import hwr.oop.ChessBoard
-import hwr.oop.Color
-import hwr.oop.Figure
-import hwr.oop.Position
+import hwr.oop.*
 
 /**
  * Represents a Pawn chess piece.
@@ -41,35 +38,49 @@ class Pawn(private val pawnColor: Color) : Figure {
         val direction = if (color() == Color.WHITE) 1 else -1
         val startZeile = if (color() == Color.WHITE) 2 else 7
 
-        // Normal move: one square forward
-        val forwardOne = Position.valueOf("${from.column}${from.row + direction}")
-        if (board.getFigureAt(forwardOne) == null && forwardOne.row
-            in 1..8
-        ) {
-            moves.add(forwardOne)
-        }
 
-        // First move: two squares forward from starting position
-        val forwardTwo = Position.valueOf("${from.column}${from.row + 2 * direction}")
-        if (from.row == startZeile && board.getFigureAt(forwardOne) == null && board.getFigureAt(forwardTwo) == null) {
-            moves.add(forwardTwo)
-        }
-
-        // Capture moves: diagonally left and right
-        val attackLeft = Position.valueOf("${(from.column - 1)}${from.row + direction}")
-        val attackRight = Position.valueOf("${(from.column + 1)}${from.row + direction}")
-
-        if (attackLeft.column in 'a'..'h' && attackLeft.row in 1..8) {
-            val leftTarget = board.getFigureAt(attackLeft)
-            if (leftTarget != null && leftTarget.color() != this.color()) {
-                moves.add(attackLeft)
+        // Normaler Zug
+        val forwardOneIndex = from.row.ordinal + direction
+        if (forwardOneIndex in Row.values().indices) {
+            val forwardOne = Position(from.column, Row.values()[forwardOneIndex])
+            if (board.getFigureAt(forwardOne) == null) {
+                moves.add(forwardOne)
             }
         }
 
-        if (attackRight.column in 'a'..'h' && attackRight.row in 1..8) {
-            val rightTarget = board.getFigureAt(attackRight)
-            if (rightTarget != null && rightTarget.color() != this.color()) {
-                moves.add(attackRight)
+            // Erster Zug (2 Felder)
+            val forwardTwoIndex = from.row.ordinal + 2 * direction
+            if (forwardTwoIndex in Row.values().indices) {
+                val forwardOne = Position(from.column, Row.values()[forwardOneIndex])
+                val forwardTwo = Position(from.column, Row.values()[forwardTwoIndex])
+                if (board.getFigureAt(forwardTwo) == null && board.getFigureAt(forwardOne) == null) {
+                    if (from.row.ordinal + 1 == startZeile) {
+                        moves.add(forwardTwo)
+                    }
+                }
+        }
+
+        // Schlagzüge
+        val attackLeftColumnIndex = from.column.ordinal - 1
+        val attackRightColumnIndex = from.column.ordinal + 1
+        val attackRowIndex = from.row.ordinal + direction
+
+        if (attackRowIndex in Row.values().indices) {
+            if (attackLeftColumnIndex in Column.values().indices) {
+                val attackLeft = Position(Column.values()[attackLeftColumnIndex], Row.values()[attackRowIndex])
+                val leftTarget = board.getFigureAt(attackLeft)
+                if (leftTarget != null && leftTarget.color != this.color) {
+                    moves.add(attackLeft)
+                }
+
+            }
+
+            if (attackRightColumnIndex in Column.values().indices) {
+                val attackRight = Position(Column.values()[attackRightColumnIndex], Row.values()[attackRowIndex])
+                val rightTarget = board.getFigureAt(attackRight)
+                if (rightTarget != null && rightTarget.color != this.color) {
+                    moves.add(attackRight)
+                }
             }
         }
 

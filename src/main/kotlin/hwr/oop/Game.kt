@@ -34,7 +34,7 @@ class Game {
             }
 
             if (board.getFigureAt(to) is Pawn &&
-                ((to.row == 8 && figure.color() == Color.WHITE) || (to.row == 1 && figure.color() == Color.BLACK))) {
+                ((to.row == Row.EIGHT && figure.color == Color.WHITE) || (to.row == Row.ONE && figure.color == Color.BLACK))) {
                 board.promoteFigure(to, promotionFigure)
             }
             currentPlayerIsWhite = !currentPlayerIsWhite
@@ -50,11 +50,12 @@ class Game {
      * @param board The chessboard to analyze.
      * @return A pair of lists: (whiteMoves, blackMoves).
      */
+
     fun getAllMoves(board: ChessBoard): Pair<List<Position>, List<Position>> {
-        val whiteMoves = mutableListOf<Position>() // Contains all possible moves for white
-        val blackMoves = mutableListOf<Position>() // Contains all possible moves for black
-        val col = 'A'..'H'
-        val row = 1..8
+        val whiteMoves = mutableListOf<Position>() //enthält alle weißen möglichen Züge
+        val blackMoves = mutableListOf<Position>() //enthält alle schwarzen möglichen Züge
+        val col = Column.values()
+        val row = Row.values()
 
         for (column in col) {
             for (row in row) {

@@ -5,25 +5,34 @@ import hwr.oop.figures.Knight
 import hwr.oop.figures.Pawn
 import hwr.oop.figures.Queen
 import hwr.oop.figures.Rook
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.AnnotationSpec
 import org.assertj.core.api.Assertions.assertThat
 
 class MovementTests : AnnotationSpec() {
 
-
     @Test
     fun `Bishop available moves on empty board`() {
         val chessBoard = ChessBoard.emptyBoard()
         val bishop = Bishop(Color.WHITE)
-        chessBoard.placePieces(Position.D4, bishop)
-        val from = Position.D4
+        chessBoard.placePieces(Position(Column.D, Row.FOUR), bishop)
+        val from = Position(Column.D, Row.FOUR)
 
         val moves = bishop.availableTargets(from, chessBoard)
         assertThat(moves).containsExactlyInAnyOrder(
-            Position.E5, Position.F6, Position.G7, Position.H8,
-            Position.C5, Position.B6, Position.A7,
-            Position.E3, Position.F2, Position.G1,
-            Position.C3, Position.B2, Position.A1
+            Position(Column.E, Row.FIVE),
+            Position(Column.F, Row.SIX),
+            Position(Column.G, Row.SEVEN),
+            Position(Column.H, Row.EIGHT),
+            Position(Column.C, Row.FIVE),
+            Position(Column.B, Row.SIX),
+            Position(Column.A, Row.SEVEN),
+            Position(Column.E, Row.THREE),
+            Position(Column.F, Row.TWO),
+            Position(Column.G, Row.ONE),
+            Position(Column.C, Row.THREE),
+            Position(Column.B, Row.TWO),
+            Position(Column.A, Row.ONE)
         )
     }
 
@@ -33,16 +42,16 @@ class MovementTests : AnnotationSpec() {
         val bishop = Bishop(Color.WHITE)
         val blockingPawn = Pawn(Color.WHITE)
         val opponentPawn = Pawn(Color.BLACK)
-        chessBoard.placePieces(Position.D4, bishop)
-        chessBoard.placePieces(Position.E5, blockingPawn)
-        chessBoard.placePieces(Position.C3, opponentPawn)
-        val from = Position.D4
+        chessBoard.placePieces(Position(Column.D, Row.FOUR), bishop)
+        chessBoard.placePieces(Position(Column.E, Row.FIVE), blockingPawn)
+        chessBoard.placePieces(Position(Column.C, Row.THREE), opponentPawn)
+        val from = Position(Column.D, Row.FOUR)
 
         val moves = bishop.availableTargets(from, chessBoard)
         assertThat(moves).containsExactlyInAnyOrder(
-            Position.C3,
-            Position.E3, Position.F2, Position.G1,
-            Position.C5, Position.B6, Position.A7
+            Position(Column.C, Row.THREE),
+            Position(Column.E, Row.THREE), Position(Column.F, Row.TWO), Position(Column.G, Row.ONE),
+            Position(Column.C, Row.FIVE), Position(Column.B, Row.SIX), Position(Column.A, Row.SEVEN)
         )
     }
 
@@ -50,13 +59,19 @@ class MovementTests : AnnotationSpec() {
     fun `knight available moves on empty board`() {
         val chessBoard = ChessBoard.emptyBoard()
         val knight = Knight(Color.WHITE)
-        chessBoard.placePieces(Position.D4, knight)
-        val from = Position.D4
+        chessBoard.placePieces(Position(Column.D, Row.FOUR), knight)
+        val from = Position(Column.D, Row.FOUR)
 
         val moves = knight.availableTargets(from, chessBoard)
         assertThat(moves).containsExactlyInAnyOrder(
-            Position.B3, Position.B5, Position.C2, Position.C6,
-            Position.E2, Position.E6, Position.F3, Position.F5
+            Position(Column.B, Row.THREE),
+            Position(Column.B, Row.FIVE),
+            Position(Column.C, Row.TWO),
+            Position(Column.C, Row.SIX),
+            Position(Column.E, Row.TWO),
+            Position(Column.E, Row.SIX),
+            Position(Column.F, Row.THREE),
+            Position(Column.F, Row.FIVE)
         )
     }
 
@@ -66,15 +81,20 @@ class MovementTests : AnnotationSpec() {
         val knight = Knight(Color.WHITE)
         val blockingPawn = Pawn(Color.WHITE)
         val opponentPawn = Pawn(Color.BLACK)
-        chessBoard.placePieces(Position.D4, knight)
-        chessBoard.placePieces(Position.B3, blockingPawn)
-        chessBoard.placePieces(Position.F5, opponentPawn)
-        val from = Position.D4
+        chessBoard.placePieces(Position(Column.D, Row.FOUR), knight)
+        chessBoard.placePieces(Position(Column.B, Row.THREE), blockingPawn)
+        chessBoard.placePieces(Position(Column.F, Row.FIVE), opponentPawn)
+        val from = Position(Column.D, Row.FOUR)
 
         val moves = knight.availableTargets(from, chessBoard)
         assertThat(moves).containsExactlyInAnyOrder(
-            Position.B5, Position.C2, Position.C6,
-            Position.E2, Position.E6, Position.F3, Position.F5
+            Position(Column.B, Row.FIVE),
+            Position(Column.C, Row.TWO),
+            Position(Column.C, Row.SIX),
+            Position(Column.E, Row.TWO),
+            Position(Column.E, Row.SIX),
+            Position(Column.F, Row.THREE),
+            Position(Column.F, Row.FIVE)
         )
     }
 
@@ -82,12 +102,12 @@ class MovementTests : AnnotationSpec() {
     fun `Pawn available moves on empty board`() {
         val chessBoard = ChessBoard.emptyBoard()
         val pawn = Pawn(Color.WHITE)
-        chessBoard.placePieces(Position.A2, pawn)
-        val from = Position.A2
+        chessBoard.placePieces(Position(Column.A, Row.TWO), pawn)
+        val from = Position(Column.A, Row.TWO)
 
         val moves = pawn.availableTargets(from, chessBoard)
         assertThat(moves).containsExactlyInAnyOrder(
-            Position.A3, Position.A4
+            Position(Column.A, Row.THREE), Position(Column.A, Row.FOUR)
         )
     }
 
@@ -98,90 +118,85 @@ class MovementTests : AnnotationSpec() {
         val blockingPawn = Pawn(Color.WHITE)
         val opponentPawn = Pawn(Color.BLACK)
         val opponentPawn2 = Pawn(Color.BLACK)
-        chessBoard.placePieces(Position.B2, pawn)
-        chessBoard.placePieces(Position.B3, blockingPawn)
-        chessBoard.placePieces(Position.C3, opponentPawn)
-        chessBoard.placePieces(Position.A3, opponentPawn2)
-        val from = Position.B2
+        chessBoard.placePieces(Position(Column.B, Row.TWO), pawn)
+        chessBoard.placePieces(Position(Column.B, Row.THREE), blockingPawn)
+        chessBoard.placePieces(Position(Column.C, Row.THREE), opponentPawn)
+        chessBoard.placePieces(Position(Column.A, Row.THREE), opponentPawn2)
+        val from = Position(Column.B, Row.TWO)
 
         val moves = pawn.availableTargets(from, chessBoard)
         assertThat(moves).containsExactlyInAnyOrder(
-            Position.C3, Position.A3,
+            Position(Column.C, Row.THREE), Position(Column.A, Row.THREE),
         )
     }
 
     @Test
-
     fun `Queen available moves on empty board`() {
         val chessBoard = ChessBoard.emptyBoard()
         val queen = Queen(Color.WHITE)
-        chessBoard.placePieces(Position.D4, queen)
-        val from = Position.D4
+        chessBoard.placePieces(Position(Column.D, Row.FOUR), queen)
+        val from = Position(Column.D, Row.FOUR)
 
         val moves = queen.availableTargets(from, chessBoard)
         assertThat(moves).containsExactlyInAnyOrder(
             // Vertikal
-            Position.D1,
-            Position.D2,
-            Position.D3,
-            Position.D5,
-            Position.D6,
-            Position.D7,
-            Position.D8,
+            Position(Column.D, Row.ONE),
+            Position(Column.D, Row.TWO),
+            Position(Column.D, Row.THREE),
+            Position(Column.D, Row.FIVE),
+            Position(Column.D, Row.SIX),
+            Position(Column.D, Row.SEVEN),
+            Position(Column.D, Row.EIGHT),
             // Horizontal
-            Position.A4,
-            Position.B4,
-            Position.C4,
-            Position.E4,
-            Position.F4,
-            Position.G4,
-            Position.H4,
+            Position(Column.A, Row.FOUR),
+            Position(Column.B, Row.FOUR),
+            Position(Column.C, Row.FOUR),
+            Position(Column.E, Row.FOUR),
+            Position(Column.F, Row.FOUR),
+            Position(Column.G, Row.FOUR),
+            Position(Column.H, Row.FOUR),
             // Diagonal
-            Position.A1,
-            Position.B2,
-            Position.C3,
-            Position.E5,
-            Position.F6,
-            Position.G7,
-            Position.H8,
-            Position.A7,
-            Position.B6,
-            Position.C5,
-            Position.E3,
-            Position.F2,
-            Position.G1
+            Position(Column.A, Row.ONE),
+            Position(Column.B, Row.TWO),
+            Position(Column.C, Row.THREE),
+            Position(Column.E, Row.FIVE),
+            Position(Column.F, Row.SIX),
+            Position(Column.G, Row.SEVEN),
+            Position(Column.H, Row.EIGHT),
+            Position(Column.A, Row.SEVEN),
+            Position(Column.B, Row.SIX),
+            Position(Column.C, Row.FIVE),
+            Position(Column.E, Row.THREE),
+            Position(Column.F, Row.TWO),
+            Position(Column.G, Row.ONE)
         )
-    }
-
-    fun `Queen available moves on filled board`() {
-        val chessBoard = ChessBoard.emptyBoard()
     }
 
     @Test
     fun `Rook available moves on empty board`() {
         val chessBoard = ChessBoard.emptyBoard()
         val rook = Rook(Color.WHITE)
-        chessBoard.placePieces(Position.D4, rook)
-        val from = Position.D4
+        chessBoard.placePieces(Position(Column.D, Row.FOUR), rook)
+        val from = Position(Column.D, Row.FOUR)
 
         val moves = rook.availableTargets(from, chessBoard)
         assertThat(moves).containsExactlyInAnyOrder(
             // Vertikal
-            Position.D1,
-            Position.D2,
-            Position.D3,
-            Position.D5,
-            Position.D6,
-            Position.D7,
-            Position.D8,
+            Position(Column.D, Row.ONE),
+            Position(Column.D, Row.TWO),
+            Position(Column.D, Row.THREE),
+            Position(Column.D, Row.FIVE),
+            Position(Column.D, Row.SIX),
+            Position(Column.D, Row.SEVEN),
+            Position(Column.D, Row.EIGHT),
             // Horizontal
-            Position.A4,
-            Position.B4,
-            Position.C4,
-            Position.E4,
-            Position.F4,
-            Position.G4,
-            Position.H4
+            Position(Column.A, Row.FOUR),
+            Position(Column.B, Row.FOUR),
+            Position(Column.C, Row.FOUR),
+            Position(Column.E, Row.FOUR),
+            Position(Column.F, Row.FOUR),
+            Position(Column.G, Row.FOUR),
+            Position(Column.H, Row.FOUR)
         )
     }
 
@@ -189,10 +204,10 @@ class MovementTests : AnnotationSpec() {
     @Test
     fun `isValid returns true for valid move`() {
         val board = ChessBoard.emptyBoard()
-        val from = Position.E2
-        val to = Position.E3
+        val from = Position(Column.E, Row.TWO)
+        val to = Position(Column.E, Row.THREE)
         val pawn = Pawn(Color.WHITE)
-        board.placePieces(Position.E2, pawn)
+        board.placePieces(Position(Column.E, Row.TWO), pawn)
         val move = Move(from, to, board)
         assertThat(move.isValid()).isTrue()
     }
@@ -200,10 +215,10 @@ class MovementTests : AnnotationSpec() {
     @Test
     fun `isValid returns false for invalid move`() {
         val board = ChessBoard.emptyBoard()
-        val from = Position.E2
-        val to = Position.E5
+        val from = Position(Column.E, Row.TWO)
+        val to = Position(Column.E, Row.FIVE)
         val pawn = Pawn(Color.WHITE)
-        board.placePieces(Position.E2, pawn)
+        board.placePieces(Position(Column.E, Row.TWO), pawn)
         val move = Move(from, to, board)
         assertThat(move.isValid()).isFalse()
     }
@@ -211,8 +226,8 @@ class MovementTests : AnnotationSpec() {
     @Test
     fun `isValid returns false if no figure at from`() {
         val board = ChessBoard.emptyBoard()
-        val from = Position.E2
-        val to = Position.E3
+        val from = Position(Column.E, Row.TWO)
+        val to = Position(Column.E, Row.THREE)
         val move = Move(from, to, board)
         assertThat(move.isValid()).isFalse()
     }
@@ -220,12 +235,12 @@ class MovementTests : AnnotationSpec() {
     @Test
     fun `isCapture returns true if target is enemy`() {
         val board = ChessBoard.emptyBoard()
-        val from = Position.E2
-        val to = Position.E3
+        val from = Position(Column.E, Row.TWO)
+        val to = Position(Column.E, Row.THREE)
         val whitePawn = Pawn(Color.WHITE)
         val blackPawn = Pawn(Color.BLACK)
-        board.placePieces(Position.E2, whitePawn)
-        board.placePieces(Position.E3, blackPawn)
+        board.placePieces(Position(Column.E, Row.TWO), whitePawn)
+        board.placePieces(Position(Column.E, Row.THREE), blackPawn)
         val move = Move(from, to, board)
         assertThat(move.isCapture()).isTrue()
     }
@@ -233,12 +248,12 @@ class MovementTests : AnnotationSpec() {
     @Test
     fun `isCapture returns false if target is same color`() {
         val board = ChessBoard.emptyBoard()
-        val from = Position.E2
-        val to = Position.E3
+        val from = Position(Column.E, Row.TWO)
+        val to = Position(Column.E, Row.THREE)
         val whitePawn1 = Pawn(Color.WHITE)
         val whitePawn2 = Pawn(Color.WHITE)
-        board.placePieces(Position.E2, whitePawn1)
-        board.placePieces(Position.E3, whitePawn2)
+        board.placePieces(Position(Column.E, Row.TWO), whitePawn1)
+        board.placePieces(Position(Column.E, Row.THREE), whitePawn2)
         val move = Move(from, to, board)
         assertThat(move.isCapture()).isFalse()
     }
@@ -246,10 +261,10 @@ class MovementTests : AnnotationSpec() {
     @Test
     fun `isCapture returns false if target is empty`() {
         val board = ChessBoard.emptyBoard()
-        val from = Position.E2
-        val to = Position.E3
+        val from = Position(Column.E, Row.TWO)
+        val to = Position(Column.E, Row.THREE)
         val whitePawn = Pawn(Color.WHITE)
-        board.placePieces(Position.E2, whitePawn)
+        board.placePieces(Position(Column.E, Row.TWO), whitePawn)
         val move = Move(from, to, board)
         assertThat(move.isCapture()).isFalse()
     }
@@ -257,8 +272,8 @@ class MovementTests : AnnotationSpec() {
     @Test
     fun `execute returns true for valid move`() {
         val board = ChessBoard.fullBoard()
-        val from = Position.E2
-        val to = Position.E3
+        val from = Position(Column.E, Row.TWO)
+        val to = Position(Column.E, Row.THREE)
         val pawn = Pawn(Color.WHITE)
         board.placePieces(from, pawn)
         val move = Move(from, to, board)
@@ -270,30 +285,33 @@ class MovementTests : AnnotationSpec() {
     @Test
     fun `execute returns false for invalid move`() {
         val board = ChessBoard.emptyBoard()
-        val from = Position.E2
-        val to = Position.E5
-        val pawn = Pawn(Color.WHITE)
-        board.placePieces(Position.E2, pawn)
+        val from = Position(Column.E, Row.TWO)
+        val to = Position(Column.E, Row.FIVE)
+        val whitePawn = Pawn(Color.WHITE)
+        board.placePieces(Position(Column.E, Row.TWO), whitePawn)
         val move = Move(from, to, board)
-        assertThat(move.execute()).isFalse()
-        assertThat(board.getFigureAt(from)).isEqualTo(pawn)
+        shouldThrow<IllegalStateException> {
+            move.execute()
+        }.apply {
+            assertThat(message).isEqualTo("Ungültiger Zug von ETWO nach EFIVE")
+        }
+        assertThat(board.getFigureAt(from)).isEqualTo(whitePawn)
         assertThat(board.getFigureAt(to)).isNull()
     }
 
-    // Position Test
+// Position Test
 
     @Test
     fun `Position creates correct object`() {
-        val pos = Position.E4
-        assertThat(pos.column).isEqualTo('e')
-        assertThat(pos.row).isEqualTo(4)
+        val pos = Position(Column.E, Row.FOUR)
+        assertThat(pos.column).isEqualTo(Column.E)
+        assertThat(pos.row).isEqualTo(Row.FOUR)
     }
 
     @Test
     fun `Position equals and hashCode work correctly`() {
-        val pos1 = Position.A1
-        val pos2 = Position.A1
-        val pos3 = Position.B2
+        val pos1 = Position(Column.A, Row.ONE)
+        val pos2 = Position(Column.A, Row.ONE)
         assertThat(pos1).isEqualTo(pos2)
         assertThat(pos1.hashCode()).isEqualTo(pos2.hashCode())
         assertThat(pos1).isNotEqualTo(pos3)
@@ -301,32 +319,32 @@ class MovementTests : AnnotationSpec() {
 
     @Test
     fun `toString returns correct format`() {
-        val pos = Position.D5
-        assertThat(pos.toString()).isEqualTo("d5")
+        val pos = Position(Column.D, Row.FIVE)
+        assertThat(pos.toString()).isEqualTo("DFIVE")
     }
 
     @Test
     fun `toString for Move returns correct format`() {
         val board = ChessBoard.emptyBoard()
-        val from = Position.E2
-        val to = Position.E3
+        val from = Position(Column.E, Row.TWO)
+        val to = Position(Column.E, Row.THREE)
         val move = Move(from, to, board)
-        assertThat(move.toString()).isEqualTo("Zug von e2 nach e3")
+        assertThat(move.toString()).isEqualTo("Zug von ETWO nach ETHREE")
     }
 
     @Test
     fun `isCapture returns True`() {
         val board = ChessBoard.emptyBoard()
-        val from = Position.E2
-        val from2 = Position.A3
-        val to = Position.F3
-        val to2 = Position.A4
+        val from = Position(Column.E, Row.TWO)
+        val from2 = Position(Column.A, Row.THREE)
+        val to = Position(Column.F, Row.THREE)
+        val to2 = Position(Column.A, Row.FOUR)
         val whitePawn = Pawn(Color.WHITE)
         val whitePawn2 = Pawn(Color.WHITE)
         val blackPawn = Pawn(Color.BLACK)
-        board.placePieces(Position.E2, whitePawn)
-        board.placePieces(Position.F3, blackPawn)
-        board.placePieces(Position.A3, whitePawn2)
+        board.placePieces(Position(Column.E, Row.TWO), whitePawn)
+        board.placePieces(Position(Column.F, Row.THREE), blackPawn)
+        board.placePieces(Position(Column.A, Row.THREE), whitePawn2)
 
         val move = Move(from, to, board)
         val move2 = Move(from2, to2, board)
@@ -334,11 +352,12 @@ class MovementTests : AnnotationSpec() {
         assertThat(move.isCapture()).isTrue()
         assertThat(move2.isCapture()).isFalse()
     }
+
     @Test
     fun `isCapture returns true if target is opponent figure`() {
         val board = ChessBoard.emptyBoard()
-        val from = Position.E2
-        val to = Position.E3
+        val from = Position(Column.E, Row.TWO)
+        val to = Position(Column.E, Row.THREE)
         val whitePawn = Pawn(Color.WHITE)
         val blackPawn = Pawn(Color.BLACK)
         board.placePieces(from, whitePawn)
@@ -350,8 +369,8 @@ class MovementTests : AnnotationSpec() {
     @Test
     fun `isCapture returns false if destination is empty`() {
         val board = ChessBoard.emptyBoard()
-        val from = Position.E2
-        val to = Position.E3
+        val from = Position(Column.E, Row.TWO)
+        val to = Position(Column.E, Row.THREE)
         val whitePawn = Pawn(Color.WHITE)
         board.placePieces(from, whitePawn)
         val move = Move(from, to, board)
@@ -361,8 +380,8 @@ class MovementTests : AnnotationSpec() {
     @Test
     fun `execute returns true for valid move and removes figure from start field`() {
         val board = ChessBoard.fullBoard()
-        val from = Position.E2
-        val to = Position.E3
+        val from = Position(Column.E, Row.TWO)
+        val to = Position(Column.E, Row.THREE)
         val whitePawn = Pawn(Color.WHITE)
         board.placePieces(from, whitePawn)
         val move = Move(from, to, board)
@@ -374,15 +393,18 @@ class MovementTests : AnnotationSpec() {
     @Test
     fun `execute returns false for invalid move and does not change anything`() {
         val board = ChessBoard.emptyBoard()
-        val from = Position.E2
-        val to = Position.E5
+        val from = Position(Column.E, Row.TWO)
+        val to = Position(Column.E, Row.FIVE)
         val whitePawn = Pawn(Color.WHITE)
         board.placePieces(from, whitePawn)
         val move = Move(from, to, board)
-        assertThat(move.execute()).isFalse()
+        shouldThrow<IllegalStateException> {
+            move.execute()
+        }.apply {
+            assertThat(message).isEqualTo("Ungültiger Zug von ETWO nach EFIVE")
+        }
         assertThat(board.getFigureAt(from)).isEqualTo(whitePawn)
         assertThat(board.getFigureAt(to)).isNull()
     }
 }
-
 

@@ -50,5 +50,25 @@ data class Move(val from: Position, val to: Position, val board: ChessBoard) {
         }
         return board.move(from, to)
     }
-}
+
+
+    fun castleKingSide(game: Game):Boolean{
+        val kingFirstMove = true
+        val rookFirstMove = true
+        val rookW = Rook(Color.WHITE)
+        val kingW = King(Color.WHITE)
+
+        if(kingFirstMove && rookFirstMove){
+            val kingPosition = Position(Column.E, Row.ONE)
+            val kingTo = Position(Column.B, Row.ONE)
+            val rookPosition = Position(Column.A, Row.ONE)
+            val rookTo = Position(Column.C, Row.ONE)
+
+            board.placePieces(rookTo, rookW)
+            board.placePieces(kingTo, kingW)
+        }
+        return true
+    }
+   }
+ }
 

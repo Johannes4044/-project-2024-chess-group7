@@ -6,6 +6,7 @@ import hwr.oop.Direction
 import hwr.oop.Figure
 import hwr.oop.Position
 
+
 /**
  * Represents a Queen chess piece.
  *
@@ -31,6 +32,7 @@ class Queen(private val queenColor: Color) : Figure {
      */
     override fun color() = queenColor
 
+
     /**
      * Returns the symbol representing the queen.
      * "d" for white, "D" for black.
@@ -38,6 +40,32 @@ class Queen(private val queenColor: Color) : Figure {
      * @return The symbol of the queen.
      */
     override fun symbol() = if (queenColor == Color.WHITE) "d" else "D"
+
+        for (direction in directionsQueen) {
+            val deltaX = direction.deltaX
+            val deltaY = direction.deltaY
+            var newColumnIndex = from.column.ordinal + deltaX
+            var newRowIndex = from.row.ordinal + deltaY
+
+            while (newColumnIndex in Column.values().indices && newRowIndex in Row.values().indices) {
+                val current = Position(
+                    Column.values()[newColumnIndex],
+                    Row.values()[newRowIndex]
+                )
+                val destination = board.getFigureAt(current)
+                if (destination == null) {
+                    moves.add(current)
+                } else {
+                    if (destination.color != this.color) {
+                        moves.add(current)
+                    }
+                    break
+                }
+                newColumnIndex += deltaX
+                newRowIndex += deltaY
+            }
+        }
+
 
     /**
      * Calculates all valid target positions for the queen from the given position on the current chessboard.

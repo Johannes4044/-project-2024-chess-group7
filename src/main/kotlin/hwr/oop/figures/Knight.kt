@@ -1,11 +1,13 @@
 package hwr.oop.figures
 
+
 import hwr.oop.ChessBoard
 import hwr.oop.Color
 import hwr.oop.Direction
 import hwr.oop.Figure
 import hwr.oop.Position
 import kotlin.text.uppercase
+
 
 /**
  * Represents a Knight chess piece.
@@ -53,13 +55,19 @@ class Knight(private val knightColor: Color) : Figure {
     override fun availableTargets(from: Position, board: ChessBoard): List<Position> {
         val moves = mutableListOf<Position>()
 
-        // Iterates over all possible knight moves
-        for (direction in directionKnights) {
+
+        for (direction in directionsKnight) {
             val deltaX = direction.deltaX
             val deltaY = direction.deltaY
-            val target = Position.valueOf((from.column + deltaX).toString() + (from.row + deltaY).toString().uppercase())
-            // Checks if the target position is within the valid chessboard boundaries
-            if (target.column in 'a'..'h' && target.row in 1..8) {
+            val newColumnIndex = from.column.ordinal + deltaX
+            val newRowIndex = from.row.ordinal + deltaY
+
+            if (newColumnIndex in Column.values().indices && newRowIndex in Row.values().indices) {
+                val target = Position(
+                    Column.values()[newColumnIndex],
+                    Row.values()[newRowIndex]
+                )
+                
                 val destination = board.getFigureAt(target)
                 // Adds the target if it is empty or occupied by an opponent's piece
                 if (destination == null || destination.color() != this.color()) {

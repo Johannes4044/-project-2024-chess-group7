@@ -52,9 +52,14 @@ class King(private val kingColor: Color) : Figure {
         for (direction in directionKings) {
             val deltaX = direction.deltaX
             val deltaY = direction.deltaY
-            val target = Position.valueOf("${(from.column + deltaX)}${(from.row + deltaY)}".uppercase())
-            // Checks if the target position is within the valid chessboard boundaries
-            if (target.column in 'a'..'h' && target.row in 1..8) {
+            val newColumnIndex = from.column.ordinal + deltaX
+            val newRowIndex = from.row.ordinal + deltaY
+
+            if (newColumnIndex in Column.values().indices && newRowIndex in Row.values().indices) {
+                val target = Position(
+                    Column.values()[newColumnIndex],
+                    Row.values()[newRowIndex]
+                )
                 val destination = board.getFigureAt(target)
                 // Adds the target if it is empty or occupied by an opponent's piece
                 if (destination == null || destination.color() != this.color()) {
