@@ -3,7 +3,6 @@ package hwr.oop
 import hwr.oop.figures.*
 import io.kotest.core.spec.style.AnnotationSpec
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.assertThrows
 
 class ChessBoardTests : AnnotationSpec() {
     @Test
@@ -13,58 +12,40 @@ class ChessBoardTests : AnnotationSpec() {
     }
 
     @Test
-    fun `FEN string is generated correctly`() {
-        val chessBoard = ChessBoard.fullBoard()
-        val fenString = FEN().toFEN(chessBoard)
-        assertThat(fenString).isEqualTo("TSLDKLST/BBBBBBBB/8/8/8/8/bbbbbbbb/tsldklst")
+    fun `FEN string is parsed correctly for full board`() {
+        val fenString = "TSLDKLST/BBBBBBBB/8/8/8/8/bbbbbbbb/tsldklst w KQkq - 0 1"
+        val fen = FEN(fenString)
+        assertThat(fen.getPiecePlacement()).isEqualTo("TSLDKLST/BBBBBBBB/8/8/8/8/bbbbbbbb/tsldklst")
+        assertThat(fen.getActiveColor()).isEqualTo("w")
+        assertThat(fen.getCastlingAvailability()).isEqualTo("KQkq")
+        assertThat(fen.getEnPassantTarget()).isEqualTo("-")
+        assertThat(fen.getHalfmoveClock()).isEqualTo(0)
+        assertThat(fen.getFullmoveNumber()).isEqualTo(1)
     }
 
     @Test
-    fun `FEN string is generated correctly for empty board`() {
-        val chessBoard = ChessBoard.emptyBoard()
-        val fenString = FEN().toFEN(chessBoard)
-        assertThat(fenString).isEqualTo("8/8/8/8/8/8/8/8")
-        assertThat(chessBoard.getFigureAt(Position.D1)).isNull()
-        assertThat(chessBoard.getFigureAt(Position.E2)).isNull()
+    fun `FEN string is parsed correctly for empty board`() {
+        val fenString = "8/8/8/8/8/8/8/8 b - - 10 20"
+        val fen = FEN(fenString)
+        assertThat(fen.getPiecePlacement()).isEqualTo("8/8/8/8/8/8/8/8")
+        assertThat(fen.getActiveColor()).isEqualTo("b")
+        assertThat(fen.getCastlingAvailability()).isEqualTo("-")
+        assertThat(fen.getEnPassantTarget()).isEqualTo("-")
+        assertThat(fen.getHalfmoveClock()).isEqualTo(10)
+        assertThat(fen.getFullmoveNumber()).isEqualTo(20)
     }
 
     @Test
-    fun `FEN string is generated correctly for custom board`() {
-        val chessBoard = ChessBoard.emptyBoard()
-        chessBoard.placePieces(Position.A1, Rook(Color.WHITE))
-        chessBoard.placePieces(Position.B2, Knight(Color.BLACK))
-        chessBoard.placePieces(Position.C3, Bishop(Color.WHITE))
-
-        val fenString = FEN().toFEN(chessBoard)
-        assertThat(fenString).isEqualTo("8/8/8/8/8/2l5/1S6/t7")
+    fun `FEN string is parsed correctly for custom board`() {
+        val fenString = "8/8/8/8/8/2l5/1S6/t7 w - e3 5 7"
+        val fen = FEN(fenString)
+        assertThat(fen.getPiecePlacement()).isEqualTo("8/8/8/8/8/2l5/1S6/t7")
+        assertThat(fen.getActiveColor()).isEqualTo("w")
+        assertThat(fen.getCastlingAvailability()).isEqualTo("-")
+        assertThat(fen.getEnPassantTarget()).isEqualTo("e3")
+        assertThat(fen.getHalfmoveClock()).isEqualTo(5)
+        assertThat(fen.getFullmoveNumber()).isEqualTo(7)
     }
-
-//    @Test
-//    fun `FEN to board conversion works correctly`() {
-//        val fenString = "TSLDKLST/BBBBBBBB/8/8/8/8/bbbbbbbb/tsldklst"
-//        val chessBoard = ChessBoard.fromFEN(fenString)
-//        assertThat(chessBoard.getFigureAt(Position.D1)?.symbol()).isEqualTo("d")
-//        assertThat(chessBoard.getFigureAt(Position.E2)?.symbol()).isEqualTo("b")
-//    }
-//
-//    @Test
-//    fun `FEN to board conversion works correctly for empty board`() {
-//        val fenString = "8/8/8/8/8/8/8/8"
-//        val chessBoard = ChessBoard.fromFEN(fenString)
-//        assertThat(chessBoard.getFigureAt(Position.D1)).isNull()
-//        assertThat(chessBoard.getFigureAt(Position.E2)).isNull()
-//    }
-//
-//    @Test
-//    fun `fromFEN throws IllegalArgumentException for invalid FEN`() {
-//        val invalidFEN = "invalidFENString"
-//
-//        val exception = assertThrows<IllegalArgumentException> {
-//            ChessBoard.fromFEN(invalidFEN)
-//        }
-//
-//        assertThat(exception.message?.contains("Invalid figure in FEN") == true)
-//    }
 
     @Test
     fun `Promotion works for every white figure`() {

@@ -1,6 +1,6 @@
-import hwr.oop.ChessBoard
-import hwr.oop.Color
-import hwr.oop.Position
+package hwr.oop
+
+
 import hwr.oop.figures.Bishop
 import hwr.oop.figures.King
 import hwr.oop.figures.Knight
@@ -60,7 +60,6 @@ class FigureSymbolTest : FunSpec({
         board.placePieces(from, king)
 
         val moves = king.availableTargets(from, board)
-
         possibleMoves.forEach { to ->
             moves shouldContain to
         }
