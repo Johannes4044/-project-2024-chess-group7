@@ -26,12 +26,6 @@ class FEN(fenString: String? = null) {
     fun getEnPassantTarget() = enPassantTarget
     fun getHalfmoveClock() = halfmoveClock
     fun getFullmoveNumber() = fullmoveNumber
-    fun setPiecePlacement(value: String) { piecePlacement = value }
-    fun setActiveColor(value: String) { activeColor = value }
-    fun setCastlingAvailability(value: String) { castlingAvailability = value }
-    fun setEnPassantTarget(value: String) { enPassantTarget = value }
-    fun setHalfmoveClock(value: Int) { halfmoveClock = value }
-    fun setFullmoveNumber(value: Int) { fullmoveNumber = value }
     fun toFenString(): String {
         return listOf(
             piecePlacement,

@@ -269,37 +269,19 @@ class MovementTests : AnnotationSpec() {
         assertThat(move.isCapture()).isFalse()
     }
 
+    // Position Test
+
     @Test
-    fun `execute returns true for valid move`() {
-        val board = ChessBoard.fullBoard()
-        val from = Position(Column.E, Row.TWO)
-        val to = Position(Column.E, Row.THREE)
-        val pawn = Pawn(Color.WHITE)
-        board.placePieces(from, pawn)
-        val move = Move(from, to, board)
-        assertThat(move.execute()).isTrue()
-        assertThat(board.getFigureAt(to)).isEqualTo(pawn)
-        assertThat(board.getFigureAt(from)).isNull()
+    fun `from returns null for invalid column`() {
+        val position = Position.from('Z', 1)
+        assertThat(position).isNull()
     }
 
     @Test
-    fun `execute returns false for invalid move`() {
-        val board = ChessBoard.emptyBoard()
-        val from = Position(Column.E, Row.TWO)
-        val to = Position(Column.E, Row.FIVE)
-        val whitePawn = Pawn(Color.WHITE)
-        board.placePieces(Position(Column.E, Row.TWO), whitePawn)
-        val move = Move(from, to, board)
-        shouldThrow<IllegalStateException> {
-            move.execute()
-        }.apply {
-            assertThat(message).isEqualTo("Ungültiger Zug von ETWO nach EFIVE")
-        }
-        assertThat(board.getFigureAt(from)).isEqualTo(whitePawn)
-        assertThat(board.getFigureAt(to)).isNull()
+    fun `from returns null for invalid row`() {
+        val position = Position.from('A', 99)
+        assertThat(position).isNull()
     }
-
-// Position Test
 
     @Test
     fun `Position creates correct object`() {
@@ -377,33 +359,32 @@ class MovementTests : AnnotationSpec() {
     }
 
     @Test
-    fun `execute returns true for valid move and removes figure from start field`() {
-        val board = ChessBoard.fullBoard()
-        val from = Position(Column.E, Row.TWO)
-        val to = Position(Column.E, Row.THREE)
-        val whitePawn = Pawn(Color.WHITE)
-        board.placePieces(from, whitePawn)
-        val move = Move(from, to, board)
-        assertThat(move.execute()).isTrue()
-        assertThat(board.getFigureAt(from)).isNull()
-        assertThat(board.getFigureAt(to)).isEqualTo(whitePawn)
+     fun `makeMove throws exception for invalid move and does not change board`() {
+         val board = ChessBoard.emptyBoard()
+         val from = Position(Column.E, Row.TWO)
+         val to = Position(Column.E, Row.FIVE)
+         val whitePawn = Pawn(Color.WHITE)
+         board.placePieces(from, whitePawn)
+         val game = Game()
+         game.board = board
+         val exception = shouldThrow<IllegalStateException> {
+             game.makeMove(from, to)
+         }
+         assertThat(exception.message).isEqualTo("Invalid move from ETWO to EFIVE")
+         assertThat(board.getFigureAt(from)).isEqualTo(whitePawn)
+         assertThat(board.getFigureAt(to)).isNull()
+     }
+
+    @Test
+    fun `from returns null for invalid column Z`() {
+        val position = Position.from('Z', 1)
+        assertThat(position).isNull()
     }
 
     @Test
-    fun `execute returns false for invalid move and does not change anything`() {
-        val board = ChessBoard.emptyBoard()
-        val from = Position(Column.E, Row.TWO)
-        val to = Position(Column.E, Row.FIVE)
-        val whitePawn = Pawn(Color.WHITE)
-        board.placePieces(from, whitePawn)
-        val move = Move(from, to, board)
-        shouldThrow<IllegalStateException> {
-            move.execute()
-        }.apply {
-            assertThat(message).isEqualTo("Ungültiger Zug von ETWO nach EFIVE")
-        }
-        assertThat(board.getFigureAt(from)).isEqualTo(whitePawn)
-        assertThat(board.getFigureAt(to)).isNull()
+    fun `from returns null for invalid row A`() {
+        val position = Position.from('A', 99)
+        assertThat(position).isNull()
     }
 }
 

@@ -26,22 +26,6 @@ class ChessBoardTests : AnnotationSpec() {
         assertThat(fen.getFullmoveNumber()).isEqualTo(1)
     }
 
-//    @Test
-//    fun `FEN to board conversion works correctly`() {
-//        val fenString = "TSLDKLST/BBBBBBBB/8/8/8/8/bbbbbbbb/tsldklst"
-//        val chessBoard = ChessBoard.fromFEN(fenString)
-//        assertThat(chessBoard.getFigureAt(Position(Column.D, Row.EIGHT))?.symbol()).isEqualTo("D")
-//        assertThat(chessBoard.getFigureAt(Position(Column.E, Row.SEVEN))?.symbol()).isEqualTo("B")
-//    }
-//
-//    @Test
-//    fun `FEN to board conversion works correctly for empty board`() {
-//        val fenString = "8/8/8/8/8/8/8/8"
-//        val chessBoard = ChessBoard.fromFEN(fenString)
-//        assertThat(chessBoard.getFigureAt(Position(Column.D, Row.EIGHT))).isNull()
-//        assertThat(chessBoard.getFigureAt(Position(Column.E, Row.SEVEN))).isNull()
-//    }
-
     @Test
     fun `fromFEN throws IllegalArgumentException for invalid FEN`() {
         val invalidFEN = "invalidFENString"
@@ -158,5 +142,36 @@ class ChessBoardTests : AnnotationSpec() {
     fun `Column enum name stimmt mit Wert überein`() {
         assertThat(Column.A.column).isEqualTo('a')
         assertThat(Column.H.column).isEqualTo('h')
+    }
+
+    @Test
+        fun `Bauer kann zu Bauer oder König befördert werden`() {
+            val chessBoard = ChessBoard.emptyBoard()
+            chessBoard.placePieces(Position(Column.A, Row.EIGHT), Pawn(Color.WHITE))
+
+            // Beförderung zu Bauer
+            assertThat(chessBoard.promoteFigure(Position(Column.A, Row.EIGHT), FigureType.Pawn)).isTrue()
+            assertThat(chessBoard.getFigureAt(Position(Column.A, Row.EIGHT))).isInstanceOf(Pawn::class.java)
+
+            // Beförderung zu König
+            assertThat(chessBoard.promoteFigure(Position(Column.A, Row.EIGHT), FigureType.King)).isTrue()
+            assertThat(chessBoard.getFigureAt(Position(Column.A, Row.EIGHT))).isInstanceOf(King::class.java)
+        }
+
+    @Test
+    fun `move gibt false zurück wenn Startfeld leer ist`() {
+        val chessBoard = ChessBoard.emptyBoard()
+        val from = Position(Column.A, Row.ONE)
+        val to = Position(Column.A, Row.TWO)
+        val result = chessBoard.move(from, to)
+        assertThat(result).isFalse()
+    }
+
+    @Test
+    fun `fromFEN gibt leeres Schachbrett zurück`() {
+        val fenString = "8/8/8/8/8/8/8/8 w - - 0 1"
+        val chessBoard = ChessBoard.fromFEN(fenString)
+        // Es sollten keine Figuren auf dem Brett sein
+        assertThat(chessBoard.getAllPositions()).isEmpty()
     }
  }

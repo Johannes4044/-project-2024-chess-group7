@@ -4,7 +4,7 @@ import hwr.oop.figures.FigureType
 import hwr.oop.figures.King
 import hwr.oop.figures.Pawn
 import hwr.oop.figures.Rook
-import kotlin.collections.plusAssign
+
 
 /**
  * Represents a chess game, managing the board state, player turns, moves, and game logic.
@@ -12,7 +12,7 @@ import kotlin.collections.plusAssign
 class Game {
     var board: ChessBoard = ChessBoard.fullBoard()
     var currentPlayerIsWhite: Boolean = true
-    val moves = mutableListOf<Triple<Figure, Position, Position>>()
+    val moves = mutableListOf<Move>()
     var totalMoves = 0
 
     /**
@@ -29,19 +29,20 @@ class Game {
 
         if (move.isValid()) {
             totalMoves += 1
-            move.execute()
+            moves.add(move) // Add the move to the list of moves
             if (move.isCapture() || figure is Pawn) {
                 totalMoves = 0 // Reset total moves if a pawn moves or a piece is captured
             }
 
             if (board.getFigureAt(to) is Pawn &&
-                ((to.row == Row.EIGHT && figure.color() == Color.WHITE) || (to.row == Row.ONE && figure.color() == Color.BLACK))) {
+                ((to.row == Row.EIGHT && figure.color() == Color.WHITE) || (to.row == Row.ONE && figure.color() == Color.BLACK))
+            ) {
                 board.promoteFigure(to, promotionFigure)
             }
             currentPlayerIsWhite = !currentPlayerIsWhite
             return true
         } else {
-            return false
+            throw IllegalStateException("Invalid move from $from to $to")
         }
     }
 
@@ -52,24 +53,27 @@ class Game {
      * @return A pair of lists: (whiteMoves, blackMoves).
      */
 
-    fun getAllMoves(board: ChessBoard): Pair<List<Position>, List<Position>> {  //gibt ein paar aus Listen wieder
-        val whiteMoves = mutableListOf<Position>() //enthält alle weißen möglichen Züge
-        val blackMoves = mutableListOf<Position>() //enthält alle schwarzen möglichen Züge
-        val col = Column.values()
-        val row = Row.values()
+    fun getAllMoves(board: ChessBoard): Pair<List<Move>, List<Move>> {
+        val whiteMoves = mutableListOf<Move>()
+        val blackMoves = mutableListOf<Move>()
+        val columns = Column.values()
+        val rows = Row.values()
 
-        for (column in col) {
-            for (row in row) {
+        for (column in columns) {
+            for (row in rows) {
                 val from = Position(column, row)
                 val figure = board.getFigureAt(from)
-
-                if (figure != King(Color.WHITE) && figure != null && figure.symbol()[0].isLowerCase()) {
-                    val moves = figure.availableTargets(from, board)
-                    whiteMoves.addAll(moves)    // Add all moves of a white piece to the list
-                }
-                if (figure != King(Color.BLACK) && figure != null && figure.symbol()[0].isUpperCase()) {
-                    val moves = figure.availableTargets(from, board)
-                    blackMoves.addAll(moves)    // Add all moves of a black piece to the list
+                if (figure != null) {
+                    val targets = figure.availableTargets(from, board)
+                    for (to in targets) {
+                        val move = Move(from, to, board)
+                        if (figure.color() == Color.WHITE && figure !is King) {
+                            whiteMoves.add(move)
+                        }
+                        if (figure.color() == Color.BLACK && figure !is King) {
+                            blackMoves.add(move)
+                        }
+                    }
                 }
             }
         }
@@ -83,9 +87,8 @@ class Game {
      */
     fun whiteCheck(): Boolean {
         val (_, blackMoves) = getAllMoves(board)
-        val whiteKing = board.findKing(true)
-        if (whiteKing == null) return false
-        return blackMoves.contains(whiteKing)
+        val whiteKingPos = board.findKing(true) ?: return false
+        return blackMoves.any { it.to == whiteKingPos }
     }
 
     /**
@@ -93,11 +96,11 @@ class Game {
      *
      * @return True if the black king is in check, false otherwise.
      */
+
     fun blackCheck(): Boolean {
         val (whiteMoves, _) = getAllMoves(board)
-        val blackKing = board.findKing(false)
-        if (blackKing == null) return false
-        return whiteMoves.contains(blackKing)
+        val blackKingPos = board.findKing(false) ?: return false
+        return whiteMoves.any { it.to == blackKingPos }
     }
 
     /**
@@ -137,8 +140,8 @@ class Game {
      */
     fun isSpaceFree(game: Game, position: Position, isWhiteCastling: Boolean): Boolean {
         val (whiteMoves, blackMoves) = game.getAllMoves(board)
-        if (whiteMoves.contains(position) && isWhiteCastling) return false
-        if (blackMoves.contains(position) && !isWhiteCastling) return false
+        if (isWhiteCastling && blackMoves.any { it.to == position }) return false
+        if (!isWhiteCastling && whiteMoves.any { it.to == position }) return false
         return true
     }
 
@@ -148,21 +151,35 @@ class Game {
      * @param game The current game instance.
      * @return True if castling was performed, false otherwise.
      */
-    fun castleKingSide(game: Game):Boolean{
-        val kingFirstMove = true
-        val rookFirstMove = true
-        val rookW = Rook(Color.WHITE)
-        val kingW = King(Color.WHITE)
 
-        if(kingFirstMove && rookFirstMove){
-            val kingPosition = Position(Column.E, Row.ONE)
-            val kingTo = Position(Column.B, Row.ONE)
-            val rookPosition = Position(Column.A, Row.ONE)
-            val rookTo = Position(Column.C, Row.ONE)
-
-            board.placePieces(rookTo, rookW)
-            board.placePieces(kingTo, kingW)
+    fun whiteKingsideCastling(game: Game): Boolean {
+        val kingPos = Position(Column.E, Row.ONE)
+        val rookPos = Position(Column.H, Row.ONE)
+        if (game.board.getFigureAt(kingPos) is King && game.board.getFigureAt(rookPos) is Rook &&
+            game.isSpaceFree(game, Position(Column.F, Row.ONE), true) &&
+            game.isSpaceFree(game, Position(Column.G, Row.ONE), true)) {
+            game.makeMove(kingPos, Position(Column.G, Row.ONE))
+            game.makeMove(rookPos, Position(Column.F, Row.ONE))
+            return true
         }
-        return true
+        return false
+    }
+    /**
+     * Performs kingside castling for black if possible.
+     *
+     * @param game The current game instance.
+     * @return True if castling was performed, false otherwise.
+     */
+    fun blackKingsideCastling(game: Game): Boolean{
+        val kingPos = Position(Column.E, Row.EIGHT)
+        val rookPos = Position(Column.H, Row.EIGHT)
+        if (game.board.getFigureAt(kingPos) is King && game.board.getFigureAt(rookPos) is Rook &&
+            game.isSpaceFree(game, Position(Column.F, Row.EIGHT), false) &&
+            game.isSpaceFree(game, Position(Column.G, Row.EIGHT), false)) {
+            game.makeMove(kingPos, Position(Column.G, Row.EIGHT))
+            game.makeMove(rookPos, Position(Column.F, Row.EIGHT))
+            return true
+        }
+        return false
     }
 }
