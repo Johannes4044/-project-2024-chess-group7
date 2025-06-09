@@ -47,13 +47,6 @@ data class Move(val from: Position, val to: Position, val board: ChessBoard) {
      * @return True if the move was executed successfully, false otherwise.
      * @throws IllegalArgumentException if the move is invalid.
      */
-    fun execute(): Boolean {
-        if (!isValid()) {
-            error("Ungültiger Zug von ${from.column}${from.row} nach ${to.column}${to.row}")
-        }
-        return board.move(from, to)
-    }
-
 
     fun castleKingSide(game: Game):Boolean{
         val kingFirstMove = true

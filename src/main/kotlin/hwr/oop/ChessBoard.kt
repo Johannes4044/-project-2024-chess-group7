@@ -171,4 +171,8 @@ class ChessBoard(private val board: MutableMap<Position, Figure>) {
         return allPositions
     }
 
+    fun removePiece(position: Position) {
+        board.remove(position)
+    }
+
 }

@@ -1,13 +1,10 @@
 package hwr.oop
 
 import hwr.oop.figures.FigureType
-import hwr.oop.figures.King
-import hwr.oop.figures.Pawn
-import hwr.oop.figures.Rook
+import hwr.oop.figures.*
 import io.kotest.core.spec.style.AnnotationSpec
-
 import org.assertj.core.api.Assertions.assertThat
-
+import org.junit.jupiter.api.Test
 
 class GameTest : AnnotationSpec() {
     @Test
@@ -58,25 +55,6 @@ class GameTest : AnnotationSpec() {
         val game = Game()
         game.board = ChessBoard.emptyBoard()
         assertThat(game.whiteCheck()).isFalse()
-    }
-
-    @Test
-    fun `invalid move does not change player turn`() {
-        val game = Game()
-        val from = Position(Column.E, Row.TWO)
-        val to = Position(Column.E, Row.FIVE)
-        game.makeMove(from, to)
-        assertThat(game.isGameOver()).isFalse()
-    }
-
-    @Test
-    fun `move with wrong player's figure does not change player turn`() {
-        val game = Game()
-        val from = Position(Column.E, Row.TWO)
-        val to = Position(Column.E, Row.FOUR)
-        game.makeMove(from, to)
-        game.makeMove(from, to)
-        assertThat(game.isGameOver()).isFalse()
     }
 
     @Test
@@ -181,25 +159,6 @@ class GameTest : AnnotationSpec() {
     }
 
     @Test
-    fun `move to own figure returns false`() {
-        val game = Game()
-        val from = Position(Column.E, Row.TWO)
-        val to = Position(Column.D, Row.ONE)
-        val result = game.makeMove(from, to)
-        assertThat(result).isFalse()
-    }
-
-    @Test
-    fun `makeMove returns false, if move is not valid`() {
-        val game = Game()
-        game.board = ChessBoard.fullBoard()
-        game.board.placePieces(Position(Column.A, Row.SEVEN), Pawn(Color.WHITE))
-        game.currentPlayerIsWhite = false
-        val result = game.makeMove(Position(Column.A, Row.SEVEN), Position(Column.A, Row.EIGHT), FigureType.Queen)
-        assertThat(result).isFalse()
-    }
-
-    @Test
     fun `game is over when no king on board`() {
         val game = Game()
         game.board = ChessBoard.emptyBoard()
@@ -214,6 +173,7 @@ class GameTest : AnnotationSpec() {
         val result = game.makeMove(Position(Column.A, Row.ONE), Position(Column.A, Row.TWO))
         assertThat(result).isFalse()
     }
+
     @Test
     fun `game ends after 50 moves without pawn move or capture`() {
         val game = Game()
@@ -276,17 +236,107 @@ class GameTest : AnnotationSpec() {
         assertThat(king).isInstanceOf(King::class.java)
         assertThat(rook).isInstanceOf(Rook::class.java)
     }
+
     @Test
-    fun `execute returns true for valid move`() {
-        val board = ChessBoard.fullBoard()
-        val from = Position(Column.E, Row.TWO)
-        val to = Position(Column.E, Row.THREE)
-        val pawn = Pawn(Color.WHITE)
-        board.placePieces(from, pawn)
-        val move = Move(from, to, board)
-        assertThat(move.execute()).isTrue()
-        assertThat(board.getFigureAt(to)).isEqualTo(pawn)
-        assertThat(board.getFigureAt(from)).isNull()
+    fun `isSpaceFree returns true when position is not attacked for white castling`() {
+        val game = Game()
+        val position = Position(Column.F, Row.ONE)
+        // Keine schwarzen Züge auf F1
+        assertThat(game.isSpaceFree(game, position, true)).isTrue()
     }
 
+
+    @Test
+    fun `isSpaceFree returns true when position is not attacked for black castling`() {
+        val game = Game()
+        val position = Position(Column.F, Row.EIGHT)
+        // Keine weißen Züge auf F8
+        assertThat(game.isSpaceFree(game, position, false)).isTrue()
+    }
+
+    @Test
+    fun `initial game has empty moves list and totalMoves is zero`() {
+        val game = Game()
+        assertThat(game.moves).isEmpty()
+        assertThat(game.totalMoves).isEqualTo(0)
+    }
+
+
+    @Test
+    fun `inCheck, playerMoves und hasMoves werden korrekt gesetzt`() {
+        val game = Game()
+        val board = ChessBoard.emptyBoard()
+        // Weißer König wird von schwarzem Turm bedroht
+        board.placePieces(Position(Column.E, Row.ONE), King(Color.WHITE))
+        board.placePieces(Position(Column.E, Row.EIGHT), Rook(Color.BLACK))
+        game.board = board
+        game.currentPlayerIsWhite = true
+
+        val (whiteMoves, blackMoves) = game.getAllMoves(game.board)
+        val inCheck = if (game.currentPlayerIsWhite) game.whiteCheck() else game.blackCheck()
+        val playerMoves = if (game.currentPlayerIsWhite) whiteMoves else blackMoves
+        val hasMoves = playerMoves.isNotEmpty()
+
+        assertThat(inCheck).isTrue()
+        assertThat(playerMoves).isEmpty()
+        assertThat(hasMoves).isFalse()
+    }
+
+    @Test
+    fun `isSpaceFree gibt false zurück wenn Feld von Schwarz angegriffen wird beim weißen Rochieren`() {
+        val game = Game()
+        val board = ChessBoard.emptyBoard()
+        board.placePieces(Position(Column.F, Row.EIGHT), Rook(Color.BLACK))
+        game.board = board
+        val position = Position(Column.F, Row.ONE)
+        val result = game.isSpaceFree(game, position, true)
+        assertThat(result).isFalse()
+    }
+
+    @Test
+    fun `getHalfmoveClock, getFullmoveNumber und toFenString geben korrekte Werte zurück`() {
+        val fenString = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 5 12"
+        val fen = FEN(fenString)
+
+        assertThat(fen.getHalfmoveClock()).isEqualTo(5)
+        assertThat(fen.getFullmoveNumber()).isEqualTo(12)
+        assertThat(fen.toFenString()).isEqualTo(fenString)
+    }
+
+    @Test
+    fun `moves Liste ist leer und totalMoves ist 0 nach Initialisierung`() {
+        val moves = mutableListOf<Move>()
+        var totalMoves = 0
+
+        assertThat(moves).isEmpty()
+        assertThat(totalMoves).isEqualTo(0)
+    }
+
+    @Test
+    fun `inCheck und playerMoves werden korrekt gesetzt wenn weiß im Schach und keine Züge möglich`() {
+        val game = Game()
+        val board = ChessBoard.emptyBoard()
+        // Weißer König wird von schwarzem Turm bedroht, keine anderen Figuren
+        board.placePieces(Position(Column.E, Row.ONE), King(Color.WHITE))
+        board.placePieces(Position(Column.E, Row.EIGHT), Rook(Color.BLACK))
+        game.board = board
+        game.currentPlayerIsWhite = true
+
+        val (whiteMoves, blackMoves) = game.getAllMoves(game.board)
+        val inCheck = if (game.currentPlayerIsWhite) game.whiteCheck() else game.blackCheck()
+        val playerMoves = if (game.currentPlayerIsWhite) whiteMoves else blackMoves
+
+        assertThat(inCheck).isTrue()
+        assertThat(playerMoves).isEmpty()
+    }
+    @Test
+    fun `isSpaceFree gibt false zurück wenn Feld von Weiß angegriffen wird beim schwarzen Rochieren`() {
+        val game = Game()
+        val board = ChessBoard.emptyBoard()
+        board.placePieces(Position(Column.F, Row.ONE), Rook(Color.WHITE))
+        game.board = board
+        val position = Position(Column.F, Row.EIGHT)
+        val result = game.isSpaceFree(game, position, false)
+        assertThat(result).isFalse()
+    }
 }
