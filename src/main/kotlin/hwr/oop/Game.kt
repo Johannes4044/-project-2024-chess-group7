@@ -158,8 +158,10 @@ class Game {
         if (game.board.getFigureAt(kingPos) is King && game.board.getFigureAt(rookPos) is Rook &&
             game.isSpaceFree(game, Position(Column.F, Row.ONE), true) &&
             game.isSpaceFree(game, Position(Column.G, Row.ONE), true)) {
-            game.makeMove(kingPos, Position(Column.G, Row.ONE))
-            game.makeMove(rookPos, Position(Column.F, Row.ONE))
+            board.placePieces(Position(Column.G, Row.ONE), King(Color.WHITE))
+            board.placePieces(Position(Column.F, Row.ONE), Rook(Color.WHITE))
+            board.removePiece(kingPos)
+            board.removePiece(rookPos)
             return true
         }
         return false
@@ -176,8 +178,10 @@ class Game {
         if (game.board.getFigureAt(kingPos) is King && game.board.getFigureAt(rookPos) is Rook &&
             game.isSpaceFree(game, Position(Column.F, Row.EIGHT), false) &&
             game.isSpaceFree(game, Position(Column.G, Row.EIGHT), false)) {
-            game.makeMove(kingPos, Position(Column.G, Row.EIGHT))
-            game.makeMove(rookPos, Position(Column.F, Row.EIGHT))
+            board.placePieces(Position(Column.G, Row.EIGHT), King(Color.BLACK))
+            board.placePieces(Position(Column.F, Row.EIGHT), Rook(Color.BLACK))
+            board.removePiece(kingPos)
+            board.removePiece(rookPos)
             return true
         }
         return false
