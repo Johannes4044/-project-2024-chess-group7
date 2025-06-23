@@ -4,36 +4,33 @@ import hwr.oop.figures.FigureType
 import hwr.oop.figures.King
 import hwr.oop.figures.Pawn
 import hwr.oop.figures.Rook
+import hwr.oop.FEN
+import kotlin.collections.remove
+import kotlin.inc
+import kotlin.toString
 
 
-/**
- * Represents a chess game, managing the board state, player turns, moves, and game logic.
- */
 class Game {
     var board: ChessBoard = ChessBoard.fullBoard()
     var currentPlayerIsWhite: Boolean = true
     val moves = mutableListOf<Move>()
     var totalMoves = 0
 
-    /**
-     * Attempts to make a move from one position to another, handling promotion if needed.
-     *
-     * @param from The starting position.
-     * @param to The target position.
-     * @param promotionFigure The figure type to promote to, if applicable.
-     * @return True if the move was successful, false otherwise.
-     */
+    // Für Undo und Stellungswiederholung
+    val boardHistory = mutableListOf<String>()
+
     fun makeMove(from: Position, to: Position, promotionFigure: FigureType? = null): Boolean {
         val figure = board.getFigureAt(from) ?: return false
         val move = Move(from, to, board)
-
         if (move.isValid()) {
+            // Board-Status für Undo und Wiederholung speichern
+            boardHistory.add(FEN(board.toString()).toFenString())
             totalMoves += 1
-            moves.add(move) // Add the move to the list of moves
+            moves.add(move)
             if (move.isCapture() || figure is Pawn) {
-                totalMoves = 0 // Reset total moves if a pawn moves or a piece is captured
+                totalMoves = 0
             }
-
+            board.move(from, to, null)
             if (board.getFigureAt(to) is Pawn &&
                 ((to.row == Row.EIGHT && figure.color() == Color.WHITE) || (to.row == Row.ONE && figure.color() == Color.BLACK))
             ) {
@@ -46,19 +43,11 @@ class Game {
         }
     }
 
-    /**
-     * Retrieves all possible moves for both white and black pieces on the given board.
-     *
-     * @param board The chessboard to analyze.
-     * @return A pair of lists: (whiteMoves, blackMoves).
-     */
-
     fun getAllMoves(board: ChessBoard): Pair<List<Move>, List<Move>> {
         val whiteMoves = mutableListOf<Move>()
         val blackMoves = mutableListOf<Move>()
         val columns = Column.values()
         val rows = Row.values()
-
         for (column in columns) {
             for (row in rows) {
                 val from = Position(column, row)
@@ -80,22 +69,11 @@ class Game {
         return Pair(whiteMoves, blackMoves)
     }
 
-    /**
-     * Checks if the white king is in check.
-     *
-     * @return True if the white king is in check, false otherwise.
-     */
     fun whiteCheck(): Boolean {
         val (_, blackMoves) = getAllMoves(board)
         val whiteKingPos = board.findKing(true) ?: return false
         return blackMoves.any { it.to == whiteKingPos }
     }
-
-    /**
-     * Checks if the black king is in check.
-     *
-     * @return True if the black king is in check, false otherwise.
-     */
 
     fun blackCheck(): Boolean {
         val (whiteMoves, _) = getAllMoves(board)
@@ -103,54 +81,23 @@ class Game {
         return whiteMoves.any { it.to == blackKingPos }
     }
 
-    /**
-     * Determines if the game is over due to checkmate, stalemate, or the 50-move rule.
-     *
-     * @return True if the game is over, false otherwise.
-     */
     fun isGameOver(): Boolean {
         val currentIsWhite = currentPlayerIsWhite
         val (whiteMoves, blackMoves) = getAllMoves(board)
-
-        val inCheck = if (currentIsWhite) whiteCheck() else blackCheck()
         val playerMoves = if (currentIsWhite) whiteMoves else blackMoves
         val hasMoves = playerMoves.isNotEmpty()
-
-        if (!hasMoves) {
-            return if (inCheck) {
-                true
-            } else {
-                true
-            }
-        }
-
-        if (totalMoves >= 50) {
-            return true // 50-move rule
-        }
+        if (!hasMoves) return true
+        if (totalMoves >= 50) return true
+        if (isThreefoldRepetition()) return true
         return false
     }
 
-    /**
-     * Checks if a given position is free from attack for castling.
-     *
-     * @param game The current game instance.
-     * @param position The position to check.
-     * @param isWhiteCastling True if checking for white, false for black.
-     * @return True if the space is free, false otherwise.
-     */
     fun isSpaceFree(game: Game, position: Position, isWhiteCastling: Boolean): Boolean {
         val (whiteMoves, blackMoves) = game.getAllMoves(board)
         if (isWhiteCastling && blackMoves.any { it.to == position }) return false
         if (!isWhiteCastling && whiteMoves.any { it.to == position }) return false
         return true
     }
-
-    /**
-     * Performs kingside castling for white if possible.
-     *
-     * @param game The current game instance.
-     * @return True if castling was performed, false otherwise.
-     */
 
     fun whiteKingsideCastling(game: Game): Boolean {
         val kingPos = Position(Column.E, Row.ONE)
@@ -166,12 +113,7 @@ class Game {
         }
         return false
     }
-    /**
-     * Performs kingside castling for black if possible.
-     *
-     * @param game The current game instance.
-     * @return True if castling was performed, false otherwise.
-     */
+
     fun blackKingsideCastling(game: Game): Boolean{
         val kingPos = Position(Column.E, Row.EIGHT)
         val rookPos = Position(Column.H, Row.EIGHT)
@@ -186,4 +128,36 @@ class Game {
         }
         return false
     }
+
+    // Undo-Funktion: Setzt das Board auf den vorherigen Stand zurück
+    fun undoMove() {
+        if (moves.isNotEmpty() && boardHistory.isNotEmpty()) {
+            moves.removeAt(moves.size - 1)
+            val fen = boardHistory.removeAt(boardHistory.size - 1)
+            board = ChessBoard.fromFEN(fen)
+            currentPlayerIsWhite = !currentPlayerIsWhite
+        }
+    }
+
+    // Dreifache Stellungswiederholung prüfen
+    fun isThreefoldRepetition(): Boolean {
+        val currentFEN = FEN(board.toString()).toFenString()
+        return boardHistory.count { it == currentFEN } >= 2 // 2x in history + aktuelle = 3x
+    }
+
+    // Gibt den aktuellen Spielstatus als String zurück
+    fun gameState(): String {
+        val inCheck = if (currentPlayerIsWhite) whiteCheck() else blackCheck()
+        val (whiteMoves, blackMoves) = getAllMoves(board)
+        val hasMoves = if (currentPlayerIsWhite) whiteMoves.isNotEmpty() else blackMoves.isNotEmpty()
+        return when {
+            !hasMoves && inCheck -> "Schachmatt"
+            !hasMoves && !inCheck -> "Patt"
+            totalMoves >= 50 -> "Remis (50-Züge-Regel)"
+            isThreefoldRepetition() -> "Remis (dreifache Stellungswiederholung)"
+            else -> "Läuft"
+        }
+    }
+
+
 }

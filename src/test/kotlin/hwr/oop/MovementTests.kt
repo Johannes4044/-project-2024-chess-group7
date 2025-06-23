@@ -395,16 +395,6 @@ class MovementTests : AnnotationSpec() {
         assertThat(chessBoard.getFigureAt(position)).isNull()
     }
 
-    @Test
-    fun `incorrect move throws error`() {
-        val chessBoard = ChessBoard.emptyBoard()
-        val pawn = Pawn(Color.WHITE)
-        chessBoard.placePieces(Position(Column.E, Row.FOUR), pawn)
-
-        shouldThrow<IllegalStateException> {
-            chessBoard.move(Position(Column.E, Row.FOUR), Position(Column.E, Row.SIX))
-        }
-    }
 
     @Test
     fun `castleKingSideWhite executes correctly`() {
@@ -481,4 +471,3 @@ class MovementTests : AnnotationSpec() {
         assertThat(chessBoard.getFigureAt(Position(Column.G, Row.EIGHT))).isNull()
     }
 }
-

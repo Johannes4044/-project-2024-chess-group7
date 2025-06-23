@@ -67,6 +67,10 @@ class Pawn(private val pawnColor: Color) : Figure {
             if (target != null && target.color() != this.color()) {
                 moves.add(attackLeft)
             }
+            // En Passant nach links
+            if (board.enPassantTarget == attackLeft) {
+                moves.add(attackLeft)
+            }
         }
 
         // Schlagen nach rechts
@@ -75,6 +79,10 @@ class Pawn(private val pawnColor: Color) : Figure {
             val attackRight = Position(Column.values()[rightCol], Row.values()[forwardOneRow])
             val target = board.getFigureAt(attackRight)
             if (target != null && target.color() != this.color()) {
+                moves.add(attackRight)
+            }
+            // En Passant nach rechts
+            if (board.enPassantTarget == attackRight) {
                 moves.add(attackRight)
             }
         }

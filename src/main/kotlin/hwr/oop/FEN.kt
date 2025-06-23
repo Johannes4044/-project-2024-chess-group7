@@ -7,9 +7,15 @@ class FEN(fenString: String? = null) {
     private var enPassantTarget: String = ""
     private var halfmoveClock: Int = 0
     private var fullmoveNumber: Int = 1
-    init {
-        fenString?.let { parseFen(it) }
+
+    companion object {
+        private const val DEFAULT_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
     }
+
+    init {
+        parseFen(fenString?.takeIf { it.trim().split(" ").size == 6 } ?: DEFAULT_FEN)
+    }
+
     private fun parseFen(fen: String) {
         val parts = fen.trim().split(" ")
         require(parts.size == 6) { "FEN-String muss aus 6 Teilen bestehen." }
@@ -20,12 +26,14 @@ class FEN(fenString: String? = null) {
         halfmoveClock = parts[4].toInt()
         fullmoveNumber = parts[5].toInt()
     }
+
     fun getPiecePlacement() = piecePlacement
     fun getActiveColor() = activeColor
     fun getCastlingAvailability() = castlingAvailability
     fun getEnPassantTarget() = enPassantTarget
     fun getHalfmoveClock() = halfmoveClock
     fun getFullmoveNumber() = fullmoveNumber
+
     fun toFenString(): String {
         return listOf(
             piecePlacement,

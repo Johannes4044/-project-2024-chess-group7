@@ -1,6 +1,11 @@
 package hwr.oop
 import hwr.oop.figures.*
-import hwr.oop.FEN
+import kotlin.collections.remove
+import kotlin.div
+import kotlin.text.get
+import kotlin.text.set
+
+
 /**
  * Represents a chessboard containing positions and their corresponding chess pieces.
  *
@@ -82,15 +87,38 @@ class ChessBoard(private val board: MutableMap<Position, Figure>) {
      * @param promoteTo Optional promotion function for pawn promotion.
      * @return True if the move was successful, false otherwise.
      */
+
+    var enPassantTarget: Position? = null
+
+
     fun move(from: Position, to: Position, promoteTo: ((Boolean) -> Figure)? = null): Boolean {
         val figure = board[from] ?: return false
+
+        // En Passant ausführen
+        if (figure is Pawn && enPassantTarget != null && to == enPassantTarget) {
+            val capturedPawnPos = Position(to.column, from.row)
+            if (board[capturedPawnPos] is Pawn) {
+                board.remove(capturedPawnPos)
+            } else {
+                return false
+            }
+        }
+
+        // Zug ausführen
         if (figure.availableTargets(from, this).contains(to)) {
             board.remove(from)
             board[to] = figure
-            return true
         } else {
-            error("Ungültiger Zug von ${figure.symbol()} von $from nach $to")
+            return false
         }
+
+        // En Passant Ziel setzen oder zurücksetzen
+        enPassantTarget = if (figure is Pawn && Math.abs(to.row.ordinal - from.row.ordinal) == 2) {
+            Position(from.column, Row.values()[(from.row.ordinal + to.row.ordinal) / 2])
+        } else {
+            null
+        }
+        return true
     }
 
     /**
