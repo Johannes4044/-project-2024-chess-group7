@@ -46,6 +46,7 @@ class FigureSymbolTest : FunSpec({
             figure.color() shouldBe color
         }
     }
+
     test("King can move if destination is empty") {
         val king = King(Color.WHITE)
         val from = Position(Column.E, Row.ONE)

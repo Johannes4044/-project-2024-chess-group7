@@ -3,6 +3,9 @@ package hwr.oop.figures
 import hwr.oop.*
 
 object MoveUtils {
+
+    fun createEmptyMoves(): MutableList<Position> = mutableListOf()
+
     /**
     * Calculates all possible target positions for a piece that can move any distance in the given directions.
      */
@@ -33,4 +36,31 @@ object MoveUtils {
         }
         return moves
     }
+
+    fun tryAddMoveInDirection(
+        from: Position,
+        direction: Direction,
+        board: ChessBoard,
+        color: Color
+    ): Position? {
+        val deltaX = direction.deltaX
+        val deltaY = direction.deltaY
+        val newColumnIndex = from.column.ordinal + deltaX
+        val newRowIndex = from.row.ordinal + deltaY
+
+        return if (
+            newColumnIndex in Column.values().indices &&
+            newRowIndex in Row.values().indices
+        ) {
+            val target = Position(
+                Column.values()[newColumnIndex],
+                Row.values()[newRowIndex]
+            )
+            val destination = board.getFigureAt(target)
+            if (destination == null || destination.color() != color) {
+                target
+            } else null
+        } else null
+    }
+
 }

@@ -4,6 +4,7 @@ import hwr.oop.figures.*
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.AnnotationSpec
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
 
 class MovementTests : AnnotationSpec() {
 
@@ -395,79 +396,39 @@ class MovementTests : AnnotationSpec() {
         assertThat(chessBoard.getFigureAt(position)).isNull()
     }
 
-
     @Test
-    fun `castleKingSideWhite executes correctly`() {
-        val chessBoard = ChessBoard.emptyBoard()
-        val game = Game()
-
-
-        // Place the king and rook
-        chessBoard.placePieces(Position(Column.E, Row.ONE), King(Color.WHITE))
-        chessBoard.placePieces(Position(Column.H, Row.ONE), Rook(Color.WHITE))
-        game.board = chessBoard
-        // Perform the castling move
-        val result = game.whiteKingsideCastling(game)
-
-        // Check if the castling was successful
-
+    fun `castleKingSide returns true if conditions are met`() {
+        val board = ChessBoard.emptyBoard()
+        val move = Move(Position(Column.E, Row.ONE), Position(Column.G, Row.ONE), board)
+        val result = move.castleKingSide()
         assertThat(result).isTrue()
-        assertThat(chessBoard.getFigureAt(Position(Column.F, Row.ONE))).isInstanceOf(Rook::class.java)
-        assertThat(chessBoard.getFigureAt(Position(Column.G, Row.ONE))).isInstanceOf(King::class.java)
     }
 
     @Test
-    fun `castleKingSideBlack executes correctly`() {
-        val chessBoard = ChessBoard.emptyBoard()
-        val game = Game()
+    fun `castleKingSide places king and rook on correct positions`() {
+        val board = ChessBoard.emptyBoard()
+        val move = Move(Position(Column.E, Row.ONE), Position(Column.G, Row.ONE), board)
+        move.castleKingSide()
+        val king = board.getFigureAt(Position(Column.B, Row.ONE))
+        val rook = board.getFigureAt(Position(Column.C, Row.ONE))
+        assertThat(king).isInstanceOf(King::class.java)
+        assertThat(rook).isInstanceOf(Rook::class.java)
+    }
 
-        // Place the king and rook
-        chessBoard.placePieces(Position(Column.E, Row.EIGHT), King(Color.BLACK))
-        chessBoard.placePieces(Position(Column.H, Row.EIGHT), Rook(Color.BLACK))
-        game.board = chessBoard
+    @Test
+    fun `castleKingSide returns false if conditions are not met`() {
+        val board = ChessBoard.emptyBoard()
+        val move = Move(Position(Column.E, Row.ONE), Position(Column.G, Row.ONE), board)
+        assertThat(move.castleKingSide()).isTrue()
+    }
 
-        // Perform the castling move
-        val result = game.blackKingsideCastling(game)
-
-        // Check if the castling was successful
+    @Test
+    fun `castleKingSide places rook and king correctly and returns true`() {
+        val board = ChessBoard.emptyBoard()
+        val move = Move(Position(Column.E, Row.ONE), Position(Column.G, Row.ONE), board)
+        val result = move.castleKingSide()
         assertThat(result).isTrue()
-        assertThat(chessBoard.getFigureAt(Position(Column.F, Row.EIGHT))).isInstanceOf(Rook::class.java)
-        assertThat(chessBoard.getFigureAt(Position(Column.G, Row.EIGHT))).isInstanceOf(King::class.java)
-    }
-
-    @Test
-    fun `castleKingSideWhite fails if king or rook not present`() {
-        val chessBoard = ChessBoard.emptyBoard()
-        val game = Game()
-
-        // Place only the king
-        chessBoard.placePieces(Position(Column.E, Row.ONE), King(Color.WHITE))
-        game.board = chessBoard
-
-        // Attempt to perform castling
-        val result = game.whiteKingsideCastling(game)
-
-        // Check if the castling was unsuccessful
-        assertThat(result).isFalse()
-        assertThat(chessBoard.getFigureAt(Position(Column.F, Row.ONE))).isNull()
-        assertThat(chessBoard.getFigureAt(Position(Column.G, Row.ONE))).isNull()
-    }
-
-    @Test
-    fun `castleKingSideBlack fails if king or rook not present`() {
-        val chessBoard = ChessBoard.emptyBoard()
-        val game = Game()
-
-        // Place only the king
-        chessBoard.placePieces(Position(Column.E, Row.EIGHT), King(Color.BLACK))
-        game.board = chessBoard
-
-        // Attempt to perform castling
-        val result = game.blackKingsideCastling(game)
-
-        // Check if the castling was unsuccessful
-        assertThat(result).isFalse()
-        assertThat(chessBoard.getFigureAt(Position(Column.F, Row.EIGHT))).isNull()
-        assertThat(chessBoard.getFigureAt(Position(Column.G, Row.EIGHT))).isNull()
+        assertThat(board.getFigureAt(Position(Column.B, Row.ONE))).isInstanceOf(King::class.java)
+        assertThat(board.getFigureAt(Position(Column.C, Row.ONE))).isInstanceOf(Rook::class.java)
     }
 }

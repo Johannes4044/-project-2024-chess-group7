@@ -1,7 +1,6 @@
 package hwr.oop.figures
 
 import hwr.oop.*
-import kotlin.text.get
 
 /**
  * Represents a Pawn chess piece.

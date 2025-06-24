@@ -5,8 +5,8 @@ class FEN(fenString: String? = null) {
     private var activeColor: String = ""
     private var castlingAvailability: String = ""
     private var enPassantTarget: String = ""
-    private var halfmoveClock: Int = 0
-    private var fullmoveNumber: Int = 1
+    private var halfMoveClock: Int = 0
+    private var fullMoveNumber: Int = 1
 
     companion object {
         private const val DEFAULT_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
@@ -23,16 +23,16 @@ class FEN(fenString: String? = null) {
         activeColor = parts[1]
         castlingAvailability = parts[2]
         enPassantTarget = parts[3]
-        halfmoveClock = parts[4].toInt()
-        fullmoveNumber = parts[5].toInt()
+        halfMoveClock = parts[4].toInt()
+        fullMoveNumber = parts[5].toInt()
     }
 
     fun getPiecePlacement() = piecePlacement
     fun getActiveColor() = activeColor
     fun getCastlingAvailability() = castlingAvailability
     fun getEnPassantTarget() = enPassantTarget
-    fun getHalfmoveClock() = halfmoveClock
-    fun getFullmoveNumber() = fullmoveNumber
+    fun getHalfMoveClock() = halfMoveClock
+    fun getFullMoveNumber() = fullMoveNumber
 
     fun toFenString(): String {
         return listOf(
@@ -40,8 +40,8 @@ class FEN(fenString: String? = null) {
             activeColor,
             castlingAvailability,
             enPassantTarget,
-            halfmoveClock.toString(),
-            fullmoveNumber.toString()
+            halfMoveClock.toString(),
+            fullMoveNumber.toString()
         ).joinToString(" ")
     }
 }

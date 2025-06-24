@@ -9,5 +9,4 @@ enum class Column(val column: Char) {
     , F('f')
     , G('g')
     , H('h');
-
 }

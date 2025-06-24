@@ -4,10 +4,6 @@ import hwr.oop.figures.FigureType
 import hwr.oop.figures.King
 import hwr.oop.figures.Pawn
 import hwr.oop.figures.Rook
-import hwr.oop.FEN
-import kotlin.collections.remove
-import kotlin.inc
-import kotlin.toString
 
 
 class Game {
@@ -30,7 +26,7 @@ class Game {
             if (move.isCapture() || figure is Pawn) {
                 totalMoves = 0
             }
-            board.move(from, to, null)
+            board.move(from, to)
             if (board.getFigureAt(to) is Pawn &&
                 ((to.row == Row.EIGHT && figure.color() == Color.WHITE) || (to.row == Row.ONE && figure.color() == Color.BLACK))
             ) {
