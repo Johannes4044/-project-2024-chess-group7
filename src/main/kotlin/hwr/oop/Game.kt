@@ -1,9 +1,7 @@
 package hwr.oop
 
 import hwr.oop.figures.FigureType
-import hwr.oop.figures.King
-import hwr.oop.figures.Pawn
-import hwr.oop.figures.Rook
+import hwr.oop.figures.*
 
 
 class Game {
@@ -17,7 +15,7 @@ class Game {
 
     fun makeMove(from: Position, to: Position, promotionFigure: FigureType? = null): Boolean {
         val figure = board.getFigureAt(from) ?: return false
-        val move = Move(from, to, board)
+        val move = Move(from, to, board.copy(), currentPlayerIsWhite, totalMoves)
         if (move.isValid()) {
             // Board-Status für Undo und Wiederholung speichern
             boardHistory.add(FEN(board.toString()).toFenString())
@@ -51,7 +49,7 @@ class Game {
                 if (figure != null) {
                     val targets = figure.availableTargets(from, board)
                     for (to in targets) {
-                        val move = Move(from, to, board)
+                        val move = Move(from, to, board.copy(), currentPlayerIsWhite, totalMoves)
                         if (figure.color() == Color.WHITE && figure !is King) {
                             whiteMoves.add(move)
                         }
@@ -88,19 +86,12 @@ class Game {
         return false
     }
 
-    fun isSpaceFree(game: Game, position: Position, isWhiteCastling: Boolean): Boolean {
-        val (whiteMoves, blackMoves) = game.getAllMoves(board)
-        if (isWhiteCastling && blackMoves.any { it.to == position }) return false
-        if (!isWhiteCastling && whiteMoves.any { it.to == position }) return false
-        return true
-    }
-
     fun whiteKingsideCastling(game: Game): Boolean {
-        val kingPos = Position(Column.E, Row.ONE)
+        val kingPos = board.findKing(true)!!
         val rookPos = Position(Column.H, Row.ONE)
         if (game.board.getFigureAt(kingPos) is King && game.board.getFigureAt(rookPos) is Rook &&
-            game.isSpaceFree(game, Position(Column.F, Row.ONE), true) &&
-            game.isSpaceFree(game, Position(Column.G, Row.ONE), true)) {
+            game.board.isSpaceFree(game, Position(Column.F, Row.ONE), true) &&
+            game.board.isSpaceFree(game, Position(Column.G, Row.ONE), true)) {
             board.placePieces(Position(Column.G, Row.ONE), King(Color.WHITE))
             board.placePieces(Position(Column.F, Row.ONE), Rook(Color.WHITE))
             board.removePiece(kingPos)
@@ -110,12 +101,12 @@ class Game {
         return false
     }
 
-    fun blackKingsideCastling(game: Game): Boolean{
+    fun blackKingsideCastling(game: Game): Boolean {
         val kingPos = Position(Column.E, Row.EIGHT)
         val rookPos = Position(Column.H, Row.EIGHT)
         if (game.board.getFigureAt(kingPos) is King && game.board.getFigureAt(rookPos) is Rook &&
-            game.isSpaceFree(game, Position(Column.F, Row.EIGHT), false) &&
-            game.isSpaceFree(game, Position(Column.G, Row.EIGHT), false)) {
+            game.board.isSpaceFree(game, Position(Column.F, Row.EIGHT), false) &&
+            game.board.isSpaceFree(game, Position(Column.G, Row.EIGHT), false)) {
             board.placePieces(Position(Column.G, Row.EIGHT), King(Color.BLACK))
             board.placePieces(Position(Column.F, Row.EIGHT), Rook(Color.BLACK))
             board.removePiece(kingPos)
@@ -127,11 +118,11 @@ class Game {
 
     // Undo-Funktion: Setzt das Board auf den vorherigen Stand zurück
     fun undoMove() {
-        if (moves.isNotEmpty() && boardHistory.isNotEmpty()) {
-            moves.removeAt(moves.size - 1)
-            val fen = boardHistory.removeAt(boardHistory.size - 1)
-            board = ChessBoard.fromFEN(fen)
-            currentPlayerIsWhite = !currentPlayerIsWhite
+        if (moves.isNotEmpty()) {
+            val lastMove = moves.removeAt(moves.size - 1)
+            board = lastMove.board
+            currentPlayerIsWhite = lastMove.playerBefore
+            totalMoves = lastMove.totalMovesBefore
         }
     }
 
@@ -154,6 +145,4 @@ class Game {
             else -> "Läuft"
         }
     }
-
-
 }

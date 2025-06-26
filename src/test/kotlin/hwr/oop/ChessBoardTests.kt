@@ -4,7 +4,7 @@ import hwr.oop.figures.*
 import io.kotest.core.spec.style.AnnotationSpec
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertNull
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 
 class ChessBoardTests : AnnotationSpec() {
     @Test
@@ -257,19 +257,10 @@ class ChessBoardTests : AnnotationSpec() {
     }
 
     @Test
-    fun `findKing returns null if there is no king on the board`() {
+    fun `findKing returns correct king position for both colors`() {
         val chessBoard = ChessBoard.emptyBoard()
-        val resultWhite = chessBoard.findKing(true)
-        val resultBlack = chessBoard.findKing(false)
-        assertThat(resultWhite).isNull()
-        assertThat(resultBlack).isNull()
-    }
-
-    @Test
-    fun `findKing returns the position of the correct king when both kings are present`() {
-        val chessBoard = ChessBoard.emptyBoard()
-        val whiteKingPos = Position(Column.E, Row.ONE)
-        val blackKingPos = Position(Column.E, Row.EIGHT)
+        val whiteKingPos = Position(Column.B, Row.THREE)
+        val blackKingPos = Position(Column.G, Row.SIX)
         chessBoard.placePieces(whiteKingPos, King(Color.WHITE))
         chessBoard.placePieces(blackKingPos, King(Color.BLACK))
         assertThat(chessBoard.findKing(true)).isEqualTo(whiteKingPos)
@@ -277,14 +268,14 @@ class ChessBoardTests : AnnotationSpec() {
     }
 
     @Test
-    fun `getFigureAt gibt null zurück wenn kein Stein auf dem Feld steht`() {
+    fun `getFigureAt returns null if there is no piece on the square`() {
         val board = ChessBoard.emptyBoard()
         val pos = Position(Column.A, Row.ONE)
         assertThat(board.getFigureAt(pos)).isNull()
     }
 
     @Test
-    fun `placePieces setzt eine Figur korrekt auf das Feld`() {
+    fun `placePieces correctly places a piece on the square`() {
         val board = ChessBoard.emptyBoard()
         val pos = Position(Column.B, Row.TWO)
         board.placePieces(pos, Knight(Color.WHITE))
@@ -292,7 +283,7 @@ class ChessBoardTests : AnnotationSpec() {
     }
 
     @Test
-    fun `removePiece entfernt die Figur vom Feld`() {
+    fun `removePiece removes the piece from the square`() {
         val board = ChessBoard.emptyBoard()
         val pos = Position(Column.C, Row.THREE)
         board.placePieces(pos, Bishop(Color.BLACK))
@@ -301,7 +292,7 @@ class ChessBoardTests : AnnotationSpec() {
     }
 
     @Test
-    fun `move verschiebt eine Figur und leert das Ursprungsfeld`() {
+    fun `move moves a piece and empties the origin square`() {
         val board = ChessBoard.emptyBoard()
         val from = Position(Column.D, Row.FOUR)
         val to = Position(Column.D, Row.FIVE)
@@ -312,14 +303,14 @@ class ChessBoardTests : AnnotationSpec() {
     }
 
     @Test
-    fun `getAllFigures gibt leere Liste zurück wenn keine Figuren vorhanden sind`() {
+    fun `getAllFigures returns empty list if no pieces are present`() {
         val board = ChessBoard.emptyBoard()
         assertThat(board.getAllFigures(true)).isEmpty()
         assertThat(board.getAllFigures(false)).isEmpty()
     }
 
     @Test
-    fun `getAllPositions gibt alle belegten Felder zurück`() {
+    fun `getAllPositions returns all occupied squares`() {
         val board = ChessBoard.emptyBoard()
         board.placePieces(Position(Column.E, Row.ONE), King(Color.WHITE))
         board.placePieces(Position(Column.E, Row.EIGHT), King(Color.BLACK))
@@ -331,7 +322,7 @@ class ChessBoardTests : AnnotationSpec() {
     }
 
     @Test
-    fun `move gibt false zurück wenn kein Stein auf Ursprungsfeld steht`() {
+    fun `move returns false if there is no piece on the origin square`() {
         val board = ChessBoard.emptyBoard()
         val from = Position(Column.A, Row.ONE)
         val to = Position(Column.A, Row.TWO)
@@ -340,7 +331,7 @@ class ChessBoardTests : AnnotationSpec() {
     }
 
     @Test
-    fun `findKing gibt Position des weißen Königs zurück wenn weiß am Zug ist`() {
+    fun `findKing returns the position of the white king when white is to move`() {
         val board = ChessBoard.emptyBoard()
         board.placePieces(Position(Column.E, Row.ONE), King(Color.WHITE))
         val result = board.findKing(true)
@@ -348,20 +339,131 @@ class ChessBoardTests : AnnotationSpec() {
     }
 
     @Test
-    fun `findKing gibt null zurück wenn kein König gefunden wird`() {
+    fun `findKing returns null if no king is found`() {
         val board = ChessBoard.emptyBoard()
         val result = board.findKing(true)
         assertThat(result).isNull()
     }
 
     @Test
-    fun `en passant schlägt fehl wenn kein Bauer zu schlagen ist`() {
+    fun `findKing finds only the white king when whiteTurn is true, even if black king exists`() {
         val board = ChessBoard.emptyBoard()
-        // Schwarzer Bauer auf e5
-        board.placePieces(Position(Column.E, Row.FIVE), Pawn(Color.BLACK))
-        // Setze enPassantTarget, aber kein Bauer auf d5
+        val whiteKingPos = Position(Column.E, Row.ONE)
+        val blackKingPos = Position(Column.E, Row.EIGHT)
+        board.placePieces(whiteKingPos, King(Color.WHITE))
+        board.placePieces(blackKingPos, King(Color.BLACK))
+        val result = board.findKing(true)
+        assertThat(result).isEqualTo(whiteKingPos)
+    }
+
+    @Test
+    fun `findKing finds only the black king when whiteTurn is false, even if white king exists`() {
+        val board = ChessBoard.emptyBoard()
+        val whiteKingPos = Position(Column.E, Row.ONE)
+        val blackKingPos = Position(Column.E, Row.EIGHT)
+        board.placePieces(whiteKingPos, King(Color.WHITE))
+        board.placePieces(blackKingPos, King(Color.BLACK))
+        val result = board.findKing(false)
+        assertThat(result).isEqualTo(blackKingPos)
+    }
+
+    @Test
+    fun `findKing returns null if no king of the searched color exists`() {
+        val board = ChessBoard.emptyBoard()
+        board.placePieces(Position(Column.E, Row.ONE), King(Color.WHITE))
+        val result = board.findKing(false)
+        assertThat(result).isNull()
+    }
+
+    @Test
+    fun `findKing throws when no king is present and result is used non-nullable`() {
+        val board = ChessBoard.emptyBoard()
+        assertThrows<NullPointerException> {
+            val kingPos = board.findKing(true)!!
+            // Zugriff auf kingPos, um NullPointerException zu provozieren
+            kingPos.toString()
+        }
+    }
+
+    @Test
+    fun `findKing returns null if there is no king on the board`() {
+        val chessBoard = ChessBoard.emptyBoard()
+        val resultWhite = chessBoard.findKing(true)
+        val resultBlack = chessBoard.findKing(false)
+        assertThat(resultWhite).isNull()
+        assertThat(resultBlack).isNull()
+    }
+    @Test
+    fun `findKing returns the position of the correct king when both kings are present`() {
+        val chessBoard = ChessBoard.emptyBoard()
+        val whiteKingPos = Position(Column.E, Row.ONE)
+        val blackKingPos = Position(Column.E, Row.EIGHT)
+        chessBoard.placePieces(whiteKingPos, King(Color.WHITE))
+        chessBoard.placePieces(blackKingPos, King(Color.BLACK))
+        assertThat(chessBoard.findKing(true)).isEqualTo(whiteKingPos)
+        assertThat(chessBoard.findKing(false)).isEqualTo(blackKingPos)
+    }
+    @Test
+    fun `findKing throws exception if there is no king and the result non-null is used`() {
+        val board = ChessBoard.emptyBoard()
+        assertThrows<NullPointerException> {
+            val kingPos = board.findKing(true)!!
+            kingPos.toString()
+        }
+    }
+
+    @Test
+    fun `en passant gibt false zurück wenn auf dem zu schlagenden Feld kein Bauer steht`() {
+        val board = ChessBoard.emptyBoard()
+        // Weißer Bauer bereit für en passant
+        board.placePieces(Position(Column.E, Row.FIVE), Pawn(Color.WHITE))
+        // En-Passant-Ziel setzen, aber kein schwarzer Bauer auf D5
         board.enPassantTarget = Position(Column.D, Row.SIX)
+        // Statt eines Bauern steht z.B. ein Springer auf D5
+        board.placePieces(Position(Column.D, Row.FIVE), Knight(Color.BLACK))
+
+        // Weißer Bauer versucht en passant auf D6
         val result = board.move(Position(Column.E, Row.FIVE), Position(Column.D, Row.SIX))
         assertThat(result).isFalse()
     }
+
+    @Test
+    fun `findKing returns position of white king when whiteTurn is true`() {
+        val board = ChessBoard(mutableMapOf())
+        val whiteKingPosition = Position(Column.E, Row.ONE)
+        board.placePieces(whiteKingPosition, King(Color.WHITE))
+
+        val result = board.findKing(whiteTurn = true)
+        assertThat(result).isEqualTo(whiteKingPosition)
+    }
+
+    @Test
+    fun `findKing returns null when whiteTurn is true but white king not present`() {
+        val board = ChessBoard(mutableMapOf())
+        // placing only black king
+        board.placePieces(Position(Column.E, Row.EIGHT), King(Color.BLACK))
+
+        val result = board.findKing(whiteTurn = true)
+        assertThat(result).isNull()
+    }
+
+    @Test
+    fun `findKing returns position of black king when whiteTurn is false`() {
+        val board = ChessBoard(mutableMapOf())
+        val blackKingPosition = Position(Column.E, Row.EIGHT)
+        board.placePieces(blackKingPosition, King(Color.BLACK))
+
+        val result = board.findKing(whiteTurn = false)
+        assertThat(result).isEqualTo(blackKingPosition)
+    }
+
+    @Test
+    fun `findKing returns null when blackTurn and black king is not present`() {
+        val board = ChessBoard(mutableMapOf())
+        board.placePieces(Position(Column.E, Row.ONE), King(Color.WHITE))
+
+        val result = board.findKing(whiteTurn = false)
+        assertThat(result).isNull()
+    }
+
 }

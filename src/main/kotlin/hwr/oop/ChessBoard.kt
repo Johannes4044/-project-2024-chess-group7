@@ -1,10 +1,6 @@
 package hwr.oop
 import hwr.oop.figures.*
-import kotlin.collections.remove
-import kotlin.div
-import kotlin.text.get
-import kotlin.text.set
-
+import kotlin.math.abs
 
 /**
  * Represents a chessboard containing positions and their corresponding chess pieces.
@@ -66,7 +62,6 @@ class ChessBoard(private val board: MutableMap<Position, Figure>) {
          * @return A ChessBoard instance based on the FEN string.
          */
         fun fromFEN(fenString: String): ChessBoard {
-            val fen = FEN(fenString)
             return ChessBoard(mutableMapOf())
         }
     }
@@ -82,16 +77,14 @@ class ChessBoard(private val board: MutableMap<Position, Figure>) {
     /**
      * Moves a figure from one position to another if the move is valid.
      *
-     * @param from The starting position.
      * @param to The target position.
-     * @param promoteTo Optional promotion function for pawn promotion.
      * @return True if the move was successful, false otherwise.
      */
 
     var enPassantTarget: Position? = null
 
 
-    fun move(from: Position, to: Position, promoteTo: ((Boolean) -> Figure)? = null): Boolean {
+    fun move(from: Position, to: Position): Boolean {
         val figure = board[from] ?: return false
 
         // En Passant ausführen
@@ -113,7 +106,7 @@ class ChessBoard(private val board: MutableMap<Position, Figure>) {
         }
 
         // En Passant Ziel setzen oder zurücksetzen
-        enPassantTarget = if (figure is Pawn && Math.abs(to.row.ordinal - from.row.ordinal) == 2) {
+        enPassantTarget = if (figure is Pawn && abs(to.row.ordinal - from.row.ordinal) == 2) {
             Position(from.column, Row.values()[(from.row.ordinal + to.row.ordinal) / 2])
         } else {
             null
@@ -203,4 +196,21 @@ class ChessBoard(private val board: MutableMap<Position, Figure>) {
         board.remove(position)
     }
 
+
+    fun isSpaceFree(game: Game, position: Position, isWhiteCastling: Boolean): Boolean {
+        val (whiteMoves, blackMoves) = game.getAllMoves(this)
+        if (isWhiteCastling && blackMoves.any { it.to == position }) return false
+        if (!isWhiteCastling && whiteMoves.any { it.to == position }) return false
+        return true
+    }
+
+    fun copy(): ChessBoard {
+        val newBoard = mutableMapOf<Position, Figure>()
+        for ((pos, fig) in board) {
+            newBoard[pos] = fig // ggf. tiefe Kopie der Figuren, falls nötig
+        }
+        val cb = ChessBoard(newBoard)
+        cb.enPassantTarget = this.enPassantTarget
+        return cb
+    }
 }

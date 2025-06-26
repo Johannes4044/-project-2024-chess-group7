@@ -126,4 +126,29 @@ class FigureSymbolTest : FunSpec({
             (it.column in Column.values() && it.row in Row.values()).shouldBeTrue()
         }
     }
+
+    test("Bishop hasMoved property works") {
+        val bishop = Bishop(Color.WHITE)
+        bishop.hasMoved shouldBe false
+        bishop.hasMoved = true
+        bishop.hasMoved shouldBe true
+    }
+    test("Knight hasMoved property works") {
+        val knight = Knight(Color.BLACK)
+        knight.hasMoved shouldBe false
+        knight.hasMoved = true
+        knight.hasMoved shouldBe true
+    }
+    test("Pawn hasMoved property works") {
+        val pawn = Pawn(Color.WHITE)
+        pawn.hasMoved shouldBe false
+        pawn.hasMoved = true
+        pawn.hasMoved shouldBe true
+    }
+    test("Queen hasMoved property works") {
+        val queen = Queen(Color.BLACK)
+        queen.hasMoved shouldBe false
+        queen.hasMoved = true
+        queen.hasMoved shouldBe true
+    }
 })

@@ -4,7 +4,6 @@ import hwr.oop.figures.*
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.AnnotationSpec
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Test
 
 class MovementTests : AnnotationSpec() {
 
@@ -205,7 +204,7 @@ class MovementTests : AnnotationSpec() {
         val to = Position(Column.E, Row.THREE)
         val pawn = Pawn(Color.WHITE)
         board.placePieces(Position(Column.E, Row.TWO), pawn)
-        val move = Move(from, to, board)
+        val move = Move(from, to, board, true, 0)
         assertThat(move.isValid()).isTrue()
     }
 
@@ -216,7 +215,7 @@ class MovementTests : AnnotationSpec() {
         val to = Position(Column.E, Row.FIVE)
         val pawn = Pawn(Color.WHITE)
         board.placePieces(Position(Column.E, Row.TWO), pawn)
-        val move = Move(from, to, board)
+        val move = Move(from, to, board, true, 0)
         assertThat(move.isValid()).isFalse()
     }
 
@@ -225,7 +224,7 @@ class MovementTests : AnnotationSpec() {
         val board = ChessBoard.emptyBoard()
         val from = Position(Column.E, Row.TWO)
         val to = Position(Column.E, Row.THREE)
-        val move = Move(from, to, board)
+        val move = Move(from, to, board, true, 0)
         assertThat(move.isValid()).isFalse()
     }
 
@@ -238,7 +237,7 @@ class MovementTests : AnnotationSpec() {
         val blackPawn = Pawn(Color.BLACK)
         board.placePieces(Position(Column.E, Row.TWO), whitePawn)
         board.placePieces(Position(Column.E, Row.THREE), blackPawn)
-        val move = Move(from, to, board)
+        val move = Move(from, to, board, true, 0)
         assertThat(move.isCapture()).isTrue()
     }
 
@@ -251,7 +250,7 @@ class MovementTests : AnnotationSpec() {
         val whitePawn2 = Pawn(Color.WHITE)
         board.placePieces(Position(Column.E, Row.TWO), whitePawn1)
         board.placePieces(Position(Column.E, Row.THREE), whitePawn2)
-        val move = Move(from, to, board)
+        val move = Move(from, to, board, true, 0)
         assertThat(move.isCapture()).isFalse()
     }
 
@@ -262,7 +261,7 @@ class MovementTests : AnnotationSpec() {
         val to = Position(Column.E, Row.THREE)
         val whitePawn = Pawn(Color.WHITE)
         board.placePieces(Position(Column.E, Row.TWO), whitePawn)
-        val move = Move(from, to, board)
+        val move = Move(from, to, board, true, 0)
         assertThat(move.isCapture()).isFalse()
     }
 
@@ -306,7 +305,7 @@ class MovementTests : AnnotationSpec() {
         val board = ChessBoard.emptyBoard()
         val from = Position(Column.E, Row.TWO)
         val to = Position(Column.E, Row.THREE)
-        val move = Move(from, to, board)
+        val move = Move(from, to, board, true, 0)
         assertThat(move.toString()).isEqualTo("Zug von ETWO nach ETHREE")
     }
 
@@ -324,8 +323,8 @@ class MovementTests : AnnotationSpec() {
         board.placePieces(Position(Column.F, Row.THREE), blackPawn)
         board.placePieces(Position(Column.A, Row.THREE), whitePawn2)
 
-        val move = Move(from, to, board)
-        val move2 = Move(from2, to2, board)
+        val move = Move(from, to, board, true, 0)
+        val move2 = Move(from2, to2, board, false, 1)
 
         assertThat(move.isCapture()).isTrue()
         assertThat(move2.isCapture()).isFalse()
@@ -340,7 +339,7 @@ class MovementTests : AnnotationSpec() {
         val blackPawn = Pawn(Color.BLACK)
         board.placePieces(from, whitePawn)
         board.placePieces(to, blackPawn)
-        val move = Move(from, to, board)
+        val move = Move(from, to, board, true, 0)
         assertThat(move.isCapture()).isTrue()
     }
 
@@ -351,7 +350,7 @@ class MovementTests : AnnotationSpec() {
         val to = Position(Column.E, Row.THREE)
         val whitePawn = Pawn(Color.WHITE)
         board.placePieces(from, whitePawn)
-        val move = Move(from, to, board)
+        val move = Move(from, to, board, true, 0)
         assertThat(move.isCapture()).isFalse()
     }
 
@@ -397,38 +396,105 @@ class MovementTests : AnnotationSpec() {
     }
 
     @Test
-    fun `castleKingSide returns true if conditions are met`() {
-        val board = ChessBoard.emptyBoard()
-        val move = Move(Position(Column.E, Row.ONE), Position(Column.G, Row.ONE), board)
-        val result = move.castleKingSide()
-        assertThat(result).isTrue()
-    }
-
-    @Test
     fun `castleKingSide places king and rook on correct positions`() {
         val board = ChessBoard.emptyBoard()
-        val move = Move(Position(Column.E, Row.ONE), Position(Column.G, Row.ONE), board)
-        move.castleKingSide()
-        val king = board.getFigureAt(Position(Column.B, Row.ONE))
-        val rook = board.getFigureAt(Position(Column.C, Row.ONE))
-        assertThat(king).isInstanceOf(King::class.java)
-        assertThat(rook).isInstanceOf(Rook::class.java)
+        val king = King(Color.WHITE)
+        val rook = Rook(Color.WHITE)
+        board.placePieces(Position(Column.E, Row.ONE), king)
+        board.placePieces(Position(Column.H, Row.ONE), rook)
+        val move = Move(Position(Column.E, Row.ONE), Position(Column.G, Row.ONE), board, true, 0)
+        move.castleKingSide(game = Game())
+        val kingAfter = board.getFigureAt(Position(Column.G, Row.ONE))
+        val rookAfter = board.getFigureAt(Position(Column.F, Row.ONE))
+        assertThat(kingAfter).isInstanceOf(King::class.java)
+        assertThat(rookAfter).isInstanceOf(Rook::class.java)
     }
 
     @Test
     fun `castleKingSide returns false if conditions are not met`() {
         val board = ChessBoard.emptyBoard()
-        val move = Move(Position(Column.E, Row.ONE), Position(Column.G, Row.ONE), board)
-        assertThat(move.castleKingSide()).isTrue()
+        val move = Move(Position(Column.E, Row.ONE), Position(Column.G, Row.ONE), board, true, 0)
+        assertThat(move.castleKingSide(game = Game())).isFalse()
     }
 
     @Test
     fun `castleKingSide places rook and king correctly and returns true`() {
         val board = ChessBoard.emptyBoard()
-        val move = Move(Position(Column.E, Row.ONE), Position(Column.G, Row.ONE), board)
-        val result = move.castleKingSide()
+        val king = King(Color.WHITE)
+        val rook = Rook(Color.WHITE)
+        board.placePieces(Position(Column.E, Row.ONE), king)
+        board.placePieces(Position(Column.H, Row.ONE), rook)
+        val move = Move(Position(Column.E, Row.ONE), Position(Column.G, Row.ONE), board, true, 0)
+        val result = move.castleKingSide(game = Game())
         assertThat(result).isTrue()
-        assertThat(board.getFigureAt(Position(Column.B, Row.ONE))).isInstanceOf(King::class.java)
-        assertThat(board.getFigureAt(Position(Column.C, Row.ONE))).isInstanceOf(Rook::class.java)
+        assertThat(board.getFigureAt(Position(Column.G, Row.ONE))).isInstanceOf(King::class.java)
+        assertThat(board.getFigureAt(Position(Column.F, Row.ONE))).isInstanceOf(Rook::class.java)
     }
+
+    @Test
+    fun `castleKingSide returns true and moves king and rook correctly`() {
+        val board = ChessBoard.emptyBoard()
+        val king = King(Color.WHITE)
+        val rook = Rook(Color.WHITE)
+        board.placePieces(Position(Column.E, Row.ONE), king)
+        board.placePieces(Position(Column.H, Row.ONE), rook)
+        val move = Move(Position(Column.E, Row.ONE), Position(Column.G, Row.ONE), board, true, 0)
+
+        val result = move.castleKingSide(game = Game())
+
+        assertThat(result).isTrue()
+        assertThat(board.getFigureAt(Position(Column.G, Row.ONE))).isInstanceOf(King::class.java)
+        assertThat(board.getFigureAt(Position(Column.F, Row.ONE))).isInstanceOf(Rook::class.java)
+        assertThat((board.getFigureAt(Position(Column.G, Row.ONE)) as King).hasMoved).isTrue()
+        assertThat((board.getFigureAt(Position(Column.F, Row.ONE)) as Rook).hasMoved).isTrue()
+        assertThat(board.getFigureAt(Position(Column.E, Row.ONE))).isNull()
+        assertThat(board.getFigureAt(Position(Column.H, Row.ONE))).isNull()
+    }
+
+    @Test
+    fun `castleKingSide returns false if king has moved`() {
+        val board = ChessBoard.emptyBoard()
+        val king = King(Color.WHITE)
+        king.hasMoved = true
+        val rook = Rook(Color.WHITE)
+        board.placePieces(Position(Column.E, Row.ONE), king)
+        board.placePieces(Position(Column.H, Row.ONE), rook)
+        val move = Move(Position(Column.E, Row.ONE), Position(Column.G, Row.ONE), board, true, 0)
+
+        val result = move.castleKingSide(game = Game())
+
+        assertThat(result).isFalse()
+    }
+
+    @Test
+    fun `castleKingSide returns false if rook has moved`() {
+        val board = ChessBoard.emptyBoard()
+        val king = King(Color.WHITE)
+        val rook = Rook(Color.WHITE)
+        rook.hasMoved = true
+        board.placePieces(Position(Column.E, Row.ONE), king)
+        board.placePieces(Position(Column.H, Row.ONE), rook)
+        val move = Move(Position(Column.E, Row.ONE), Position(Column.G, Row.ONE), board, true, 0)
+
+        val result = move.castleKingSide(game = Game())
+
+        assertThat(result).isFalse()
+    }
+
+    @Test
+    fun `castleKingSide returns false if pieces between king and rook`() {
+        val board = ChessBoard.emptyBoard()
+        val king = King(Color.WHITE)
+        val rook = Rook(Color.WHITE)
+        val blocking = Pawn(Color.WHITE)
+        board.placePieces(Position(Column.E, Row.ONE), king)
+        board.placePieces(Position(Column.H, Row.ONE), rook)
+        board.placePieces(Position(Column.F, Row.ONE), blocking)
+        val move = Move(Position(Column.E, Row.ONE), Position(Column.G, Row.ONE), board, true, 0)
+
+        val result = move.castleKingSide(game = Game())
+
+        assertThat(result).isFalse()
+    }
+
 }

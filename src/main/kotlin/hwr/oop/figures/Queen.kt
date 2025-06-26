@@ -6,7 +6,9 @@ import hwr.oop.*
  * Repräsentiert eine Dame im Schach.
  */
 class Queen(private val queenColor: Color) : Figure {
-    // Alle Bewegungsrichtungen der Dame
+     override var hasMoved: Boolean = false
+
+     // Alle Bewegungsrichtungen der Dame
     private val directionsQueen = listOf(
         Direction.UP,
         Direction.DOWN,

@@ -10,6 +10,7 @@ import hwr.oop.figures.MoveUtils.tryAddMoveInDirection
  * @property kingColor The color of the king (white or black).
  */
 class King(private val kingColor: Color) : Figure {
+    override var hasMoved: Boolean = false
 
     // Directions in which a king can move (one square in any direction)
     private val directionKings = listOf(

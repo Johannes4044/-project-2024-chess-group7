@@ -60,12 +60,6 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>io.kotest</groupId>
-      <artifactId>kotest-assertions-core-jvm</artifactId>
-      <version>${kotest.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>io.kotest.extensions</groupId>
       <artifactId>kotest-extensions-pitest</artifactId>
       <version>${kotest-extensions-pitest.version}</version>
@@ -82,12 +76,6 @@
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
       <version>${assertj-core.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.kotest</groupId>
-      <artifactId>kotest-runner-junit5-jvm</artifactId>
-      <version>5.9.1</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

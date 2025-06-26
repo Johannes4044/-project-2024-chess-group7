@@ -4,7 +4,13 @@ import hwr.oop.figures.King
 import hwr.oop.figures.Rook
 
 
-data class Move(val from: Position, val to: Position, val board: ChessBoard) {
+data class Move(
+    val from: Position,
+    val to: Position,
+    val board: ChessBoard,
+    val playerBefore: Boolean,
+    val totalMovesBefore: Int
+) {
 
     /**
      * Creates a move from one position to another on the given chessboard.
@@ -48,21 +54,46 @@ data class Move(val from: Position, val to: Position, val board: ChessBoard) {
      * @throws IllegalArgumentException if the move is invalid.
      */
 
-    fun castleKingSide(): Boolean {
-        val kingFirstMove = true
-        val rookFirstMove = true
-        val rookW = Rook(Color.WHITE)
-        val kingW = King(Color.WHITE)
+    fun castleKingSide(game: Game): Boolean {
+        // Rochade nur für Weiß, von e1 nach g1 (König) und h1 nach f1 (Turm)
+        val kingFrom = Position(Column.E, Row.ONE)
+        val rookFrom = Position(Column.H, Row.ONE)
+        val kingTo = Position(Column.G, Row.ONE)
+        val rookTo = Position(Column.F, Row.ONE)
 
-        if (kingFirstMove && rookFirstMove) {
-            val kingTo = Position(Column.B, Row.ONE)
-            val rookTo = Position(Column.C, Row.ONE)
+        val king = board.getFigureAt(kingFrom)
+        val rook = board.getFigureAt(rookFrom)
 
-            board.placePieces(rookTo, rookW)
-            board.placePieces(kingTo, kingW)
-            return true
-        }
-        return false
+        // Prüfe, ob König und Turm vorhanden und noch nicht gezogen haben
+        if (king !is King || king.color() != Color.WHITE || king.hasMoved) return false
+        if (rook !is Rook || rook.color() != Color.WHITE || rook.hasMoved) return false
+
+        // Prüfe, ob Felder zwischen König und Turm frei sind
+        val between = listOf(
+            Position(Column.F, Row.ONE),
+            Position(Column.G, Row.ONE)
+        )
+        if (between.any { board.getFigureAt(it) != null }) return false
+
+        // Prüfe, ob König im Schach steht oder durch bedrohte Felder zieht
+        val threatened = listOf(
+            Position(Column.E, Row.ONE),
+            Position(Column.F, Row.ONE),
+            Position(Column.G, Row.ONE)
+        )
+        // Annahme: board.isSpaceFree ist eine Methode, die überprüft, ob das Feld nicht bedroht ist
+        if (threatened.any { !board.isSpaceFree(game, it, true) }) return false
+
+        // Rochade ausführen
+        board.removePiece(kingFrom)
+        board.removePiece(rookFrom)
+
+        // Setze hasMoved manuell auf true, ohne copy
+        king.hasMoved = true
+        rook.hasMoved = true
+        board.placePieces(kingTo, king)
+        board.placePieces(rookTo, rook)
+        return true
     }
 }
 

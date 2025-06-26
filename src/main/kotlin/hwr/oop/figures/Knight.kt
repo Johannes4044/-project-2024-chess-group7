@@ -16,6 +16,8 @@ import hwr.oop.figures.MoveUtils.tryAddMoveInDirection
  * @property knightColor The color of the knight (white or black).
  */
 class Knight(private val knightColor: Color) : Figure {
+    override var hasMoved: Boolean = false
+
     // List of all possible movement directions for a knight
     private val directionsKnight = listOf(
         Direction.KNIGHT_UP_LEFT,

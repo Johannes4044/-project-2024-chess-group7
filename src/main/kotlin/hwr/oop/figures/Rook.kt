@@ -13,6 +13,8 @@ import hwr.oop.Position
  * @property rookColor The color of the rook (white or black).
  */
 class Rook(private val rookColor: Color) : Figure {
+    override var hasMoved: Boolean = false
+
     // List of all possible movement directions for a rook (horizontal and vertical)
     private val directionRooks = listOf(
         Direction.UP,

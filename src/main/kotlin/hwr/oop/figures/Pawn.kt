@@ -8,6 +8,8 @@ import hwr.oop.*
  * @property pawnColor The color of the pawn (white or black).
  */
 class Pawn(private val pawnColor: Color) : Figure {
+    override var hasMoved: Boolean = false
+
     /**
      * Returns the color of the pawn.
      *
@@ -58,33 +60,30 @@ class Pawn(private val pawnColor: Color) : Figure {
             }
         }
 
-        // Schlagen nach links
-        val leftCol = from.column.ordinal - 1
-        if (leftCol in Column.values().indices && forwardOneRow in Row.values().indices) {
-            val attackLeft = Position(Column.values()[leftCol], Row.values()[forwardOneRow])
-            val target = board.getFigureAt(attackLeft)
-            if (target != null && target.color() != this.color()) {
-                moves.add(attackLeft)
-            }
-            // En Passant nach links
-            if (board.enPassantTarget == attackLeft) {
-                moves.add(attackLeft)
+        fun addAttackMove(
+            from: Position,
+            colOffset: Int,
+            direction: Int,
+            board: ChessBoard,
+            moves: MutableList<Position>
+        ) {
+            val newCol = from.column.ordinal + colOffset
+            val newRow = from.row.ordinal + direction
+            if (newCol in Column.values().indices && newRow in Row.values().indices) {
+                val pos = Position(Column.values()[newCol], Row.values()[newRow])
+                val target = board.getFigureAt(pos)
+                if (target != null && target.color() != this.color()) {
+                    moves.add(pos)
+                }
+                if (board.enPassantTarget == pos) {
+                    moves.add(pos)
+                }
             }
         }
 
-        // Schlagen nach rechts
-        val rightCol = from.column.ordinal + 1
-        if (rightCol in Column.values().indices && forwardOneRow in Row.values().indices) {
-            val attackRight = Position(Column.values()[rightCol], Row.values()[forwardOneRow])
-            val target = board.getFigureAt(attackRight)
-            if (target != null && target.color() != this.color()) {
-                moves.add(attackRight)
-            }
-            // En Passant nach rechts
-            if (board.enPassantTarget == attackRight) {
-                moves.add(attackRight)
-            }
-        }
+        // Im Hauptcode:
+        addAttackMove(from, -1, direction, board, moves) // links
+        addAttackMove(from, 1, direction, board, moves)  // rechts
 
         return moves
     }

@@ -8,6 +8,8 @@ import hwr.oop.*
  * @property bishopColor The color of the bishop (white or black).
  */
 class Bishop(private val bishopColor: Color) : Figure {
+    override var hasMoved: Boolean = false
+
     // Directions in which a bishop can move (diagonally)
     private val directionBishops = listOf(
         Direction.UP_LEFT,
